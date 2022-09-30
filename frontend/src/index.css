@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  scroll-behavior: smooth;
+}
+@media screen and (max-width: 790px) {
+  *{
+    font-size: 18px;
+  }
+}
+.href{
+  text-decoration: none !important;
+}
+button:focus,
+button:active,
+button:hover,
+.btn:active,
+.btn.active {
+  outline: 0px !important;
+  -webkit-appearance: none;
+  box-shadow: none !important;
+}
+
