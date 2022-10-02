@@ -7,16 +7,15 @@ export default function UserBlogs(props) {
   const [blogs, setBlogs] = useState([]);
   const baseServerUrl = "http://localhost:5000/";
   const userId = localStorage.getItem("userId");
-
+  const sendRequest = async ()=>{
+    const res = await axios.get(`${baseServerUrl}blogs/user/${userId}`)
+                      .catch((err)=>console.log(err));
+    const data = await res.data;
+    return data;
+  }
   useEffect(()=>{
-    const sendRequest = async ()=>{
-      const res = await axios.get(`${baseServerUrl}blogs/user/${userId}`)
-                        .catch((err)=>console.log(err));
-      const data = await res.data;
-      return data;
-    }
     sendRequest().then(data => setBlogs(data.blogs));
-  }, [blogs]);
+  });
   return (
     <>
       <div className='container-fluid blogs'>

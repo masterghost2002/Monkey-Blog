@@ -24,15 +24,15 @@ export default function BlogDetail(props) {
   // const handleEdit = (e)=>{
   //   navigate(`/updateblog/${props.blog._id}`);
   // }
-  const handleDelete = (e)=>{
-    if(window.confirm("Are you sure want to delete the blog?")){
+  const handleDelete = (e) => {
+    if (window.confirm("Are you sure want to delete the blog?")) {
       sendDeleteRequest()
-        .then(data=>console.log(data))
-        .catch((err)=>console.log(err));
+        .then(data => console.log(data))
+        .catch((err) => console.log(err));
     }
   }
 
-  const sendDeleteRequest = async ()=>{
+  const sendDeleteRequest = async () => {
     const res = axios.delete(`${baseServerUrl}blogs/${props.blog._id}`);
     return res.data;
   }
@@ -48,14 +48,14 @@ export default function BlogDetail(props) {
             <span className='text-muted fw-normal'>{date}</span>
           </div>
           <h5 className="card-title">{props.blog.title}</h5>
-          <p className="card-text text-muted">{props.blog.description}</p>
+          <p dangerouslySetInnerHTML={{__html: props.blog.description}}/>
         </div>
         <hr className='divider-line'></hr>
         <div className="card-body d-flex justify-content-between">
           <a href="fsdfsd" className="btn btn-viewfull">View Full Blog &rarr;</a>
           <button href="fdsfs" className="card-link  card-link-btn"><img src={Share} alt="fdsf" className="img-fluid share" /></button>
-          {props.canmodify &&   <button className="card-link card-link-btn" onClick={handleDelete}><img src={Delete} alt="fdsf" className="img-fluid share" /></button> }
-          {props.canmodify &&   <button className="card-link card-link-btn"><img src={Edit} alt="fdsf" className="img-fluid share" /></button> }
+          {props.canmodify && <button className="card-link card-link-btn" onClick={handleDelete}><img src={Delete} alt="fdsf" className="img-fluid share" /></button>}
+          {props.canmodify && <button className="card-link card-link-btn"><img src={Edit} alt="fdsf" className="img-fluid share" /></button>}
         </div>
       </div>
     </div>
