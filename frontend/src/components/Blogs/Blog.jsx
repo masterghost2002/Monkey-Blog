@@ -4,12 +4,12 @@ import Share from '../../assests/images/share-sm-icon.png';
 import Delete from '../../assests/images/delete-sm-icon.png';
 import Edit from '../../assests/images/edit-sm-icon.png';
 import axios from 'axios';
-// import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 export default function BlogDetail(props) {
-  // const navigate = useNavigate();
   const image_link = "https://bloggerzone.in/blogadmin/images/63234400_1657257086.jpg";
   const baseServerUrl = "http://localhost:5000/";
-  //date foramt
+  const navigate = useNavigate();
+
   let date = new Date(props.blog.created_at);
   let dtFromat = new Intl.DateTimeFormat('en-US', {
     day: '2-digit',
@@ -19,11 +19,6 @@ export default function BlogDetail(props) {
   date = dtFromat.format(date);
   let userName = localStorage.getItem("userName");
 
-
-  // edit delete
-  // const handleEdit = (e)=>{
-  //   navigate(`/updateblog/${props.blog._id}`);
-  // }
   const handleDelete = (e) => {
     if (window.confirm("Are you sure want to delete the blog?")) {
       sendDeleteRequest()
@@ -31,11 +26,15 @@ export default function BlogDetail(props) {
         .catch((err) => console.log(err));
     }
   }
+  const handleEdit = () => {
+    navigate(`/updateblog/${props.blog._id}`);
+  }
 
   const sendDeleteRequest = async () => {
     const res = axios.delete(`${baseServerUrl}blogs/${props.blog._id}`);
     return res.data;
   }
+
   return (
     <div className="col-lg-5">
       <div className="card blog-card">
@@ -55,7 +54,7 @@ export default function BlogDetail(props) {
           <a href="fsdfsd" className="btn btn-viewfull">View Full Blog &rarr;</a>
           <button href="fdsfs" className="card-link  card-link-btn"><img src={Share} alt="fdsf" className="img-fluid share" /></button>
           {props.canmodify && <button className="card-link card-link-btn" onClick={handleDelete}><img src={Delete} alt="fdsf" className="img-fluid share" /></button>}
-          {props.canmodify && <button className="card-link card-link-btn"><img src={Edit} alt="fdsf" className="img-fluid share" /></button>}
+          {props.canmodify && <button className="card-link card-link-btn" onClick = {handleEdit}><img src={Edit} alt="fdsf" className="img-fluid share" /></button>}
         </div>
       </div>
     </div>

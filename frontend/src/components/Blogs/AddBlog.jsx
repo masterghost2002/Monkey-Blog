@@ -1,41 +1,54 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState, useRef } from 'react';
 import Heading from './Heading';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import JoditEditor from 'jodit-react';
-// import { useEffect } from 'react';
 export default function AddBlog() {
-  const baseServerUrl = "http://localhost:5000/";
   let userId = localStorage.getItem("userId");
   const params = useParams();
   const blogId = params.id;
+  const baseServerUrl = "http://localhost:5000/";
+  const [newBlog, setNewBlog] = useState({ title: "", description: "" });
+  useEffect(() => {
+    const sendRequestGetBlog = async () => {
+      const res = await axios.get(`${baseServerUrl}blogs/${blogId}`).catch((err) => console.log(err));
+      const data = await res.data;
+      setNewBlog({
+        title:data.blog.title,
+        description:data.blog.description
+      })
+    }
+    if (blogId !== undefined){
+      sendRequestGetBlog();
+    }
+  }, [blogId]);
+
+
+
   const editor = useRef(null);
   const navigate = useNavigate();
-  const [newBlog, setNewBlog] = useState({ title: "", description: "" });
 
 
   const handleChange = (event) => {
-      setNewBlog((prevSate) => ({
-        ...prevSate, // first it will derefernce the prevState and set it then 
-        [event.target.name]: event.target.value // then it will update the name fild which is currently chagning
-      }));
+    setNewBlog((prevSate) => ({
+      ...prevSate, // first it will derefernce the prevState and set it then 
+      [event.target.name]: event.target.value // then it will update the name fild which is currently chagning
+    }));
   };
 
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (newBlog.title === "" || newBlog.description === "")
-      alert(`${newBlog.title === ""?"Title":"Description"} must not be empty`);
+      alert(`${newBlog.title === "" ? "Title" : "Description"} must not be empty`);
     else {
       if (blogId === undefined) {
         sendRequestAdd()
-          .then(data => console.log(data))
           .then(() => navigate('/blogs'));
       }
       else {
         sendRequestUpdate()
-          .then(data => console.log(data))
           .then(() => navigate('/blogs'));
       }
     }
@@ -75,7 +88,7 @@ export default function AddBlog() {
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label htmlFor="exampleFormControlInput1" className="form-label fs-3 fw-bold">Title</label>
-                <input onChange={handleChange} type="text" className="form-control" id="exampleFormControlInput1" placeholder="This I my First Blog" name="title" />
+                <input onChange={handleChange} type="text" className="form-control" id="exampleFormControlInput1" placeholder="Title..." name="title" value={newBlog.title} />
               </div>
               <div className="mb-3">
                 <label htmlFor="exampleFormControlTextarea1" className="form-label fs-3 fw-bold">Description</label>
