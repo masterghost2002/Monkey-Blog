@@ -1,15 +1,22 @@
 # Monkey-Blog
 Monkey-Blog  a part of monkey site
-![Screenshot (49)](https://user-images.githubusercontent.com/55751461/193206278-6c889f84-9b83-4b19-809c-be8f42d4b8ca.png)
-![Screenshot (50)](https://user-images.githubusercontent.com/55751461/193206300-7447400b-2de6-46c3-bb3d-e940dc913997.png)
-![Screenshot (51)](https://user-images.githubusercontent.com/55751461/193206306-b3738239-08a0-4b91-9fa4-50b4689e5ae4.png)
-![Screenshot (58)](https://user-images.githubusercontent.com/55751461/193437388-bf319e20-ae20-4765-92e8-517756ae7ae7.png)
 
-![Screenshot (53)](https://user-images.githubusercontent.com/55751461/193206320-4596db39-9460-491d-9d5b-c1cdd78b5cc8.png)
-![Screenshot (54)](https://user-images.githubusercontent.com/55751461/193206324-de061bcc-5940-44d1-aad3-9ccde0d36156.png)
-![Screenshot (55)](https://user-images.githubusercontent.com/55751461/193206328-d49a08f9-a78f-44e0-8684-2cb7c050166e.png)
-![Screenshot (48)](https://user-images.githubusercontent.com/55751461/193206339-6c31ac81-9187-4a02-90b8-3f0253fe5b93.png)
-![Screenshot (56)](https://user-images.githubusercontent.com/55751461/193206691-86a15f98-2d12-4f2c-95bd-e4b04105dc26.png)
+
+
+https://user-images.githubusercontent.com/55751461/194047908-703a1402-02d3-400c-9ce9-dcd00b7b15ee.mp4
+
+
+![Screenshot (70)](https://user-images.githubusercontent.com/55751461/194048559-d3a27513-558b-40ef-a0c2-543a242726d0.png)
+![Screenshot (59)](https://user-images.githubusercontent.com/55751461/194048572-463d31fa-3def-49ef-812d-93f62938c801.png)
+![Screenshot (60)](https://user-images.githubusercontent.com/55751461/194048579-6f071eb6-519a-4f9b-9c46-5e249e4eb397.png)
+![Screenshot (61)](https://user-images.githubusercontent.com/55751461/194048582-ea9998c4-cc50-4ec5-bbb9-c2349575f489.png)
+![Screenshot (62)](https://user-images.githubusercontent.com/55751461/194048587-8140e00a-566c-4fe7-b9c5-398c193ed9e3.png)
+![Screenshot (64)](https://user-images.githubusercontent.com/55751461/194048593-64274d9e-9fbc-4e6d-8f85-538aed6a7bf0.png)
+![Screenshot (65)](https://user-images.githubusercontent.com/55751461/194048600-1ba7958d-8e87-4551-aeb7-60aa16672fc7.png)
+![Screenshot (66)](https://user-images.githubusercontent.com/55751461/194048602-d5c4c016-b773-415f-8219-4db0e600e202.png)
+![Screenshot (67)](https://user-images.githubusercontent.com/55751461/194048608-c36c1113-860b-4246-b007-9c1e0091b969.png)
+![Screenshot (68)](https://user-images.githubusercontent.com/55751461/194048616-e87b4bba-54f5-46d2-9267-06650f129221.png)
+![Screenshot (69)](https://user-images.githubusercontent.com/55751461/194048618-2a69b009-92e0-4e55-bf25-9ee1c5880dfa.png)
 
 
 # Getting Started with Monkey Blog
