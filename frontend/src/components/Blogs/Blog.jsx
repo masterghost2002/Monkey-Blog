@@ -9,7 +9,7 @@ export default function BlogDetail(props) {
   const image_link = "https://bloggerzone.in/blogadmin/images/63234400_1657257086.jpg";
   const baseServerUrl = "http://localhost:5000/";
   const navigate = useNavigate();
-
+  const description = props.blog.description.slice(0,400);
   let date = new Date(props.blog.created_at);
   let dtFromat = new Intl.DateTimeFormat('en-US', {
     day: '2-digit',
@@ -34,7 +34,6 @@ export default function BlogDetail(props) {
     const res = axios.delete(`${baseServerUrl}blogs/${props.blog._id}`);
     return res.data;
   }
-
   return (
     <div className="col-lg-5">
       <div className="card blog-card">
@@ -47,11 +46,11 @@ export default function BlogDetail(props) {
             <span className='text-muted fw-normal'>{date}</span>
           </div>
           <h5 className="card-title">{props.blog.title}</h5>
-          <p dangerouslySetInnerHTML={{__html: props.blog.description}}/>
+          <p dangerouslySetInnerHTML={{__html: description}}/>
         </div>
         <hr className='divider-line'></hr>
         <div className="card-body d-flex justify-content-between">
-          <a href="fsdfsd" className="btn btn-viewfull">View Full Blog &rarr;</a>
+          <a href={`/blog/${props.blog._id}`} className="btn btn-viewfull">View Full Blog &rarr;</a>
           <button href="fdsfs" className="card-link  card-link-btn"><img src={Share} alt="fdsf" className="img-fluid share" /></button>
           {props.canmodify && <button className="card-link card-link-btn" onClick={handleDelete}><img src={Delete} alt="fdsf" className="img-fluid share" /></button>}
           {props.canmodify && <button className="card-link card-link-btn" onClick = {handleEdit}><img src={Edit} alt="fdsf" className="img-fluid share" /></button>}

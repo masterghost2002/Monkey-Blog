@@ -8,6 +8,7 @@ import AddBlog from './components/Blogs/AddBlog';
 import UserBlogs from './components/Blogs/UserBlogs';
 import VerifyMail from './components/VerifyMail/VerifyMail';
 import Footer from './components/Footer/Footer';
+import ViewFull from './components/Blogs/ViewFull';
 import {Route, Routes} from 'react-router-dom';
 import Contact from './components/ContactUs/Contact';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,6 +36,7 @@ function App() {
             <Route path='/updateblog/:id' element={<AddBlog/>}></Route>
             <Route path='/addBlog' element={<AddBlog></AddBlog>}></Route>
             <Route path='/verify/:id' element={<VerifyMail/>}></Route>
+            <Route path='/blog/:id' element={<ViewFull/>}></Route>
           </>
         }
         <Route path='/contactus' element={<Contact/>}></Route>

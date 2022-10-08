@@ -4,12 +4,7 @@ const app = express();
 
 // cors to connect with frontend
 const cors = require('cors');
-const whitelist = ['http://localhost:3000', 'http://192.168.126.145:3000/']
-var corsOptions = {
-    origin: 'http://192.168.126.145:3000',
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
-app.use(cors(corsOptions)); // cors is a function
+app.use(cors()); // cors is a function
 
 // session
 let session = require("express-session");
@@ -42,7 +37,7 @@ app.use(express.json());
 // database.once("open", ()=>{ console.log("Connected to database")});
 // will listen to part if and only if we are connected to our database
 
-mongoose.connect("")
+mongoose.connect("mongodb+srv://masterghost:R%40kesh050317@cluster0.npotuys.mongodb.net/monkey-site?retryWrites=true&w=majority")
 .then(app.listen(5000)).then(console.log("Connected To DB and listening to 5000")).catch((err)=>{console.log(err)});
 
 
