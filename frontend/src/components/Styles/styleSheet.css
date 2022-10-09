@@ -217,9 +217,35 @@
     margin: 0rem 8rem 0rem 8rem;
 }
 /* heading component end */
+/* view full blog */
 
+.view_full_blog{
+    min-height: 80vh;
+}
+.card-full{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+.card-full-body{
+    padding: 1rem;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.card-header{
+    min-height: 4rem;
+    display: flex;
+    align-items: center;
+}
 /* ############################# blogs section end ##########################################*/
-
+/* ################################## Responses */
+.not_found_container{
+    min-height: 80vh;
+    justify-content: center;
+    align-items: center;
+}
+.not-found-img{
+    max-width: 100vh;
+    max-height: 80vh;
+}
 /*############################## footer ############################################### */
 .footer {
     min-height: 10vh;

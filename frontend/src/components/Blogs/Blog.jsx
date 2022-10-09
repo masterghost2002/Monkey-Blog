@@ -1,15 +1,22 @@
 import React from 'react'
 import Avatar from '../../assests/images/avatar-sm.png'
-import Share from '../../assests/images/share-sm-icon.png';
+import Copy from '../../assests/images/Copy.png';
 import Delete from '../../assests/images/delete-sm-icon.png';
 import Edit from '../../assests/images/edit-sm-icon.png';
 import axios from 'axios';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useNavigate } from 'react-router-dom';
+import Confirm from '../Modals/Confirm';
 export default function BlogDetail(props) {
   const image_link = "https://bloggerzone.in/blogadmin/images/63234400_1657257086.jpg";
   const baseServerUrl = "http://localhost:5000/";
   const navigate = useNavigate();
-
+  const downloadModelData = {
+    title: "Delete Blog",
+    body: "Are you sure want to delete the blog?. Delete action can't be undo.",
+    btn_name: "Delete"
+  }
+  const description = props.blog.description.slice(0, 400);
   let date = new Date(props.blog.created_at);
   let dtFromat = new Intl.DateTimeFormat('en-US', {
     day: '2-digit',
@@ -20,11 +27,12 @@ export default function BlogDetail(props) {
   let userName = localStorage.getItem("userName");
 
   const handleDelete = (e) => {
-    if (window.confirm("Are you sure want to delete the blog?")) {
-      sendDeleteRequest()
-        .then(data => console.log(data))
-        .catch((err) => console.log(err));
-    }
+    sendDeleteRequest()
+      .then(data => console.log(data))
+      .catch((err) => console.log(err));
+  }
+  const handleEdit = () => {
+    navigate(`/updateblog/${props.blog._id}`);
   }
   const handleEdit = () => {
     navigate(`/updateblog/${props.blog._id}`);
@@ -47,14 +55,18 @@ export default function BlogDetail(props) {
             <span className='text-muted fw-normal'>{date}</span>
           </div>
           <h5 className="card-title">{props.blog.title}</h5>
-          <p dangerouslySetInnerHTML={{__html: props.blog.description}}/>
+          <p dangerouslySetInnerHTML={{ __html: description }} />
         </div>
         <hr className='divider-line'></hr>
         <div className="card-body d-flex justify-content-between">
-          <a href="fsdfsd" className="btn btn-viewfull">View Full Blog &rarr;</a>
-          <button href="fdsfs" className="card-link  card-link-btn"><img src={Share} alt="fdsf" className="img-fluid share" /></button>
-          {props.canmodify && <button className="card-link card-link-btn" onClick={handleDelete}><img src={Delete} alt="fdsf" className="img-fluid share" /></button>}
-          {props.canmodify && <button className="card-link card-link-btn" onClick = {handleEdit}><img src={Edit} alt="fdsf" className="img-fluid share" /></button>}
+          <a href={`/blog/${props.blog._id}`} className="btn btn-viewfull">View Full Blog &rarr;</a>
+          <div className='buttons'>
+            <CopyToClipboard text={`http://localhost:3000/blog/${props.blog._id}`}>
+              <button className="card-link  card-link-btn"><img src={Copy} alt="fdsf" className="img-fluid share" /></button>
+            </CopyToClipboard>
+            {props.canmodify && <Confirm modelData={downloadModelData} actionFun={handleDelete} icon_path={Delete} />}
+            {props.canmodify && <button className="card-link card-link-btn" onClick={handleEdit}><img src={Edit} alt="fdsf" className="img-fluid share" /></button>}
+          </div>
         </div>
       </div>
     </div>
