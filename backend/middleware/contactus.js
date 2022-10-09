@@ -9,7 +9,7 @@ let transporter = nodemailer.createTransport({
 const contactMail = (req, res, next) => {
     let mailOptions = {
         from: req.body.email,
-        to: "rakeshdhariwal657@gmail.com",
+        to: "",
         subject: req.body.subject,
         text: `Hi I ${req.body.name}  ${req.body.message}`
     }

@@ -4,12 +4,7 @@ const app = express();
 
 // cors to connect with frontend
 const cors = require('cors');
-const whitelist = ['http://localhost:3000', 'http://192.168.126.145:3000/']
-var corsOptions = {
-    origin: 'http://192.168.126.145:3000',
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
-app.use(cors(corsOptions)); // cors is a function
+app.use(cors()); // cors is a function
 
 // session
 let session = require("express-session");
