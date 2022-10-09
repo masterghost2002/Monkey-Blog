@@ -32,7 +32,7 @@ export const Header = () => {
                             <a className="btn" aria-current="page" href="/contactus">Contact US</a>
                         </li>}
                         {isLoggedIn && <div className="nav-item dropdown">
-                    <a className="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a className="nav-link active dropdown-toggle fw-bold" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {userName.split(" ")[0]}
                     </a>
                     <ul className="dropdown-menu" aria-labelledby="navbarDropdown">

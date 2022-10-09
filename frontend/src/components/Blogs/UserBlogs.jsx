@@ -15,7 +15,7 @@ export default function UserBlogs(props) {
   }
   useEffect(()=>{
     sendRequest().then(data => setBlogs(data.blogs));
-  }, []);
+  }, [blogs]);
 
   return (
     <>

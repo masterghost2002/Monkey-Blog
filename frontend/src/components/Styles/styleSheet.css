@@ -236,7 +236,16 @@
     align-items: center;
 }
 /* ############################# blogs section end ##########################################*/
-
+/* ################################## Responses */
+.not_found_container{
+    min-height: 80vh;
+    justify-content: center;
+    align-items: center;
+}
+.not-found-img{
+    max-width: 100vh;
+    max-height: 80vh;
+}
 /*############################## footer ############################################### */
 .footer {
     min-height: 10vh;
