@@ -79,7 +79,7 @@ const getById = async (req, res, next)=>{
     try{
         blog = await Blog.findById(Id).populate('user', 'name');
     }catch(err){
-        return console.log(err);
+        console.log("Blog not found");
     }
     if(!blog){
         return res.status(404).json({message: "Blog Not found"});
