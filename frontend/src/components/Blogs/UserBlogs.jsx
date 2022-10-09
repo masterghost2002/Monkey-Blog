@@ -15,7 +15,8 @@ export default function UserBlogs(props) {
   }
   useEffect(()=>{
     sendRequest().then(data => setBlogs(data.blogs));
-  });
+  }, []);
+
   return (
     <>
       <div className='container-fluid blogs'>
