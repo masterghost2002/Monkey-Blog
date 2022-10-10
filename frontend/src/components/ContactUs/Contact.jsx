@@ -17,7 +17,7 @@ export default function Contact() {
     };
 
     //server
-    const baseServerUrl = "http://localhost:5000/";
+    const baseServerUrl = "https://masterghostblog.herokuapp.com/";
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -34,34 +34,36 @@ export default function Contact() {
         return status === 200;
     }
     return (
-        <div className="container-fluid contactus_component">
-            {/* {<Alert/>} */}
-            <div className="row justify-content-center">
-                <div className="col-lg-4">
-                    <form onSubmit={handleSubmit} className="contactus-form">
-                        <div className="d-flex justify-content-center">
-                            <span className='text-dark fw-bolder fs-2 mb-3'>Contact US</span>
-                        </div>
-                        <div className="form-floating mb-2">
-                            <input type="text" className="form-control" id="floatingInput exampleFormControlInput1" placeholder="John Vick" onChange={handleChange} value={inputs.name} name='name' />
-                            <label htmlFor="floatingInput">Full Name</label>
-                        </div>
-                        <div className="form-floating mb-2">
-                            <input type="email" className="form-control" id="floatingInput exampleFormControlInput1" placeholder="name@example.com" onChange={handleChange} value={inputs.email} name='email' />
-                            <label htmlFor="floatingInput">Email address</label>
-                        </div>
-                        <div className="form-floating mb-2">
-                            <input type="text" className="form-control" id="floatingInput exampleFormControlInput1" placeholder="forgetmailexample" onChange={handleChange} value={inputs.subject} name='subject' />
-                            <label htmlFor="floatingInput">Subject</label>
-                        </div>
-                        <div className="mb-1">
-                            <label htmlFor="exampleFormControlTextarea1" className="form-label fs-3" >Message</label>
-                            <textarea className="form-control" id="exampleFormControlTextarea1" rows="4" onChange={handleChange} value={inputs.message} name='message'></textarea>
-                        </div>
-                        <button  className="btn submit_btn w-100px my-2">Sent Mail</button>
-                    </form>
+        <section className='contactus_wrapper'>
+            <div className="container-fluid">
+                <div className="row justify-content-center">
+                    <div className="col-lg-4">
+                        <form onSubmit={handleSubmit} className="contactus-form">
+                            <div className="d-flex heading-container justify-content-center align-items-centers">
+                                <span className='text-center heading'>Contact US</span>
+                            </div>
+                            <div className="form-floating mb-2">
+                                <input type="text" className="form-control" id="floatingInput exampleFormControlInput1" placeholder="John Vick" onChange={handleChange} value={inputs.name} name='name' />
+                                <label htmlFor="floatingInput">Full Name</label>
+                            </div>
+                            <div className="form-floating mb-2">
+                                <input type="email" className="form-control" id="floatingInput exampleFormControlInput1" placeholder="name@example.com" onChange={handleChange} value={inputs.email} name='email' />
+                                <label htmlFor="floatingInput">Email address</label>
+                            </div>
+                            <div className="form-floating mb-2">
+                                <input type="text" className="form-control" id="floatingInput exampleFormControlInput1" placeholder="forgetmailexample" onChange={handleChange} value={inputs.subject} name='subject' />
+                                <label htmlFor="floatingInput">Subject</label>
+                            </div>
+                            <div className="mb-1">
+                                <label htmlFor="exampleFormControlTextarea1" className="form-label fs-3" >Message</label>
+                                <textarea className="form-control" id="exampleFormControlTextarea1" rows="4" onChange={handleChange} value={inputs.message} name='message'></textarea>
+                            </div>
+                            <button className="btn submit_btn w-100px my-2">Sent Mail</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
+
     )
 }

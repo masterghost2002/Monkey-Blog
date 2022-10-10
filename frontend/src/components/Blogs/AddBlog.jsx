@@ -8,7 +8,7 @@ export default function AddBlog() {
   let userId = localStorage.getItem("userId");
   const params = useParams();
   const blogId = params.id;
-  const baseServerUrl = "http://localhost:5000/";
+  const baseServerUrl = "https://masterghostblog.herokuapp.com/";
   const [newBlog, setNewBlog] = useState({ title: "", description: "" });
   useEffect(() => {
     const sendRequestGetBlog = async () => {

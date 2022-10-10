@@ -3,7 +3,7 @@ import axios from 'axios';
 import Blog from './Blog';
 import Heading from './Heading';
 export default function Blogs() {
-  const baseServerUrl = "http://localhost:5000/"
+  const baseServerUrl = "https://masterghostblog.herokuapp.com/"
   const [blogs, setBlogs] = useState([]);
   // server requets
   const sendRequest = async () => {

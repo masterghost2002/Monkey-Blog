@@ -5,12 +5,8 @@
 /*############################# common for all ##########################3*/
 .btn {
     border-radius: 10px;
-    background-color: rgb(255, 222, 0);
     color: black;
     font-weight: bold;
-}
-.btn:hover {
-    background-color: rgb(206, 180, 9);
 }
 .form-control {
     background-color: rgb(239, 239, 239) !important;
@@ -62,6 +58,9 @@
 .user_name{
     font-weight: bold;
 }
+.btn-contact{
+    background-color: rgb(255, 234, 128);
+}
 .user_name:hover{
     background-color: transparent !important;
 }
@@ -85,7 +84,6 @@
 /* #####################################login screen #############################3*/
 .auth_wrapper {
     min-height: 80vh;
-    max-height: 80vh;
     display: flex;
     align-items: center;
 }
@@ -95,10 +93,11 @@
 }
 .submit_btn {
     width: 100%;
-    background-color: rgb(170, 196, 255);
+    height: 3rem;
+    background-color: #65b0fa;
 }
 .submit_btn:hover {
-    background-color: rgb(140, 164, 219);
+    background-color: #51a5fa;
 }
 
 
@@ -122,9 +121,6 @@
 .blog-card:hover {
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     transition: .5s;
-}
-.card-header {
-    font-family: 'Signika Negative', sans-serif;
 }
 
 .card-link-btn{
@@ -172,7 +168,20 @@
     transition: .5s;
     scale: 1.03;
 }
-
+/* no blog founc */
+.btn-add_blog{
+    background-color: rgb(78, 78, 78);
+    border-radius: 6px !important;
+    color: white;
+    font-weight: normal;
+    font-size: 1.5rem;
+    margin-top: 2rem;
+}
+.btn-add_blog:hover{
+    background-color: rgb(63, 63, 63);
+    color: white !important;
+}
+/*  */
     /* blog card mobile */
     @media screen and (max-width: 790px) {
         .blog-card:hover {
@@ -182,8 +191,9 @@
             padding: 2px;
         }
         .btn-viewfull{
-            font-size: .6rem;
-            border-radius: 30px !important;
+            width: 100%;
+            border-radius: 8px !important;
+            font-size: 1rem;
             color: white;
             font-weight: normal  !important;
             background-color: #0275d8 !important;
@@ -226,28 +236,42 @@
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
-.card-full-body{
-    padding: 1rem;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-}
 .card-header{
+    font-family: 'Signika Negative', sans-serif;
     min-height: 4rem;
     display: flex;
     align-items: center;
+    background-color: #318CE7;
+    color: white;
 }
 /* ############################# blogs section end ##########################################*/
-
+/* ################################## Responses */
+.not_found_wraper{
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.error{
+    font-size: 4rem;
+}
+/* ############contact us */
+.contactus_wrapper{
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+}
 /*############################## footer ############################################### */
 .footer {
-    min-height: 10vh;
+    min-height: 15vh;
     bottom: 0;
-    margin-bottom: 0px;
     background-color:	#318CE7;
     padding-top: 1rem;
 }
 
 .message {
     font-size: 1rem;
+    bottom: 0;
     display: flex;
     justify-content: center;
     font-family: sans-serif;

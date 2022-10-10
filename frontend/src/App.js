@@ -13,6 +13,7 @@ import {Route, Routes} from 'react-router-dom';
 import Contact from './components/ContactUs/Contact';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from './Store';
+import NotFound from './components/Responses/NotFound';
 function App() {
   const dispatch = useDispatch();
   useEffect(()=>{
@@ -28,6 +29,7 @@ function App() {
       </header>
       <main className='main'>
         <Routes>
+          <Route path='/blog/:id' element={<ViewFull/>}></Route>
           {!isLoggedIn ?<Route path='/' element={<Auth/>}></Route>:
           <>
             <Route path='/forgetpassword' element = {<ForgetPassword/>}></Route>
@@ -36,9 +38,9 @@ function App() {
             <Route path='/updateblog/:id' element={<AddBlog/>}></Route>
             <Route path='/addBlog' element={<AddBlog></AddBlog>}></Route>
             <Route path='/verify/:id' element={<VerifyMail/>}></Route>
-            <Route path='/blog/:id' element={<ViewFull/>}></Route>
           </>
         }
+        <Route path='/notfound' element={<NotFound/>}></Route>
         <Route path='/contactus' element={<Contact/>}></Route>
         </Routes>
       </main>

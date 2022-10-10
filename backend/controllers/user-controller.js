@@ -15,6 +15,7 @@ const getAllUser = async(req, res, next)=>{
 
 const signup = async (req, res, next)=>{
     const {name, email, password} = req.body;
+    if(password.length<8) return res.status(400).json({message: "Must be of 8 character"})
     let existingUser;
     try{
         existingUser = await User.findOne({email:email});
@@ -22,10 +23,9 @@ const signup = async (req, res, next)=>{
         console.log("Error while Signup: "+err);
     }
     if(existingUser)
-        return res.status(400).json({message: "User Already Exist"});
+        return res.status(404).json({message: "User Already Exist"});
     try{
         saveUser(req, res, next);
-        // verifyMail(req, res, next);
     }catch(err){
         return console.log("Unable to register User: "+err);
     };
@@ -45,7 +45,7 @@ const saveUser = async (req, res)=>{
     catch(err){
         return console.log("Unable to register User: "+err);
     }
-    return res.status(200).json({message:`Dear ${req.body.name} welcome to monkey app`, data:newUser});
+    return res.status(200).json({message:`Dear ${req.body.name} welcome to monkey app`, user:newUser});
 };
 
 const login = async (req, res, next)=>{
@@ -57,7 +57,7 @@ const login = async (req, res, next)=>{
         return console.log("User Not Found: "+err);
     }
     if(!existingUser){
-        return res.status(404).json({message: "No user found"});
+        return res.status(404).json({message: "Email is not registered"});
     }
     const isPasswordCorrect = bcrypt.compareSync(password, existingUser.password); // return boolean
     if(!isPasswordCorrect){

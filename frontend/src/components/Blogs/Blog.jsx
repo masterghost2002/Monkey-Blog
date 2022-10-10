@@ -1,15 +1,24 @@
 import React from 'react'
 import Avatar from '../../assests/images/avatar-sm.png'
-import Share from '../../assests/images/share-sm-icon.png';
+import Copy from '../../assests/images/Copy.png';
 import Delete from '../../assests/images/delete-sm-icon.png';
 import Edit from '../../assests/images/edit-sm-icon.png';
 import axios from 'axios';
+import { NavLink } from 'react-router-dom';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useNavigate } from 'react-router-dom';
+import Confirm from '../Modals/Confirm';
 export default function BlogDetail(props) {
   const image_link = "https://bloggerzone.in/blogadmin/images/63234400_1657257086.jpg";
-  const baseServerUrl = "http://localhost:5000/";
+  const baseServerUrl = "https://masterghostblog.herokuapp.com/";
   const navigate = useNavigate();
-  const description = props.blog.description.slice(0,400);
+  const downloadModelData = {
+    title: "Delete Blog",
+    body: "Are you sure want to delete the blog?. Delete action can't be undo.",
+    btn_name: "Delete",
+    btn_color: "danger"
+  }
+  const description = props.blog.description.slice(0, 400);
   let date = new Date(props.blog.created_at);
   let dtFromat = new Intl.DateTimeFormat('en-US', {
     day: '2-digit',
@@ -20,11 +29,7 @@ export default function BlogDetail(props) {
   let userName = localStorage.getItem("userName");
 
   const handleDelete = (e) => {
-    if (window.confirm("Are you sure want to delete the blog?")) {
-      sendDeleteRequest()
-        .then(data => console.log(data))
-        .catch((err) => console.log(err));
-    }
+    sendDeleteRequest().catch((err) => console.log(err));
   }
   const handleEdit = () => {
     navigate(`/updateblog/${props.blog._id}`);
@@ -41,19 +46,32 @@ export default function BlogDetail(props) {
           <img src={image_link} className="card-img-top img-fluid" alt="fsdfsd" />
         </div>
         <div className="card-body">
-          <div className="d-flex card-detail justify-content-between">
-            <span><img src={Avatar} alt="" className="img-fluid" />&nbsp; &nbsp;{props.blog.user.name === undefined ? userName : props.blog.user.name}</span>
-            <span className='text-muted fw-normal'>{date}</span>
+          <div className=" row card-detail">
+            <div className="col-lg-6">
+              <span><img src={Avatar} alt="" className="img-fluid" />&nbsp; &nbsp;{props.blog.user.name === undefined ? userName : props.blog.user.name}</span>
+            </div>
+            <div className="col-lg-6 d-flex justify-content-end">
+              <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar3" viewBox="0 0 16 16">
+                <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z" />
+                <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+              </svg></span><span className='text-muted fw-normal'>&nbsp; {date}</span>
+            </div>
           </div>
           <h5 className="card-title">{props.blog.title}</h5>
-          <p dangerouslySetInnerHTML={{__html: description}}/>
+          <p dangerouslySetInnerHTML={{ __html: description }} />
         </div>
         <hr className='divider-line'></hr>
-        <div className="card-body d-flex justify-content-between">
-          <a href={`/blog/${props.blog._id}`} className="btn btn-viewfull">View Full Blog &rarr;</a>
-          <button href="fdsfs" className="card-link  card-link-btn"><img src={Share} alt="fdsf" className="img-fluid share" /></button>
-          {props.canmodify && <button className="card-link card-link-btn" onClick={handleDelete}><img src={Delete} alt="fdsf" className="img-fluid share" /></button>}
-          {props.canmodify && <button className="card-link card-link-btn" onClick = {handleEdit}><img src={Edit} alt="fdsf" className="img-fluid share" /></button>}
+        <div className="card-body row">
+          <div className="col-lg-6 mt-lg-3 ">
+            <NavLink className="btn btn-viewfull" aria-current="page" to={`/blog/${props.blog._id}`}>View Full Blog &rarr;</NavLink>
+          </div>
+          <div className={`col-lg-6 mt-3 d-flex justify-content-${props.canmodify ? "between" : "end"}`}>
+            <CopyToClipboard text={`https://monkey-app.netlify.app/blog/${props.blog._id}`}>
+              <button className="card-link  card-link-btn"><img src={Copy} alt="fdsf" className="img-fluid share" /></button>
+            </CopyToClipboard>
+            {props.canmodify && <Confirm modelData={downloadModelData} actionFun={handleDelete} icon_path={Delete} />}
+            {props.canmodify && <button className="card-link card-link-btn" onClick={handleEdit}><img src={Edit} alt="fdsf" className="img-fluid share" /></button>}
+          </div>
         </div>
       </div>
     </div>

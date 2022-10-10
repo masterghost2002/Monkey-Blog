@@ -12,27 +12,27 @@ export const Header = () => {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
-                <a href={isLoggedIn?"/blogs":"/"}><img src={Logo} alt="www.google.com" className="fluid logo" /></a>
+                <NavLink to={isLoggedIn?"/blogs":"/"}><img src={Logo} alt="www.google.com" className="fluid logo" /></NavLink>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav ms-auto">
                         {isLoggedIn && <li className="nav-item">
-                            <NavLink className={({ isActive }) => (isActive ? "nav-link nav-active" : "nav-link")} aria-current="page" to="/blogs">All Blogs</NavLink>
+                            <NavLink className={({ isActive }) => (isActive ? "nav-link nav-active" : "nav-link")} aria-current="page" to="/blogs" >All Blogs</NavLink>
                         </li>}
                         {isLoggedIn && <li className="nav-item">
-                            <NavLink className={({ isActive }) => (isActive ? "nav-link nav-active" : "nav-link")} aria-current="page" to="/myBlogs">My Blogs</NavLink>
+                            <NavLink className={({ isActive }) => (isActive ? "nav-link nav-active" : "nav-link")} aria-current="page" to="/myBlogs" >My Blogs</NavLink>
                         </li>}
                         {isLoggedIn && <li className="nav-item">
-                            <NavLink className={({ isActive }) => (isActive ? "nav-link nav-active" : "nav-link")} aria-current="page" to="/addBlog">Add Blog</NavLink>
+                            <NavLink className={({ isActive }) => (isActive ? "nav-link nav-active" : "nav-link")} aria-current="page" to="/addBlog" >Add Blog</NavLink>
                         </li>}
 
-                        {!isLoggedIn && <li className="nav-item">
-                            <a className="btn" aria-current="page" href="/contactus">Contact US</a>
+                        {!isLoggedIn && <li className="nav-item" data-toggle="collapse" data-target=".nav-collapse">
+                            <NavLink className="btn btn-contact" aria-current="page" to="/contactus">Contact US</NavLink>
                         </li>}
                         {isLoggedIn && <div className="nav-item dropdown">
-                    <a className="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a className="nav-link active dropdown-toggle fw-bold" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {userName.split(" ")[0]}
                     </a>
                     <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
