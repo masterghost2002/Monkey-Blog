@@ -34,11 +34,15 @@ export default function BlogDetail(props) {
   const handleEdit = () => {
     navigate(`/updateblog/${props.blog._id}`);
   }
+  const handleEdit = () => {
+    navigate(`/updateblog/${props.blog._id}`);
+  }
 
   const sendDeleteRequest = async () => {
     const res = axios.delete(`${baseServerUrl}blogs/${props.blog._id}`);
     return res.data;
   }
+
   return (
     <div className="col-lg-5">
       <div className="card blog-card">

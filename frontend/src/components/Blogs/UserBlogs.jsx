@@ -17,6 +17,7 @@ export default function UserBlogs(props) {
     sendRequest().then(data => setBlogs(data.blogs));
   }, [blogs]);
 
+
   return (
     <>
       <div className='container-fluid blogs'>
