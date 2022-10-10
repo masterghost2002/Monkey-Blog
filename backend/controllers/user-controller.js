@@ -45,7 +45,7 @@ const saveUser = async (req, res)=>{
     catch(err){
         return console.log("Unable to register User: "+err);
     }
-    return res.status(200).json({message:`Dear ${req.body.name} welcome to monkey app`, data:newUser});
+    return res.status(200).json({message:`Dear ${req.body.name} welcome to monkey app`, user:newUser});
 };
 
 const login = async (req, res, next)=>{
