@@ -7,7 +7,7 @@ export default function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     ////// server work
-    const baseServerUrl = "http://localhost:5000/";
+    const baseServerUrl = "https://localhost:5000/";
     const [inputs, setInputs] = useState({
         name: "", email: "", password: ""
     });
@@ -30,9 +30,10 @@ export default function Login() {
         event.preventDefault();
         if (isSignUp)
             sendRequest("signup")
-                .then((data)=>localStorage.setItem("userId", data.newUser._id))
+                .then((data)=>localStorage.setItem("userId", data.user._id))
                 .then(() => dispatch(authActions.login()))
-                .then(() => navigate('/blogs'));
+                .then(() => navigate('/blogs'))
+                .catch((err)=>console.log(err));
         else
             sendRequest("login")
                 .then((data)=>localStorage.setItem("userId", data.user._id))
@@ -51,7 +52,7 @@ export default function Login() {
             else if(error.response.status === 400)
                 setValidationMessage({password:error.response.data.message});
           });
-        const data = await res.data
+        const data = await res.data;
         localStorage.setItem("userName", data.user.name);
         return data;
     }
