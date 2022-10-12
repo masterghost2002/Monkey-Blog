@@ -1,12 +1,13 @@
 import React from 'react'
-
 export default function Confirm(props) {
+    // console.log(props.actionFun);
     return (
         <>
-            <button type="button" className="card-link card-link-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            <img src={props.icon_path} alt="fdsf" className="img-fluid share" />
+           
+            <button type="button" className="card-link card-link-btn blog-btns" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <i className="bi bi-file-earmark-arrow-down-fill fs-4"></i>
             </button>
-            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal fade" id="exampleModal"  aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -19,7 +20,7 @@ export default function Confirm(props) {
                             {props.modelData.body}
                         </div>
                         <div className="modal-footer">
-                            <button onClick={props.actionFun} type="button" className={`btn btn-${props.modelData.btn_color}`} data-bs-dismiss="modal">
+                            <button  type="button" onClick={props.actionFun} className={`btn btn-${props.modelData.btn_color}`} data-bs-dismiss="modal">
                                 {props.modelData.btn_name}
                             </button>
                         </div>

@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Avatar from '../../assests/images/avatar-sm.png'
-import Copy from '../../assests/images/Copy.png';
-import Download from '../../assests/images/download.png';
 import { jsPDF } from "jspdf";
 import CopyToClipboard from 'react-copy-to-clipboard';
 import Confirm from '../Modals/Confirm';
 import { useNavigate } from 'react-router-dom';
-
+import DOMPurify from 'dompurify'; 
+// as we are injection external html so, its good to purify it to prevent exteranl html attack
 export default function ViewFull() {
     const navigate = useNavigate();
     const baseServerUrl = "https://masterghostblog.herokuapp.com/";
@@ -74,10 +73,7 @@ export default function ViewFull() {
                                 </div>
                                 <div className="col-lg-6 d-flex justify-content-end">
                                     <span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar3" viewBox="0 0 16 16">
-                                            <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z" />
-                                            <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
-                                        </svg> <span className='fw-normal'>&nbsp;{blog.date}</span>
+                                    <i className="bi bi-calendar3"></i> <span className='fw-normal'>&nbsp;{blog.date}</span>
                                     </span>
                                 </div>
                             
@@ -85,14 +81,14 @@ export default function ViewFull() {
                             <div id="content">
                                 <div className="card-body card-full-body">
                                     <h5 className="card-title">Title:&nbsp;&nbsp;{blog.title}</h5>
-                                    <p dangerouslySetInnerHTML={{ __html: blog.description }} />
+                                    <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(blog.description) }} />
                                 </div>
                                 <hr></hr>
                                 <div className="card-body d-flex justify-content-between">
                                     <CopyToClipboard text={`http://localhost:3000/blog/${blog._id}`}>
-                                        <button className="card-link  card-link-btn"><img src={Copy} alt="fdsf" className="img-fluid share" /></button>
+                                        <button className="card-link  card-link-btn blog-btns"><i className="bi bi-link-45deg fs-4"></i></button>
                                     </CopyToClipboard>
-                                    <Confirm modelData={downloadModelData} actionFun={generatePDF} icon_path={Download} />
+                                    <Confirm modelData={downloadModelData} actionFun={generatePDF}/>
                                 </div>
                             </div>
                         </div>

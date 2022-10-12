@@ -4,12 +4,24 @@ import Heading from './Heading';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import JoditEditor from 'jodit-react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function AddBlog() {
   let userId = localStorage.getItem("userId");
   const params = useParams();
   const blogId = params.id;
   const baseServerUrl = "https://masterghostblog.herokuapp.com/";
   const [newBlog, setNewBlog] = useState({ title: "", description: "" });
+  const notifyAdd = () => toast.success(`${blogId === undefined?"Blog Added 😁":"Blog Update Success 😁"}`, {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+    });
   useEffect(() => {
     const sendRequestGetBlog = async () => {
       const res = await axios.get(`${baseServerUrl}blogs/${blogId}`).catch((err) => console.log(err));
@@ -45,11 +57,11 @@ export default function AddBlog() {
     else {
       if (blogId === undefined) {
         sendRequestAdd()
-          .then(() => navigate('/blogs'));
+          .then(() => navigate('/myBlogs'));
       }
       else {
         sendRequestUpdate()
-          .then(() => navigate('/blogs'));
+          .then(() => navigate('/myBlogs'));
       }
     }
 
@@ -103,11 +115,12 @@ export default function AddBlog() {
                   }))}
                 />
               </div>
-              <button className='btn add-blog-btn'>{blogId === undefined ? "Add Blog" : "Update Blog"}</button>
+              <button className='btn add-blog-btn' onClick={notifyAdd}>{blogId === undefined ? "Add Blog" : "Update Blog"}</button>
             </form>
           </div>
         </div>
       </div>
+      <ToastContainer />
     </>
   )
 }
