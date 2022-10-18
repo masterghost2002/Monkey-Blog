@@ -5,14 +5,26 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import JoditEditor from 'jodit-react';
 import { ToastContainer, toast } from 'react-toastify';
+// import { useSelector } from 'react-redux';
 import 'react-toastify/dist/ReactToastify.css';
+
+// global scope variables
+const baseServerUrl = "https://masterghostblog.herokuapp.com/";
+// const baseServerUrl = "http://localhost:5000/";
+const userId = localStorage.getItem("userId");
+const AUTH_ACCESS_TOKEN = localStorage.getItem("auth_access_token");
+
 export default function AddBlog() {
-  let userId = localStorage.getItem("userId");
+
+  // get the the params from the url if updating the blog (blog._id)
   const params = useParams();
   const blogId = params.id;
-  const baseServerUrl = "https://masterghostblog.herokuapp.com/";
+
+  //store
+  // const themeSide = useSelector((state)=>state.themeSide);
+  // state of blog
   const [newBlog, setNewBlog] = useState({ title: "", description: "" });
-  const notifyAdd = () => toast.success(`${blogId === undefined?"Blog Added 😁":"Blog Update Success 😁"}`, {
+  const notifyAdd = () => toast.success(`${blogId === undefined ? "Blog Added" : "Blog Update Success"}`, {
     position: "top-right",
     autoClose: 2000,
     hideProgressBar: false,
@@ -21,17 +33,18 @@ export default function AddBlog() {
     draggable: true,
     progress: undefined,
     theme: "dark",
-    });
+  });
+  //  use effect
   useEffect(() => {
     const sendRequestGetBlog = async () => {
       const res = await axios.get(`${baseServerUrl}blogs/${blogId}`).catch((err) => console.log(err));
       const data = await res.data;
       setNewBlog({
-        title:data.blog.title,
-        description:data.blog.description
+        title: data.blog.title,
+        description: data.blog.description
       })
     }
-    if (blogId !== undefined){
+    if (blogId !== undefined) {
       sendRequestGetBlog();
     }
   }, [blogId]);
@@ -61,7 +74,14 @@ export default function AddBlog() {
       }
       else {
         sendRequestUpdate()
-          .then(() => navigate('/myBlogs'));
+          .then((res) => {
+            if(res.response.status === 401){
+              navigate('/notfound');
+            }
+            else
+            navigate('/myBlogs')
+          })
+          .catch((error) => console.log);
       }
     }
 
@@ -80,17 +100,17 @@ export default function AddBlog() {
 
   // update
   const sendRequestUpdate = async () => {
-    const res = await axios.put(`${baseServerUrl}blogs/update/${blogId}`, {
+    let reqInstance = axios.create({ headers: { Authorization: `Bearer ${AUTH_ACCESS_TOKEN}` } });
+    const res = await reqInstance.put(`${baseServerUrl}blogs/update/${blogId}`, {
       title: newBlog.title,
       description: newBlog.description,
       user: userId
-    }).catch(err => console.log(err));
-    const data = await res.data
-    return data;
+    }).catch(error => error);
+    return res;
   }
 
 
-
+  console.log("Hello");
   return (
     <>
       <div className='container-fluid blogs'>
@@ -109,6 +129,7 @@ export default function AddBlog() {
                   value={newBlog.description}
                   tabIndex={1}
                   name="description"
+                  // config = {{ theme : 'dark' }}
                   onChange={newContent => setNewBlog((prevSate) => ({
                     ...prevSate,
                     'description': newContent

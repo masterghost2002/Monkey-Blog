@@ -65,7 +65,7 @@ export default function ViewFull() {
         <section className='view_full_blog'>
             <div className="container-fluid">
                 <div className="row justify-content-center">
-                    <div className="col-lg-8">
+                    <div className="col-lg-10">
                         <div className="card card-full" >
                             <div className="card-detail card-header row">
                                 <div className="col-lg-6">
@@ -86,7 +86,7 @@ export default function ViewFull() {
                                 <hr></hr>
                                 <div className="card-body d-flex justify-content-between">
                                     <CopyToClipboard text={`http://localhost:3000/blog/${blog._id}`}>
-                                        <button className="card-link  card-link-btn blog-btns"><i className="bi bi-link-45deg fs-4"></i></button>
+                                        <button className="card-link  card-link-btn blog-btns" title='copy-link'><i className="bi bi-link-45deg fs-4"></i></button>
                                     </CopyToClipboard>
                                     <Confirm modelData={downloadModelData} actionFun={generatePDF}/>
                                 </div>

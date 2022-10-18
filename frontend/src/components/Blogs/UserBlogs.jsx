@@ -1,5 +1,5 @@
 import React from 'react'
-import Blog from './Blog';
+import BlogCard from './BlogCard';
 import Heading from './Heading';
 import axios from 'axios';
 import { useState, useEffect} from 'react';
@@ -10,6 +10,8 @@ export default function UserBlogs() {
   const [blogs, setBlogs] = useState([]);
   const baseServerUrl = "https://masterghostblog.herokuapp.com/";
   const userId = localStorage.getItem("userId");
+
+  // const userId = localStorage.getItem("userId");
 
   //toasts
   const notifyDelete = () => toast.success('Delete Success', {
@@ -44,13 +46,14 @@ export default function UserBlogs() {
 
   useEffect(()=>{
     sendRequest();
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>
       <div className='container-fluid blogs'>
         <Heading content={"Your Blogs"}></Heading>
         <div className="row justify-content-center">
-          {blogs.length?blogs.map((item) => <Blog  key={item._id} blog={item} canmodify={true} onDelete={sendRequest} notificationDelete = {notifyDelete} notificationCopy = {notifyCopy}></Blog>):<NoBlog/>}
+          {blogs.length?blogs.map((item) => <BlogCard  key={item._id} blog={item} canmodify={true} onDelete={sendRequest} notificationDelete = {notifyDelete} notificationCopy = {notifyCopy}></BlogCard>):<NoBlog/>}
         </div>
       </div>
       <ToastContainer />

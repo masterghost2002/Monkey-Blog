@@ -3,24 +3,26 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { authActions } from '../../Store';
 import { NavLink, useNavigate } from 'react-router-dom';
+
+
+// global var should be here like server link etc
+const validMailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+const baseServerUrl = "https://masterghostblog.herokuapp.com/";
+// const baseServerUrl = "http://localhost:5000/";
 export default function Login() {
 
     // router dom and server
-    const baseServerUrl = "https://masterghostblog.herokuapp.com/";
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // form realted work
-    const [inputs, setInputs] = useState({
-        name: "", email: "", password: ""
-    });
+    // form realted states
+    const [inputs, setInputs] = useState({name: "", email: "", password: ""});
     const [validationMessage, setValidationMessage] = useState({ email: "", password: "" });
     const [isSignUp, setIsSignUp] = useState(false);
     const [viewPassword, setViewPassword] = useState(false);
-    // For those who are confused with prevCount
-    // Just like when we need to update state using setState, we either passed an object or a function to setState. The function takes prevState and prevProps as parameters. Since setState is async, it is always advisable to update state passing a function rather an object.
-    // Likewise setCount takes a function. 
-    // Remember useState returns 1. the initial state value 2. a function to update the state
+
+
+    // form handle chanfe
     const handleChange = (event) => {
         setValidationMessage({ email: "", password: "" });
         setInputs((prevSate) => ({
@@ -31,36 +33,61 @@ export default function Login() {
 
 
     // backend functions
-    const handleSubmit = (event) => {
-
-        event.preventDefault();
-        if (isSignUp)
-            sendRequest("signup")
-                .then((data) => localStorage.setItem("userId", data.user._id))
-                .then(() => dispatch(authActions.login()))
-                .then(() => navigate('/blogs'))
-                .catch((err) => console.log(err));
-        else
-            sendRequest("login")
-                .then((data) => localStorage.setItem("userId", data.user._id))
-                .then(() => dispatch(authActions.login()))
-                .then(() => navigate('/blogs'))
-                .catch((err) => console.log(err));
-    }
+    // login-sognup
     const sendRequest = async (type) => {
         const res = await axios.post(`${baseServerUrl}user/${type}`, {
             name: inputs.name,
             email: inputs.email,
             password: inputs.password
-        }).catch(function (error) {
-            if (error.response.status === 404)
-                setValidationMessage({ email: error.response.data.message });
-            else if (error.response.status === 400)
-                setValidationMessage({ password: error.response.data.message });
-        });
+        })
+            .catch(function (error) {
+                if (error.response.status === 404)
+                    setValidationMessage({ email: error.response.data.message });
+                else if (error.response.status === 400)
+                    setValidationMessage({ password: error.response.data.message });
+            });
         const data = await res.data;
-        localStorage.setItem("userName", data.user.name);
-        return data;
+        localStorage.setItem("auth_access_token", data.accessToken);
+        return data.user;
+    }
+
+    // no submition of login/signup form
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        if(!inputs.email.match(validMailRegex)){
+            setValidationMessage({ email: "Not a valid Email" });
+            return;
+        }
+        if(inputs.password.trim().length === 0){
+            setValidationMessage({ password: "Password Should Not be empty" });
+            return;
+        }
+        if (isSignUp){
+            sendRequest("signup")
+                .then((user) => {
+                    localStorage.setItem("userName", user.name);
+                    localStorage.setItem("userId", user._id);
+                    dispatch(authActions.login());
+                    if(user.themeSide === 'dark')
+                        dispatch(authActions.setThemeSideDark());
+                    else dispatch(authActions.setThemeSideLight());
+                })
+                .then(() => navigate('/blogs'))
+                .catch((err) => console.log(err));
+        }
+        else{
+            sendRequest("login")
+                .then((user) => {
+                    localStorage.setItem("userName", user.name);
+                    localStorage.setItem("userId", user._id);
+                    if(user.themeSide === 'dark')
+                        dispatch(authActions.setThemeSideDark());
+                    else dispatch(authActions.setThemeSideLight());
+                    dispatch(authActions.login())
+                })
+                .then(() => navigate('/blogs'))
+                .catch((err) => console.log(err));
+        }
     }
 
     // server functions done
@@ -98,11 +125,11 @@ export default function Login() {
                                         {validationMessage.email}
                                     </div>
                                 </div>
-                                
+
                                 {/* handle password */}
                                 <div className="input-group">
                                     <input type={viewPassword ? "text" : "password"} className="form-control p-3" id="floatingPassword" placeholder="Password" aria-label="Recipient's username" aria-describedby="button-addon2" onChange={handleChange} name='password' />
-                                    <button className="btn btn-show-password" type="button" id="button-addon2" onClick={() => setViewPassword(!viewPassword)}><i className={`bi bi-eye${viewPassword ? "-slash-fill" : "-fill"}`}></i></button>
+                                    <button className="btn btn-show-password" type="button" id="button-addon2" onClick={() => setViewPassword(!viewPassword)} title={viewPassword ? "hide-password" : "view-password"}><i className={`bi bi-eye${viewPassword ? "-slash-fill" : "-fill"}`}></i></button>
                                 </div>
                                 <div className="text-danger">
                                     {validationMessage.password}
@@ -112,7 +139,7 @@ export default function Login() {
                                 {!isSignUp && <div className="forget-password my-3 text-end">
                                     <NavLink to="/forgetpassword" className="my-4 forget_btn">Forget Password?</NavLink>
                                 </div>}
-                                <button className="btn submit_btn w-100px my-2">{isSignUp ? "Sign-Up" : "Sign-In"} &nbsp;<i className="bi bi-box-arrow-in-right fw-bold"></i></button>
+                                <button className="btn submit_btn  my-2" title={isSignUp ? "Sign-Up" : "Sign-In"}>{isSignUp ? "Sign-Up" : "Sign-In"} &nbsp;<i className="bi bi-box-arrow-in-right fw-bold"></i></button>
                             </form>
                         </div>
                     </div>
