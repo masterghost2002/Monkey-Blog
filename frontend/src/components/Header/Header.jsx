@@ -8,7 +8,6 @@ import axios from 'axios';
 
 // const baseServerUrl = "http://localhost:5000/";
 const baseServerUrl = "https://masterghostblog.herokuapp.com/";
-
 export const Header = () => {
     const [isCollapsed, setIsCollapsed] = useState(true);
     const dispatch = useDispatch();
@@ -45,8 +44,14 @@ export const Header = () => {
     return (
         <nav className={`navbar navbar-expand-lg navbar-${themeSide}`}>
             <div className="container-fluid">
-                <NavLink to={isLoggedIn ? "/blogs" : "/"}><img src={Logo} alt="www.google.com" className="fluid logo" /></NavLink>
-                <span className='text-muted fw-bold'>&nbsp; Beta</span>
+                <NavLink to={isLoggedIn ? "/blogs" : "/"}>
+                    {/* <img src={Logo} alt="www.google.com" className="fluid logo" data-bs-target="#navbarNav" data-bs-toggle="collapse" onClick={() => setIsCollapsed(!isCollapsed)} /> */}
+                    {!isCollapsed ?
+                        <img src={Logo} alt="www.google.com" className="fluid logo" data-bs-target="#navbarNav" data-bs-toggle="collapse" onClick={() => setIsCollapsed(!isCollapsed)} />: <img src={Logo} alt="www.google.com" className="fluid logo"/>}
+                </NavLink>
+                <span className='fw-bold version_header'>
+                    &nbsp; Beta
+                </span>
                 {isLoggedIn && <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" onClick={() => setIsCollapsed(!isCollapsed)}>
                     {isCollapsed ? <i className="bi bi-list fw-bold fs-2"></i> : <i className="bi bi-x-lg fs-2"></i>}
                 </button>}
@@ -54,17 +59,28 @@ export const Header = () => {
                     <ul className="navbar-nav ms-auto">
                         {isLoggedIn && <li className="nav-item">
                             <button onClick={handleThemeSide} className={`btn theme-side-switch `} title={`switch-to-${themeSide}`} >
-                                <i className={`fas fa-${themeSide === 'dark' ? 'sun' : 'moon'}`}></i><span className='text-muted'>&nbsp;Beta</span>
+                                <i className={`fas fa-${themeSide === 'dark' ? 'sun' : 'moon'}`}></i>
+                                {!isCollapsed ? <span className={`theme-side-${themeSide}`} data-bs-target="#navbarNav" data-bs-toggle="collapse" onClick={() => setIsCollapsed(!isCollapsed)}>&nbsp;{themeSide === 'dark' ? "Light Side" : "Dark Side"}</span>
+                                    : <span className={`theme-side-${themeSide}`}>&nbsp;{themeSide === 'dark' ? "Light Side" : "Dark Side"}</span>}
                             </button>
                         </li>}
                         {isLoggedIn && <li className="nav-item">
-                            <NavLink className={({ isActive }) => (isActive ? `nav-link nav-active-${themeSide}` : "nav-link")} aria-current="page" to="/blogs" >All Blogs</NavLink>
+                            <NavLink className={({ isActive }) => (isActive ? `nav-link nav-active-${themeSide}` : "nav-link")} aria-current="page" to="/blogs" >
+                                {!isCollapsed ? <span data-bs-target="#navbarNav" data-bs-toggle="collapse" onClick={() => setIsCollapsed(!isCollapsed)}>All Blogs</span> : <span>All Blogs</span>}
+                            </NavLink>
                         </li>}
                         {isLoggedIn && <li className="nav-item">
-                            <NavLink className={({ isActive }) => (isActive ? `nav-link nav-active-${themeSide}` : "nav-link")} aria-current="page" to="/myBlogs" >My Blogs</NavLink>
+                            <NavLink className={({ isActive }) => (isActive ? `nav-link nav-active-${themeSide}` : "nav-link")} aria-current="page" to="/myBlogs" >
+                                {/* <span data-bs-target="#navbarNav" data-bs-toggle="collapse" >My Blogs</span> */}
+                                {!isCollapsed ? <span data-bs-target="#navbarNav" data-bs-toggle="collapse" onClick={() => setIsCollapsed(!isCollapsed)}>My Blogs</span> : <span>My Blogs</span>}
+                            </NavLink>
                         </li>}
                         {isLoggedIn && <li className="nav-item">
-                            <NavLink className={({ isActive }) => (isActive ? `nav-link nav-active-${themeSide}` : "nav-link")} aria-current="page" to="/addBlog" >Add Blog</NavLink>
+                            <NavLink className={({ isActive }) => (isActive ? `nav-link nav-active-${themeSide}` : "nav-link")} aria-current="page" to="/addBlog" >
+                                {/* <span data-bs-target="#navbarNav" data-bs-toggle="collapse" >Add Blog</span> */}
+                                {!isCollapsed ?
+                                    <span data-bs-target="#navbarNav" data-bs-toggle="collapse" onClick={() => setIsCollapsed(!isCollapsed)}>Add Blog</span> : <span>Add Blogs</span>}
+                            </NavLink>
                         </li>}
 
                         {isLoggedIn && <div className="nav-item dropdown">
@@ -77,11 +93,19 @@ export const Header = () => {
                                         <img src={Avatar} alt="fdfd" className="img-fluid profile-image" />
                                     </div>
                                 </li>
-                                <li><span className={`dropdown-item user_name_${themeSide}`}>{userName}</span></li>
-                                <li><a className="dropdown-item disabled" href="/">Profile Setting</a></li>
-                                <li><hr className="dropdown-divider" /></li>
+                                <li>
+                                    <span className={`dropdown-item user_name_${themeSide}`}>{userName}</span>
+                                </li>
+                                <li>
+                                    <a className="dropdown-item disabled" href="/">Profile Setting</a>
+                                </li>
+                                <li>
+                                    <hr className="dropdown-divider" />
+                                </li>
                                 <li className="nav-item">
-                                    <NavLink onClick={() => dispatch(authActions.logout())} className={({ isActive }) => (isActive ? "nav-link" : "nav-link fw-bolder")} aria-current="page" to="/">Log Out</NavLink>
+                                    <NavLink onClick={() => dispatch(authActions.logout())} className={({ isActive }) => (isActive ? "nav-link" : "nav-link fw-bolder")} aria-current="page" to="/">
+                                        <span data-bs-target="#navbarNav" data-bs-toggle="collapse" onClick={() => setIsCollapsed(!isCollapsed)}>Log Out</span>
+                                    </NavLink>
                                 </li>
                             </ul>
                         </div>}

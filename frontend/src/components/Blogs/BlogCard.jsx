@@ -18,7 +18,7 @@ export default function BlogCard(props) {
   // react-router-dom
   const navigate = useNavigate();
 
-  const themeSide = useSelector((state)=> state.themeSide);;
+  const themeSide = useSelector((state)=> state.themeSide);
   // modal states and function
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -57,8 +57,8 @@ export default function BlogCard(props) {
 
   return (
     <>
-      <div className="col-lg-5">
-        <div className={`card blog-card blog-card-${themeSide} mt-4 mb-4`}>
+      <div className="col-lg-5 mt-4">
+        <div className={`card blog-card blog-card-${themeSide}`}>
           <div className="d-flex justify-content-center img_container">
             <img src={image_link} className="card-img-top img-fluid" alt="fsdfsd" />
           </div>
@@ -89,12 +89,12 @@ export default function BlogCard(props) {
                 <button className={`card-link  card-link-btn card-link-btn-${themeSide} blog-btns`} title='delete-blog' onClick={handleShow}>
                   <i className="bi bi-trash fs-4 "></i>
                 </button>
-                <Modal show={show} onHide={handleClose}>
-                  <Modal.Header closeButton>
+                <Modal show={show} onHide={handleClose} className={`modal-${themeSide}`}>
+                  <Modal.Header closeButton className={`modal-header-${themeSide}`}>
                     <Modal.Title>Delete Blog</Modal.Title>
                   </Modal.Header>
-                  <Modal.Body>Are you sure want to delete the blog?Delete action can't be undo.</Modal.Body>
-                  <Modal.Footer>
+                  <Modal.Body className={`modal-body-${themeSide}`} >Are you sure want to delete the blog?Delete action can't be undo.</Modal.Body>
+                  <Modal.Footer className={`modal-footer-${themeSide}`}>
                     <Button variant="danger" onClick={handleDelete}>
                       Delete
                     </Button>

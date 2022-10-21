@@ -1,29 +1,45 @@
-import React, { useEffect } from 'react';
-import { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import Heading from './Heading';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import JoditEditor from 'jodit-react';
 import { ToastContainer, toast } from 'react-toastify';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import 'react-toastify/dist/ReactToastify.css';
 
 // global scope variables
-const baseServerUrl = "https://masterghostblog.herokuapp.com/";
 // const baseServerUrl = "http://localhost:5000/";
-const userId = localStorage.getItem("userId");
-const AUTH_ACCESS_TOKEN = localStorage.getItem("auth_access_token");
+export default function AddBlog(props) {
+  const baseServerUrl = "https://masterghostblog.herokuapp.com/";
 
-export default function AddBlog() {
+  // 
+  const AUTH_ACCESS_TOKEN = localStorage.getItem("auth_access_token");
+  const userId = localStorage.getItem("userId");
+  //store
+  const themeSide = useSelector((state) => state.themeSide);
+
+  //router dom
+  const navigate = useNavigate();
+
+  //props destructure to prevent looping while changing of progress bar
+  const progressHandler = props.progressHandler;
+
+  //editor 
+  const editor = useRef(null);
+  function returnThemeSide(themeSide) {
+    return { theme: themeSide }
+  }
+
+  var config = useMemo(() => returnThemeSide(themeSide), [themeSide]); //use memo return memoized value
 
   // get the the params from the url if updating the blog (blog._id)
   const params = useParams();
   const blogId = params.id;
 
-  //store
-  // const themeSide = useSelector((state)=>state.themeSide);
   // state of blog
   const [newBlog, setNewBlog] = useState({ title: "", description: "" });
+
+  //toastt
   const notifyAdd = () => toast.success(`${blogId === undefined ? "Blog Added" : "Blog Update Success"}`, {
     position: "top-right",
     autoClose: 2000,
@@ -34,25 +50,26 @@ export default function AddBlog() {
     progress: undefined,
     theme: "dark",
   });
+
   //  use effect
   useEffect(() => {
     const sendRequestGetBlog = async () => {
+      progressHandler(27);
       const res = await axios.get(`${baseServerUrl}blogs/${blogId}`).catch((err) => console.log(err));
       const data = await res.data;
       setNewBlog({
         title: data.blog.title,
         description: data.blog.description
       })
+      progressHandler(100);
     }
     if (blogId !== undefined) {
       sendRequestGetBlog();
     }
-  }, [blogId]);
+  }, [blogId, progressHandler]);
 
 
 
-  const editor = useRef(null);
-  const navigate = useNavigate();
 
 
   const handleChange = (event) => {
@@ -65,21 +82,26 @@ export default function AddBlog() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    progressHandler(27);
     if (newBlog.title === "" || newBlog.description === "")
       alert(`${newBlog.title === "" ? "Title" : "Description"} must not be empty`);
     else {
       if (blogId === undefined) {
         sendRequestAdd()
-          .then(() => navigate('/myBlogs'));
+          .then(() => {
+            navigate('/myBlogs')
+          });
       }
       else {
         sendRequestUpdate()
           .then((res) => {
-            if(res.response.status === 401){
+            if (res.status === 401) {
               navigate('/notfound');
+              progressHandler(100);
             }
-            else
-            navigate('/myBlogs')
+            else{
+              navigate('/myBlogs');
+            }
           })
           .catch((error) => console.log);
       }
@@ -109,8 +131,6 @@ export default function AddBlog() {
     return res;
   }
 
-
-  console.log("Hello");
   return (
     <>
       <div className='container-fluid blogs'>
@@ -129,7 +149,7 @@ export default function AddBlog() {
                   value={newBlog.description}
                   tabIndex={1}
                   name="description"
-                  // config = {{ theme : 'dark' }}
+                  config={config}
                   onChange={newContent => setNewBlog((prevSate) => ({
                     ...prevSate,
                     'description': newContent

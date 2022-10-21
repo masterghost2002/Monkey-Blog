@@ -1,25 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Avatar from '../../assests/images/avatar-sm.png'
 import { jsPDF } from "jspdf";
 import CopyToClipboard from 'react-copy-to-clipboard';
-import Confirm from '../Modals/Confirm';
 import { useNavigate } from 'react-router-dom';
-import DOMPurify from 'dompurify'; 
+import DOMPurify from 'dompurify';
+import ViewFullSkeleton from './ViewFullSkeleton';
+import { useSelector } from 'react-redux';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 // as we are injection external html so, its good to purify it to prevent exteranl html attack
-export default function ViewFull() {
-    const navigate = useNavigate();
+export default function ViewFull(props) {
     const baseServerUrl = "https://masterghostblog.herokuapp.com/";
+
+    //store
+    const themeSide = useSelector((state) => state.themeSide);
+
+    //props destructure to prevent looping while changing of progress bar
+    const progressHandler = props.progressHandler;
+    const [loader, setLoader] = useState(true);
+    //blog state
+    const [blog, setBlog] = useState({ title: "", description: "", userName: "", date: "", _id: "" });
+
+    //router dom
+    const navigate = useNavigate();
     const param = useParams();
     const blog_id = param.id;
-    const [blog, setBlog] = useState({ title: "", description: "", userName: "", date: "", _id: "" });
+
+    //blog description
+    const description = blog.description;
+    const descriptionDark = description;
+    // console.log(descriptionDark);
+
+    //model and data
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
     const downloadModelData = {
         title: "Download as PDF",
         body: "Currently this Feature is in BETA Stage downloaded file may be not as same as blog!",
         btn_name: "Download",
         btn_color: "success"
     }
+
+    //time format
     const formatDate = (created_at) => {
         let date = new Date(created_at);
         let dtFromat = new Intl.DateTimeFormat('en-US', {
@@ -31,27 +56,33 @@ export default function ViewFull() {
         return date;
     }
 
+    //server request to get blog
+    const sendRequestGetBlog = useCallback(async () => {
+        progressHandler(27);
+        const res = await axios.get(`${baseServerUrl}blogs/${blog_id}`).catch(function (error) {
+            if (error.response) {
+                progressHandler(100);
+                navigate("/notfound");
+            }
+            else if (error.request)
+                console.log(error.request);
+            else
+                console.log('Error', error.message);
+        });
+        const data = await res.data;
+        setBlog({
+            title: data.blog.title,
+            description: data.blog.description,
+            userName: data.blog.user.name,
+            date: formatDate(data.blog.created_at),
+            _id: data.blog._id
+        });
+        setLoader(false);
+        progressHandler(100);
+    }, [blog_id, baseServerUrl, navigate, progressHandler]);
     useEffect(() => {
-        const sendRequestGetBlog = async () => {
-            const res = await axios.get(`${baseServerUrl}blogs/${blog_id}`).catch(function (error) {
-                if (error.response)
-                    navigate("/notfound");
-                else if (error.request)
-                    console.log(error.request);
-                else
-                    console.log('Error', error.message);
-            });
-            const data = await res.data;
-            setBlog({
-                title: data.blog.title,
-                description: data.blog.description,
-                userName: data.blog.user.name,
-                date: formatDate(data.blog.created_at),
-                _id: data.blog._id
-            })
-        }
         sendRequestGetBlog();
-    }, [blog_id, navigate]);
+    }, [sendRequestGetBlog]);
 
     const generatePDF = () => {
         var doc = new jsPDF("p", "pt", "a4");
@@ -62,41 +93,54 @@ export default function ViewFull() {
         });
     }
     return (
-        <section className='view_full_blog'>
-            <div className="container-fluid">
-                <div className="row justify-content-center">
-                    <div className="col-lg-10">
-                        <div className="card card-full" >
-                            <div className="card-detail card-header row">
-                                <div className="col-lg-6">
-                                    <span><img src={Avatar} alt="" className="img-fluid" />&nbsp; &nbsp;{blog.userName}</span>
+        <>
+            {loader ? <ViewFullSkeleton /> : < section className='view_full_blog' >
+                <div className="container-fluid">
+                    <div className="row justify-content-center">
+                        <div className="col-lg-10">
+                            <div className={`card card-full card-full-${themeSide}`} >
+                                <div className="card-detail card-header row">
+                                    <div className="col-lg-6">
+                                        <span><img src={Avatar} alt="" className="img-fluid" />&nbsp; &nbsp;{blog.userName}</span>
+                                    </div>
+                                    <div className="col-lg-6 d-flex justify-content-end">
+                                        <span>
+                                            <i className="bi bi-calendar3"></i> <span className='fw-normal'>&nbsp;{blog.date}</span>
+                                        </span>
+                                    </div>
                                 </div>
-                                <div className="col-lg-6 d-flex justify-content-end">
-                                    <span>
-                                    <i className="bi bi-calendar3"></i> <span className='fw-normal'>&nbsp;{blog.date}</span>
-                                    </span>
-                                </div>
-                            
-                            </div>
-                            <div id="content">
-                                <div className="card-body card-full-body">
-                                    <h5 className="card-title">Title:&nbsp;&nbsp;{blog.title}</h5>
-                                    <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(blog.description) }} />
-                                </div>
-                                <hr></hr>
-                                <div className="card-body d-flex justify-content-between">
-                                    <CopyToClipboard text={`http://localhost:3000/blog/${blog._id}`}>
-                                        <button className="card-link  card-link-btn blog-btns" title='copy-link'><i className="bi bi-link-45deg fs-4"></i></button>
-                                    </CopyToClipboard>
-                                    <Confirm modelData={downloadModelData} actionFun={generatePDF}/>
+                                <div id="content">
+                                    <div className="card-body card-full-body">
+                                        <h5 className="card-title">Title:&nbsp;&nbsp;{blog.title}</h5>
+                                        <p className='p-body' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(descriptionDark) }} />
+                                    </div>
+                                    <hr></hr>
+                                    <div className="card-body d-flex justify-content-between">
+                                        <CopyToClipboard text={`https://monkey-app.netlify.app/blog/${blog._id}`}>
+                                            <button className="card-link  card-link-btn blog-btns" title='copy-link'><i className="bi bi-link-45deg fs-4"></i></button>
+                                        </CopyToClipboard>
+                                        <button type="button" className="card-link card-link-btn blog-btns" onClick={handleShow}>
+                                            <i className="bi bi-file-earmark-arrow-down-fill fs-4"></i>
+                                        </button>
+                                        <Modal show={show} onHide={handleClose} className={`modal-${themeSide}`}>
+                                            <Modal.Header closeButton className={`modal-header-${themeSide}`}>
+                                                <Modal.Title>{downloadModelData.title}</Modal.Title>
+                                            </Modal.Header>
+                                            <Modal.Body className={`modal-body-${themeSide}`} >{downloadModelData.body}</Modal.Body>
+                                            <Modal.Footer className={`modal-footer-${themeSide}`}>
+                                                <Button variant="success" onClick={generatePDF}>
+                                                    {downloadModelData.btn_name}
+                                                </Button>
+                                            </Modal.Footer>
+                                        </Modal>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section >}
+        </>
 
-
-        </section>
-    )
+    );
 }

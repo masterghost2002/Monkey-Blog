@@ -2,6 +2,7 @@ import { React, useEffect, useState } from 'react';
 import axios from 'axios';
 import BlogCard from './BlogCard';
 import Heading from './Heading';
+import SkeletonCard from './SkeletonCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,30 +24,39 @@ const notifyCopy = () => toast('🦄 Link Copied To Clipboard!', {
   theme: "dark",
 });
 
-export default function Blogs() {
+export default function Blogs(props) {
   const userName = localStorage.getItem('userName');
   // store (store/index.js) functions
   const dispatch = useDispatch();
   const showWelcome = useSelector((state) => state.showWelcome); //set show welcome to false after first login
 
+  //props destructure to prevent looping while changing of progress bar
+  const progressHandler = props.progressHandler;
 
-  //blogs state
+  //blogs state, loaderstate
   const [blogs, setBlogs] = useState([]);
-
-
+  const [loader, setLoader] = useState(true);
 
   // server requets
   const sendRequest = async () => {
+    progressHandler(27);
     const res = await axios.get(`${baseServerUrl}blogs/`)
-      .then((response) => response)
+      .then((response) => {
+        progressHandler(87);
+        return response;
+      })
       .catch(err => console.log(err));
     const data = await res.data;
+    setLoader(false);
+    progressHandler(100);
     return data; // return blogs data 
   }
 
   // use effect
   useEffect(() => {
-    sendRequest().then(data => setBlogs(data.blogs));
+    sendRequest().then((data) => {
+      setBlogs(data.blogs);
+    });
     const notifyWelcome = () => {
       toast(`Welcome ${userName} ✌️`, {
         position: "top-right",
@@ -59,9 +69,11 @@ export default function Blogs() {
         theme: "dark",
       });
       dispatch(authActions.setShowWelcome());
+
     };
     if (showWelcome === true)
       notifyWelcome();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showWelcome, dispatch, userName]);
 
 
@@ -69,9 +81,9 @@ export default function Blogs() {
     <>
       <div className='container-fluid blogs'>
         <Heading content={"Latest Blogs"}></Heading>
-        <div className="row justify-content-center">
+        {loader?<div className="row justify-content-center">{<><SkeletonCard/><SkeletonCard/></>}</div>:<div className="row justify-content-center">
           {blogs.map((item) => <BlogCard key={item._id} blog={item} canmodify={false} notificationCopy={notifyCopy}></BlogCard>)}
-        </div>
+        </div>}
       </div>
       <ToastContainer />
     </>

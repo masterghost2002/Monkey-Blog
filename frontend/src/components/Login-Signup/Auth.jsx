@@ -9,20 +9,23 @@ import { NavLink, useNavigate } from 'react-router-dom';
 const validMailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const baseServerUrl = "https://masterghostblog.herokuapp.com/";
 // const baseServerUrl = "http://localhost:5000/";
-export default function Login() {
+export default function Auth(props) {
 
     // router dom and server
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    //props destructure to prevent looping while changing of progress bar
+    const progressHandler = props.progressHandler;
+
     // form realted states
-    const [inputs, setInputs] = useState({name: "", email: "", password: ""});
+    const [inputs, setInputs] = useState({ name: "", email: "", password: "" });
     const [validationMessage, setValidationMessage] = useState({ email: "", password: "" });
     const [isSignUp, setIsSignUp] = useState(false);
     const [viewPassword, setViewPassword] = useState(false);
 
 
-    // form handle chanfe
+    // form handle change
     const handleChange = (event) => {
         setValidationMessage({ email: "", password: "" });
         setInputs((prevSate) => ({
@@ -54,36 +57,37 @@ export default function Login() {
     // no submition of login/signup form
     const handleSubmit = (event) => {
         event.preventDefault();
-        if(!inputs.email.match(validMailRegex)){
+        if (!inputs.email.match(validMailRegex)) {
             setValidationMessage({ email: "Not a valid Email" });
             return;
         }
-        if(inputs.password.trim().length === 0){
+        if (inputs.password.trim().length === 0) {
             setValidationMessage({ password: "Password Should Not be empty" });
             return;
         }
-        if (isSignUp){
+        progressHandler(27);
+        if (isSignUp) {
             sendRequest("signup")
                 .then((user) => {
                     localStorage.setItem("userName", user.name);
                     localStorage.setItem("userId", user._id);
                     dispatch(authActions.login());
-                    if(user.themeSide === 'dark')
+                    if (user.themeSide === 'dark')
                         dispatch(authActions.setThemeSideDark());
                     else dispatch(authActions.setThemeSideLight());
                 })
                 .then(() => navigate('/blogs'))
                 .catch((err) => console.log(err));
         }
-        else{
+        else {
             sendRequest("login")
                 .then((user) => {
                     localStorage.setItem("userName", user.name);
                     localStorage.setItem("userId", user._id);
-                    if(user.themeSide === 'dark')
+                    if (user.themeSide === 'dark')
                         dispatch(authActions.setThemeSideDark());
                     else dispatch(authActions.setThemeSideLight());
-                    dispatch(authActions.login())
+                    dispatch(authActions.login());
                 })
                 .then(() => navigate('/blogs'))
                 .catch((err) => console.log(err));

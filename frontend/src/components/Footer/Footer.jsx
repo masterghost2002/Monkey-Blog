@@ -14,7 +14,7 @@ export default function Footer() {
           </div>
           <div className="col-lg-4 d-flex justify-content-lg-center justify-content-center mb-2 align-items-center">
             <ul style={{"listStyle":"none"}}>
-              <li><NavLink className={`contact-us-link-${themeSide}`} aria-current="page" to="/contactus">About Monkye-App</NavLink></li>
+              <li><NavLink className={`contact-us-link-${themeSide}`} aria-current="page" to="/contactus">About Monkey-App</NavLink></li>
               <li><NavLink className={`contact-us-link-${themeSide}`} aria-current="page" to="/contactus">Contact US</NavLink></li>
             </ul>
           </div>
