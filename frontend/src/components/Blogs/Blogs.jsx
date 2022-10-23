@@ -1,31 +1,18 @@
-import { React, useEffect, useState } from 'react';
+import { React, useCallback, useEffect, useState } from 'react';
+import { authActions } from '../../Store';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+// components
+import {notifyCopy, notifyWelcome} from '../Toastify/ToastNotifications';
 import BlogCard from './BlogCard';
 import Heading from './Heading';
 import SkeletonCard from './SkeletonCard';
-import { useDispatch, useSelector } from 'react-redux';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { authActions } from '../../Store';
-
+import AddBlogFloat from '../Modals/AddBlogFloat';
 
 const baseServerUrl = "https://masterghostblog.herokuapp.com/";
 // const baseServerUrl = "http://localhost:5000/";
 
-// toast
-const notifyCopy = () => toast('🦄 Link Copied To Clipboard!', {
-  position: "top-right",
-  autoClose: 2000,
-  hideProgressBar: true,
-  closeOnClick: false,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: "dark",
-});
-
 export default function Blogs(props) {
-  const userName = localStorage.getItem('userName');
   // store (store/index.js) functions
   const dispatch = useDispatch();
   const showWelcome = useSelector((state) => state.showWelcome); //set show welcome to false after first login
@@ -38,7 +25,7 @@ export default function Blogs(props) {
   const [loader, setLoader] = useState(true);
 
   // server requets
-  const sendRequest = async () => {
+  const sendRequest = useCallback(async () => {
     progressHandler(27);
     const res = await axios.get(`${baseServerUrl}blogs/`)
       .then((response) => {
@@ -47,45 +34,33 @@ export default function Blogs(props) {
       })
       .catch(err => console.log(err));
     const data = await res.data;
-    setLoader(false);
-    progressHandler(100);
+    await setLoader(false);
+    await progressHandler(100);
     return data; // return blogs data 
-  }
+  }, [progressHandler])
+
 
   // use effect
   useEffect(() => {
     sendRequest().then((data) => {
       setBlogs(data.blogs);
-    });
-    const notifyWelcome = () => {
-      toast(`Welcome ${userName} ✌️`, {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-      dispatch(authActions.setShowWelcome());
-
-    };
-    if (showWelcome === true)
+    }).catch((err)=>console.log(err));
+    if(showWelcome === true){
       notifyWelcome();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showWelcome, dispatch, userName]);
+      dispatch(authActions.setShowWelcome());
+    }
+  }, [sendRequest, showWelcome, dispatch]);
 
 
   return (
     <>
       <div className='container-fluid blogs'>
         <Heading content={"Latest Blogs"}></Heading>
-        {loader?<div className="row justify-content-center">{<><SkeletonCard/><SkeletonCard/></>}</div>:<div className="row justify-content-center">
+        {loader ? <div className="row justify-content-center">{<><SkeletonCard /><SkeletonCard /></>}</div> : <div className="row justify-content-center">
           {blogs.map((item) => <BlogCard key={item._id} blog={item} canmodify={false} notificationCopy={notifyCopy}></BlogCard>)}
         </div>}
       </div>
-      <ToastContainer />
+      {!loader && <AddBlogFloat />}
     </>
 
   )

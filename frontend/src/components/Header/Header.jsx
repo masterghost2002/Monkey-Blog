@@ -49,9 +49,9 @@ export const Header = () => {
                     {!isCollapsed ?
                         <img src={Logo} alt="www.google.com" className="fluid logo" data-bs-target="#navbarNav" data-bs-toggle="collapse" onClick={() => setIsCollapsed(!isCollapsed)} />: <img src={Logo} alt="www.google.com" className="fluid logo"/>}
                 </NavLink>
-                <span className='fw-bold version_header'>
+                {/* <span className='fw-bold version_header'>
                     &nbsp; Beta
-                </span>
+                </span> */}
                 {isLoggedIn && <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" onClick={() => setIsCollapsed(!isCollapsed)}>
                     {isCollapsed ? <i className="bi bi-list fw-bold fs-2"></i> : <i className="bi bi-x-lg fs-2"></i>}
                 </button>}

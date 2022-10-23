@@ -3,7 +3,7 @@ import Avatar from '../../assests/images/avatar-sm.png'
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import {useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -18,7 +18,9 @@ export default function BlogCard(props) {
   // react-router-dom
   const navigate = useNavigate();
 
-  const themeSide = useSelector((state)=> state.themeSide);
+  //store
+  const themeSide = useSelector((state) => state.themeSide);
+
   // modal states and function
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -81,9 +83,13 @@ export default function BlogCard(props) {
             </div>
             <div className={`col-lg-6 mt-3 d-flex justify-content-${props.canmodify ? "between" : "end"}`}>
               <CopyToClipboard text={`https://monkey-app.netlify.app/blog/${props.blog._id}`}>
-              <button onClick={props.notificationCopy} className={`card-link  card-link-btn card-link-btn-${themeSide} blog-btns`} title='copy-link'><i className="bi bi-link-45deg fs-4"></i></button>
+                <button onClick={props.notificationCopy} className={`card-link  card-link-btn card-link-btn-${themeSide} blog-btns`} title='copy-link'>
+                  <i className="bi bi-link-45deg fs-4"></i>
+                </button>
               </CopyToClipboard>
-              {props.canmodify && <button className={`card-link  card-link-btn card-link-btn-${themeSide} blog-btns`} title='edit-blog' onClick={handleEdit}><i className="bi bi-pencil-square fs-4"></i></button>}
+              {props.canmodify && <button className={`card-link  card-link-btn card-link-btn-${themeSide} blog-btns`} title='edit-blog' onClick={handleEdit}>
+                <i className="bi bi-pencil-square fs-4"></i>
+              </button>}
               {/* delete confirm modal */}
               {props.canmodify && <>
                 <button className={`card-link  card-link-btn card-link-btn-${themeSide} blog-btns`} title='delete-blog' onClick={handleShow}>

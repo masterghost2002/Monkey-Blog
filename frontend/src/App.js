@@ -1,5 +1,14 @@
 import './components/Styles/styleSheet.css'
 import React, { useEffect, useState } from 'react';
+import LoadingBar from 'react-top-loading-bar';
+import axios from 'axios';
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { authActions } from './Store';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+// components
 import { Header } from './components/Header/Header';
 import Auth from './components/Login-Signup/Auth';
 import ForgetPassword from './components/Responses/ForgetPassword';
@@ -9,13 +18,8 @@ import UserBlogs from './components/Blogs/UserBlogs';
 import VerifyMail from './components/VerifyMail/VerifyMail';
 import Footer from './components/Footer/Footer';
 import ViewFull from './components/Blogs/ViewFull';
-import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import Contact from './components/ContactUs/Contact';
-import { useDispatch, useSelector } from 'react-redux';
-import { authActions } from './Store';
 import NotFound from './components/Responses/NotFound';
-import axios from 'axios';
-import LoadingBar from 'react-top-loading-bar';
 
 // const baseServerUrl = "http://localhost:5000/";
 const baseServerUrl = "https://masterghostblog.herokuapp.com/";
@@ -69,7 +73,6 @@ function App() {
           progress={progress}
           loaderSpeed = '800'
           onLoaderFinished={() => setProgress(0)}
-        
         />
         <Header />
       </header>
@@ -89,6 +92,7 @@ function App() {
           <Route path='/notfound' element={<NotFound />}></Route>
           <Route path='/contactus' element={<Contact />}></Route>
         </Routes>
+        <ToastContainer bodyClassName="toastBody" />
       </main>
       <footer>
         <Footer />

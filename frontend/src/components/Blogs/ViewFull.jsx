@@ -10,6 +10,7 @@ import ViewFullSkeleton from './ViewFullSkeleton';
 import { useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { notifyCopy } from '../Toastify/ToastNotifications';
 // as we are injection external html so, its good to purify it to prevent exteranl html attack
 export default function ViewFull(props) {
     const baseServerUrl = "https://masterghostblog.herokuapp.com/";
@@ -117,7 +118,7 @@ export default function ViewFull(props) {
                                     <hr></hr>
                                     <div className="card-body d-flex justify-content-between">
                                         <CopyToClipboard text={`https://monkey-app.netlify.app/blog/${blog._id}`}>
-                                            <button className="card-link  card-link-btn blog-btns" title='copy-link'><i className="bi bi-link-45deg fs-4"></i></button>
+                                            <button className="card-link  card-link-btn blog-btns" title='copy-link' onClick={notifyCopy}><i className="bi bi-link-45deg fs-4"></i></button>
                                         </CopyToClipboard>
                                         <button type="button" className="card-link card-link-btn blog-btns" onClick={handleShow}>
                                             <i className="bi bi-file-earmark-arrow-down-fill fs-4"></i>

@@ -1,20 +1,20 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
-import Heading from './Heading';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import JoditEditor from 'jodit-react';
-import { ToastContainer, toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
-import 'react-toastify/dist/ReactToastify.css';
 
-// global scope variables
-// const baseServerUrl = "http://localhost:5000/";
+// components
+import Heading from './Heading';
+import { notifyAdd } from '../Toastify/ToastNotifications';
+
 export default function AddBlog(props) {
   const baseServerUrl = "https://masterghostblog.herokuapp.com/";
 
-  // 
+  // localstorage
   const AUTH_ACCESS_TOKEN = localStorage.getItem("auth_access_token");
   const userId = localStorage.getItem("userId");
+
   //store
   const themeSide = useSelector((state) => state.themeSide);
 
@@ -29,7 +29,6 @@ export default function AddBlog(props) {
   function returnThemeSide(themeSide) {
     return { theme: themeSide }
   }
-
   var config = useMemo(() => returnThemeSide(themeSide), [themeSide]); //use memo return memoized value
 
   // get the the params from the url if updating the blog (blog._id)
@@ -38,18 +37,6 @@ export default function AddBlog(props) {
 
   // state of blog
   const [newBlog, setNewBlog] = useState({ title: "", description: "" });
-
-  //toastt
-  const notifyAdd = () => toast.success(`${blogId === undefined ? "Blog Added" : "Blog Update Success"}`, {
-    position: "top-right",
-    autoClose: 2000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "dark",
-  });
 
   //  use effect
   useEffect(() => {
@@ -103,7 +90,7 @@ export default function AddBlog(props) {
               navigate('/myBlogs');
             }
           })
-          .catch((error) => console.log);
+          .catch((error) => console.log(error));
       }
     }
 
@@ -156,12 +143,11 @@ export default function AddBlog(props) {
                   }))}
                 />
               </div>
-              <button className='btn add-blog-btn' onClick={notifyAdd}>{blogId === undefined ? "Add Blog" : "Update Blog"}</button>
+              <button className='btn add-blog-btn' onClick={()=>notifyAdd(blogId !== undefined)}>{blogId === undefined ? "Add Blog" : "Update Blog"}</button>
             </form>
           </div>
         </div>
       </div>
-      <ToastContainer />
     </>
   )
 }
