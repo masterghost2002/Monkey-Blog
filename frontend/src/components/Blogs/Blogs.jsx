@@ -13,6 +13,7 @@ const baseServerUrl = "https://masterghostblog.herokuapp.com/";
 // const baseServerUrl = "http://localhost:5000/";
 
 export default function Blogs(props) {
+  const userName = localStorage.getItem('userName');
   // store (store/index.js) functions
   const dispatch = useDispatch();
   const showWelcome = useSelector((state) => state.showWelcome); //set show welcome to false after first login
@@ -23,7 +24,7 @@ export default function Blogs(props) {
   //blogs state, loaderstate
   const [blogs, setBlogs] = useState([]);
   const [loader, setLoader] = useState(true);
-
+  
   // server requets
   const sendRequest = useCallback(async () => {
     progressHandler(27);
@@ -46,11 +47,10 @@ export default function Blogs(props) {
       setBlogs(data.blogs);
     }).catch((err)=>console.log(err));
     if(showWelcome === true){
-      notifyWelcome();
+      notifyWelcome(userName);
       dispatch(authActions.setShowWelcome());
     }
-  }, [sendRequest, showWelcome, dispatch]);
-
+  }, [sendRequest, showWelcome, dispatch, userName]);
 
   return (
     <>

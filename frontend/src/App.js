@@ -15,12 +15,11 @@ import ForgetPassword from './components/Responses/ForgetPassword';
 import Blogs from './components/Blogs/Blogs';
 import AddBlog from './components/Blogs/AddBlog';
 import UserBlogs from './components/Blogs/UserBlogs';
-import VerifyMail from './components/VerifyMail/VerifyMail';
 import Footer from './components/Footer/Footer';
 import ViewFull from './components/Blogs/ViewFull';
 import Contact from './components/ContactUs/Contact';
 import NotFound from './components/Responses/NotFound';
-
+import Redirects from './components/Responses/Redirects';
 // const baseServerUrl = "http://localhost:5000/";
 const baseServerUrl = "https://masterghostblog.herokuapp.com/";
 const AUTH_ACCESS_TOKEN = localStorage.getItem("auth_access_token");
@@ -38,7 +37,7 @@ function App() {
   //router dom
   const navigate = useNavigate();
   const location = useLocation();
-  const accessablePath = location.pathname.substring(0, 6);
+  let accessablePath = location.pathname;
 
   useEffect(() => {
     // authorization
@@ -61,7 +60,7 @@ function App() {
         navigate('/blogs');
       }).catch(navigate('/'));
     }
-    if (accessablePath !== '/blog/' && isLoggedIn === false) navigate('/');
+    if (accessablePath !== '/redirects' && accessablePath.substring(0, 6) !== '/blog/' && isLoggedIn === false) navigate('/');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -71,28 +70,31 @@ function App() {
         <LoadingBar
           color='#f11946'
           progress={progress}
-          loaderSpeed = '800'
+          loaderSpeed='800'
           onLoaderFinished={() => setProgress(0)}
         />
         <Header />
       </header>
       <main className={`main main-${themeSide}`}>
         <Routes>
-          <Route path='/blog/:id' element={<ViewFull progressHandler={setProgress}/>}></Route>
+          <Route path='/blog/:id' element={<ViewFull progressHandler={setProgress} />}></Route>
           <Route path='/forgetpassword' element={<ForgetPassword />}></Route>
-          {!isLoggedIn ? <Route path='/' element={<Auth progressHandler={setProgress}/>}></Route> :
+          {!isLoggedIn ? <Route path='/' element={<Auth progressHandler={setProgress} />}></Route> :
             <>
-              <Route path='/blogs'  element={<Blogs progressHandler={setProgress}/>}></Route>
-              <Route path='/myBlogs' element={<UserBlogs progressHandler={setProgress}/>}></Route>
-              <Route path='/updateblog/:id' element={<AddBlog progressHandler={setProgress}/>}></Route>
+              <Route path='/blogs' element={<Blogs progressHandler={setProgress} />}></Route>
+              <Route path='/myBlogs' element={<UserBlogs progressHandler={setProgress} />}></Route>
+              <Route path='/updateblog/:id' element={<AddBlog progressHandler={setProgress} />}></Route>
               <Route path='/addBlog' element={<AddBlog progressHandler={setProgress}></AddBlog>}></Route>
-              <Route path='/verify/:id' element={<VerifyMail />}></Route>
             </>
           }
           <Route path='/notfound' element={<NotFound />}></Route>
           <Route path='/contactus' element={<Contact />}></Route>
+          <Route path='/redirects' element={<Redirects />}></Route>
         </Routes>
-        <ToastContainer bodyClassName="toastBody" />
+        <ToastContainer
+          bodyClassName="toastBody"
+          theme="dark"
+         />
       </main>
       <footer>
         <Footer />

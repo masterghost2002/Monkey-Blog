@@ -6,7 +6,7 @@ import Heading from './Heading';
 import NoBlog from '../Responses/NoBlog';
 import SkeletonCard from './SkeletonCard';
 import AddBlogFloat from '../Modals/AddBlogFloat';
-import { notifyCopy, notifyDelete } from '../Toastify/ToastNotifications';
+import { notifyCopy, notifySuccess } from '../Toastify/ToastNotifications';
 
 const userId = localStorage.getItem("userId");
 const baseServerUrl = "https://masterghostblog.herokuapp.com/";
@@ -42,7 +42,7 @@ export default function UserBlogs(props) {
       <div className='container-fluid blogs'>
         <Heading content={"Your Blogs"}></Heading>
         <div className="row justify-content-center">
-          {loader?<><SkeletonCard/><SkeletonCard/></>:blogs.length ? blogs.map((item) => <BlogCard key={item._id} blog={item} canmodify={true} onDelete={sendRequest} notificationDelete={notifyDelete} notificationCopy={notifyCopy}></BlogCard>) : <NoBlog />}
+          {loader?<><SkeletonCard/><SkeletonCard/></>:blogs.length ? blogs.map((item) => <BlogCard key={item._id} blog={item} canmodify={true} onDelete={sendRequest} notificationDelete={notifySuccess} notificationCopy={notifyCopy}></BlogCard>) : <NoBlog />}
         </div>
       </div>
       {!loader && <AddBlogFloat/>}

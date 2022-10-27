@@ -1,7 +1,7 @@
 import { createSlice , configureStore} from '@reduxjs/toolkit';
 const authSlice = createSlice({
     name: "auth",
-    initialState:{isLoggedIn: false, showWelcome: true, themeSide: 'light'},
+    initialState:{isLoggedIn: false, showWelcome: true, themeSide: ''},
     reducers:{
         login(state){
             state.isLoggedIn = true
@@ -12,6 +12,7 @@ const authSlice = createSlice({
             localStorage.removeItem("userId");
             state.isLoggedIn = false;
             state.showWelcome = true;
+            state.themeSide = '';
         },
         setShowWelcome(state){
             state.showWelcome = false;

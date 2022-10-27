@@ -12,6 +12,7 @@ import Modal from 'react-bootstrap/Modal';
 
 const image_link = "https://bloggerzone.in/blogadmin/images/63234400_1657257086.jpg";
 const baseServerUrl = "https://masterghostblog.herokuapp.com/";
+// const baseServerUrl = "http://localhost:5000/";
 export default function BlogCard(props) {
 
   const userName = localStorage.getItem("userName");
@@ -46,7 +47,7 @@ export default function BlogCard(props) {
     setShow(false);
     sendDeleteRequest().then(() => {
       props.onDelete(); // call the sendRequest function of userBlog component to refetch the user realted blog
-      props.notificationDelete();
+      props.notificationDelete("Blog Deleted");
     }).catch((err) => console.log(err));
   }
   const handleEdit = () => {
