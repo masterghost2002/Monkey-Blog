@@ -14,6 +14,7 @@
   text-decoration: none !important;
 }
 button:focus,
+.form-check-input:focus,
 button:active,
 button:hover,
 .btn:active,

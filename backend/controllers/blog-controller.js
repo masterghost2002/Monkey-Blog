@@ -1,8 +1,7 @@
-const session = require('express-session');
 const { default: mongoose } = require('mongoose');
 const Blog = require('../models/Blog');
 const User = require('../models/User');
-
+const {verify_token} = require('../middleware/auth_jwt');
 // return all the blogs
 const getAllBlogs = async (req, res, next) => {
     let blogs;
@@ -54,7 +53,26 @@ const addBlog = async (req, res, next) => {
 };
 
 // update the already present blog
-const updateBlog = async (req, res, next) => {
+
+const verifyUser = async (req, res, next)=>{
+    const authHeader = req.headers['authorization'];
+    const ACCESS_TOKEN = authHeader.split(" ")[1];
+    if(ACCESS_TOKEN === null) res.status(401);
+    const user = verify_token(ACCESS_TOKEN);
+    const blogId = req.params.id;
+    try {
+        blogs = await (await Blog.findById(blogId).populate('user', '_id'));
+    } catch (err) {
+        return console.log(err);
+    }
+    if (!blogs)
+        return res.status(404).json({ message: "No Blog Found" });
+    const blogUserId = JSON.stringify(blogs.user._id);
+    if(blogUserId === user._id)
+        next();
+    return res.status(401).json({validationError:"Anauthorized User"});
+}
+const updateBlog = async (req, res) => {
     const { title, description } = req.body;
     const blogId = req.params.id;
     let blog;
@@ -68,12 +86,12 @@ const updateBlog = async (req, res, next) => {
     }
     if(!blog)
     return res.status(500).json({message: "Unable To update"});
-    return res.status(200).json({blog});
+    return res.status(200).json({message:"Update Success"});
 };
 
 
 // return the blog by id
-const getById = async (req, res, next)=>{
+const getById = async (req, res)=>{
     const Id = req.params.id;
     let blog;
     try{
@@ -122,4 +140,4 @@ const getByUserId = async (req, res, next)=>{
         return res.status(404).json({message: "No blogs found"});
     return res.status(200).json({blogs: userBlogs.blogs});
 }
-module.exports = { getAllBlogs, addBlog, updateBlog , getById, deleteBlog, getByUserId};
+module.exports = { getAllBlogs, addBlog, updateBlog , getById, deleteBlog, getByUserId, verifyUser};

@@ -1,5 +1,33 @@
 .main {
-    margin-top: 4rem;
+    padding-top: 4rem;
+}
+
+/* ##########################icons */
+.bi-link-45deg {
+    color: rgb(89, 255, 227);
+}
+
+.bi-trash {
+    color: rgb(255, 72, 72);
+}
+
+.bi-pencil-square {
+    color: #51a5fa;
+}
+
+.blog-btns:hover {
+    text-decoration: none !important;
+    transition: .5s;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px !important;
+    border-radius: 12px;
+}
+
+.addBlogBtn {
+    display: none;
+}
+
+.toastBody {
+    height: 60px;
 }
 
 /*############################# common for all ##########################3*/
@@ -8,6 +36,7 @@
     color: black;
     font-weight: bold;
 }
+
 .form-control {
     background-color: rgb(239, 239, 239) !important;
     border-radius: 6px;
@@ -18,10 +47,16 @@
     overflow: 0 !important;
     box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px !important;
 }
+
 .heading-container {
     width: 100%;
     height: 20vh;
 }
+
+.li {
+    list-style-type: none !important;
+}
+
 /*################################### common for all end #########################*/
 
 /* ############################# header css #######################*/
@@ -29,56 +64,46 @@
     max-height: 60px;
     max-width: 120px;
 }
+
 .navbar {
     position: fixed !important;
     min-height: 10vh;
     top: 0;
     width: 100%;
-    z-index: 1;
-    background: rgb(255, 255, 255, 0.7) !important;
-    backdrop-filter: blur(12px) saturate(200%);
+    z-index: 2;
 }
 
-.dropdown-item{
-    color: black;
+.navbar-toggler {
+    border: none !important;
 }
-.dropdown-menu{
-    background: rgb(255, 255, 255, 0.7) !important;
-    backdrop-filter: blur(12px) saturate(200%) !important;
-    color: black;
+
+.dropdown-menu {
     border: none !important;
     text-decoration: none !important;
-    margin-top: 1rem;
     left: -100% !important;
 }
-.nav-active {
-    color: black !important;
-    border-bottom: 3px solid #0b62ad;
-}
-.user_name{
-    font-weight: bold;
-}
-.btn-contact{
-    background-color: rgb(255, 234, 128);
-}
-.user_name:hover{
-    background-color: transparent !important;
-}
-    /* header mobile */
-    @media screen and (max-width: 790px) {
-        .nav-active {
-            border-bottom: 3px solid #0b62ad;
-            width: 5rem;
-        }
-        .navbar-nav{
-            align-items: center;
-        }
-        .dropdown-menu{
-            background: transparent !important;
-        }
-    }
-/*######################################## header end ###########################*/
 
+
+.theming {
+    padding-left: 1rem;
+}
+
+/* header mobile */
+@media screen and (max-width: 790px) {
+    .nav-active {
+        width: 5rem;
+    }
+
+    .navbar-nav {
+        align-items: center;
+    }
+
+    .dropdown-menu {
+        background: transparent !important;
+    }
+}
+
+/*######################################## header end ###########################*/
 
 
 /* #####################################login screen #############################3*/
@@ -87,97 +112,111 @@
     display: flex;
     align-items: center;
 }
+
 .btn-auth {
     border: none !important;
     background-color: transparent;
 }
+
 .submit_btn {
     width: 100%;
     height: 3rem;
     background-color: #65b0fa;
 }
+
 .submit_btn:hover {
     background-color: #51a5fa;
 }
-.btn-show-password{
-    border-radius:0 6px 6px 0 !important;
+
+.btn-show-password {
+    border-radius: 0 6px 6px 0 !important;
     background-color: #318CE7;
 }
-.forget_component{
+
+.forget_component {
     display: flex;
     min-height: 80vh;
     justify-content: center;
     align-items: center;
 }
+
 /* ########################  login signup end ####################################3 */
 
 
 /* #################################### Blog card css #########################################*/
 
 /* Blogs  main screen*/
-.blogs{
+.blogs {
     min-height: 80vh;
+    padding-bottom: 2rem;
 }
+
 /* blog card start */
 .blog-card {
     border: none !important;
     border-radius: 12px !important;
-    padding: 12px;
+    padding-top: 16px;
     margin: 1rem;
-    box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px;
+
 }
+
 .blog-card:hover {
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
     transition: .5s;
 }
 
-.card-link-btn{
+.card-link-btn {
     background: transparent;
     border: none;
 }
+
 .card-img-top {
     box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
-    border-radius: 10px;
+    border-radius: 10px !important;
     max-width: 420px;
     max-height: 180px;
     margin-bottom: 1rem;
 
 }
+
 .card-img-top:hover {
     box-shadow: rgba(0, 0, 0, 0.2) 0px 60px 40px -7px;
     scale: 1.02;
     transition: .5s;
 }
+
 .card-detail {
     font-weight: bold;
     margin-bottom: 1rem;
 }
+
 .card-title {
     font-weight: bold;
 }
+
 .card-link {
     text-decoration: none !important;
 }
-.btn-viewfull{
+
+.btn-viewfull {
     border-radius: 30px !important;
     color: white;
-    font-weight: normal  !important;
-    background-color: #0275d8 !important;
+    font-weight: normal !important;
+    background-color: #343434 !important;
     text-decoration: none !important;
 }
-.btn-viewfull:hover{
+
+.btn-viewfull:hover {
     color: white;
-    font-weight: normal  !important;
-    background-color: #0b62ad !important;
+    font-weight: normal !important;
+    background-color: #383838 !important;
     text-decoration: none !important;
 }
-.blog-btns:hover{
-    text-decoration: none !important;
-    transition: .5s;
-    scale: 1.03;
-}
+
+
+
 /* no blog founc */
-.btn-add_blog{
+.btn-add_blog {
     background-color: rgb(78, 78, 78);
     border-radius: 6px !important;
     color: white;
@@ -185,45 +224,77 @@
     font-size: 1.5rem;
     margin-top: 2rem;
 }
-.btn-add_blog:hover{
+
+.btn-add_blog:hover {
     background-color: rgb(63, 63, 63);
     color: white !important;
 }
+
 /*  */
-    /* blog card mobile */
-    @media screen and (max-width: 790px) {
-        .blog-card:hover {
-            box-shadow: none;
-        }
-        .blog-card {
-            padding: 2px;
-        }
-        .btn-viewfull{
-            width: 100%;
-            border-radius: 8px !important;
-            font-size: 1rem;
-            color: white;
-            font-weight: normal  !important;
-            background-color: #0275d8 !important;
-            text-decoration: none !important;
-        }
+/* blog card mobile */
+@media screen and (max-width: 790px) {
+    .blog-card {
+        box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px;
+        margin-left: 0;
+        margin-right: 0;
     }
+
+    .blog-card:hover {
+        box-shadow: none;
+    }
+
+    .addBlogBtn {
+        position: fixed;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        justify-content: center;
+        align-items: center;
+        right: 40px;
+        bottom: 20px;
+        background-color: rgb(253, 253, 253. 0.9);
+        backdrop-filter: blur(20px);
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        display: flex;
+        color: rgb(50, 146, 255);
+        z-index: 2;
+    }
+
+    .addBlogBtn:hover>.fa-plus {
+        font-size: 24px;
+        color: rgb(50, 146, 255);
+        transition: 0.3s;
+    }
+
+    .img_container {
+        padding: 0 12px;
+    }
+
+    .btn-viewfull {
+        width: 100%;
+        border-radius: 8px !important;
+        font-size: 1rem;
+    }
+}
+
 /* blog card end */
 
 /* add blog */
-.add-blog-btn{
+.add-blog-btn {
     width: 100%;
     margin-bottom: 2rem;
     color: white;
-    font-weight: normal  !important;
+    font-weight: normal !important;
     background-color: #0275d8 !important;
 }
-.add-blog-btn:hover{
+
+.add-blog-btn:hover {
     color: white;
-    font-weight: normal  !important;
+    font-weight: normal !important;
     background-color: #0b62ad !important;
     text-decoration: none !important;
 }
+
 /* add blog end */
 
 /* heading component */
@@ -231,59 +302,263 @@
     font-weight: bold;
     font-size: 3rem;
 }
+
 .divider-line {
     margin: 0rem 8rem 0rem 8rem;
 }
+
 /* heading component end */
 /* view full blog */
 
-.view_full_blog{
+.view_full_blog {
     min-height: 80vh;
 }
-.card-full{
+
+.card-full {
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
-.card-header{
+
+.card-header {
     font-family: 'Signika Negative', sans-serif;
     min-height: 4rem;
     display: flex;
     align-items: center;
-    background-color: #318CE7;
+    background-color: #343434 !important;
     color: white;
 }
+
 /* ############################# blogs section end ##########################################*/
+
+
 /* ################################## Responses */
-.not_found_wraper{
+.not_found_wraper {
     min-height: 80vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.error{
+
+.error {
     font-size: 4rem;
 }
+
 /* ############contact us */
-.contactus_wrapper{
+.contactus_wrapper {
     min-height: 80vh;
     display: flex;
     align-items: center;
 }
+
 /*############################## footer ############################################### */
 .footer {
     min-height: 15vh;
     bottom: 0;
-    background-color:	#318CE7;
     padding-top: 1rem;
 }
 
-.message {
-    font-size: 1rem;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    font-family: sans-serif;
+
+
+/* ########################### footer end ######################################## */
+
+
+/* ############## themes ##################### */
+
+/* dark theme/ white theme */
+
+
+/* theme color  -->(default, sky blue, light green, pink */
+/* dark theme */
+.main-dark {
+    background-color: #1A1A1A;
     color: white;
 }
 
-/* ########################### footer end ######################################## */
+.version_header {
+    color: rgb(252, 62, 62);
+}
+
+/* navbar */
+.navbar-dark {
+    background: rgba(26, 26, 26, 0.7) !important;
+    backdrop-filter: blur(12px) saturate(200%);
+    color: white;
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.nav-active-dark {
+    color: rgb(255, 255, 255) !important;
+    border-bottom: 3px solid #ffffff;
+}
+
+.dropdown-dark {
+    background-color: rgba(40, 40, 40);
+    color: white;
+}
+
+.theme-side-switch {
+    border-radius: 30px;
+    background-color: rgb(0, 0, 0);
+}
+
+.fa-sun {
+    color: #f39c12;
+}
+
+.theme-side-dark {
+    color: #ffaf2f;
+}
+
+.theme-side-dark:hover {
+    color: #f39c12;
+}
+
+.user_name_dark {
+    font-weight: bold;
+    color: rgb(218, 218, 218);
+}
+
+.user_name_dark:hover {
+    background-color: transparent !important;
+    color: rgb(252, 252, 252);
+}
+
+.theme-side-light {
+    color: #c9c9c9;
+}
+
+.theme-side-light:hover {
+    color: #ffffff;
+}
+
+/* blog card */
+.blog-card-dark {
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    background-color: #282828 !important;
+    color: white;
+}
+
+.card-link-btn-dark {
+    color: #ffffff;
+}
+
+.card-full-dark {
+    background-color: #282828;
+}
+
+.modal-dark {
+    /* background-color: #282828 !important; */
+    padding: 0;
+    border: none !important;
+    border-radius: none;
+    background: rgba(12, 12, 12, 0.2) !important;
+    backdrop-filter: blur(2px) saturate(200%);
+}
+
+.modal-header-dark {
+    background-color: #1A1A1A;
+    color: white
+}
+
+.modal-body-dark {
+    background-color: #282828;
+    color: white;
+}
+
+.modal-footer-dark {
+    background-color: #1A1A1A;
+    color: white
+}
+
+/* blog des */
+.texttype-dark {
+    color: #cfcfcf;
+}
+
+/* footer */
+.footer-dark {
+    border-top: 2px solid rgb(99, 99, 99);
+    color: rgb(205, 205, 205);
+    background-color: #1A1A1A !important;
+}
+
+.contact-us-link-dark {
+    text-decoration: none !important;
+    color: rgb(206, 206, 206);
+
+}
+
+.contact-us-link-dark:hover {
+    text-decoration: none !important;
+    color: rgb(255, 255, 255);
+}
+
+
+/*#######################################################3 white theme */
+
+.main-light {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+}
+
+/* navbar */
+.navbar-light {
+    background: rgb(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(12px) saturate(200%);
+}
+
+.nav-active-light {
+    color: rgb(0, 0, 0) !important;
+    border-bottom: 3px solid #000000;
+}
+
+.fa-moon {
+    color: rgb(63, 0, 113)
+}
+
+.user_name_light {
+    font-weight: bold;
+}
+
+.user_name_light:hover {
+    background-color: transparent !important;
+}
+
+/* blog card */
+.blog-card-light {
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
+    background-color: #ffffff !important;
+    color: rgb(0, 0, 0);
+}
+
+.card-link-btn-light {
+    color: #000000;
+}
+
+.modal-light {
+    /* background-color: #282828 !important; */
+    padding: 0;
+    border: none !important;
+    border-radius: none;
+    background: rgba(223, 223, 223, 0.2) !important;
+    backdrop-filter: blur(2px) saturate(200%);
+}
+
+/* footer */
+.footer-light {
+    border-top: 2px solid rgb(230, 230, 230);
+
+    /* background-color: #1A1A1A !important; */
+    /* border-top: 2px solid #d7d7d7; */
+}
+
+.contact-us-link-light {
+    text-decoration: none !important;
+    color: rgb(72, 72, 72);
+
+}
+
+.contact-us-link-light:hover {
+    text-decoration: none !important;
+    color: rgb(2, 2, 2);
+}

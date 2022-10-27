@@ -1,19 +1,26 @@
 import { createSlice , configureStore} from '@reduxjs/toolkit';
 const authSlice = createSlice({
     name: "auth",
-    initialState:{isLoggedIn: false, showWelcome: true},
+    initialState:{isLoggedIn: false, showWelcome: true, themeSide: 'light'},
     reducers:{
         login(state){
             state.isLoggedIn = true
         },
         logout(state){
-            localStorage.removeItem("userId");
+            localStorage.removeItem("auth_access_token");
             localStorage.removeItem("userName");
+            localStorage.removeItem("userId");
             state.isLoggedIn = false;
             state.showWelcome = true;
         },
         setShowWelcome(state){
             state.showWelcome = false;
+        },
+        setThemeSideLight(state){
+            state.themeSide = 'light'
+        },
+        setThemeSideDark(state){
+            state.themeSide = 'dark'
         }
     }
 });
