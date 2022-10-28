@@ -44,20 +44,20 @@ function App() {
 
   const verify_access_token = useCallback(async () => {
     if(AUTH_ACCESS_TOKEN === null) return;
+    if(isLoggedIn && accessablePath ==='/') navigate('/blogs');
     let reqInstance = axios.create({ headers: { Authorization: `Bearer ${AUTH_ACCESS_TOKEN}` } });
     await reqInstance.post(`${baseServerUrl}user/verify_auth`)
       .then((response) => {
         if (response.data.user.themeSide === 'dark')
           dispatch(authActions.setThemeSideDark());
         else dispatch(authActions.setThemeSideLight());
-
         dispatch(authActions.login());
         dispatch(authActions.setShowWelcome()); //set show welcome to false
       })
       .catch(function (error) {
         if (error.response.status === 404 && accessablePath !== '/redirects' && accessablePath.substring(0, 6) !== '/blog/') navigate('/');
       });
-  }, [AUTH_ACCESS_TOKEN, dispatch, navigate, accessablePath]);
+  }, [AUTH_ACCESS_TOKEN, dispatch, navigate, accessablePath, isLoggedIn]);
 
   useEffect(() => {
     AOS.init({
@@ -72,7 +72,7 @@ function App() {
     <React.Fragment>
       <header className='header'>
         <LoadingBar
-          color='#f11946'
+          color='#51A5FA'
           progress={progress}
           loaderSpeed='800'
           onLoaderFinished={() => setProgress(0)}

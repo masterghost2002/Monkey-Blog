@@ -133,11 +133,11 @@ export default function Auth(props) {
 
                                 {/* singin singup options */}
                                 {!isSignUp && <div className="fw-bold mb-4">New Here?
-                                    <button className="text-primary fw-bold btn-auth" onClick={() => setIsSignUp(true)}> Create a new account</button>
+                                    <button className="text-primary fw-bold btn-auth" type='button' onClick={() => setIsSignUp(true)}> Create a new account</button>
                                 </div>}
 
                                 {isSignUp && <div className="fw-bold  mb-4">Already Have a account??
-                                    <button className="text-primary  fw-bold btn-auth" onClick={() =>{ setIsSignUp(false); setShowOTP(false)}}> Sign In</button>
+                                    <button className="text-primary  fw-bold btn-auth" type='button' onClick={() =>{ setIsSignUp(false); setShowOTP(false)}}> Sign In</button>
                                 </div>}
 
                                 {isSignUp && <div className="form-floating mb-3">
@@ -165,7 +165,7 @@ export default function Auth(props) {
                                 {!isSignUp && <div className="my-3 text-end">
                                     <NavLink to="/forgetpassword" className="my-4 forget_btn">Forget Password?</NavLink>
                                 </div>}
-                                {!showOTP && <button className="btn submit_btn  my-2" title={isSignUp ? "Sign-Up" : "Sign-In"}>{isSignUp ? "Sent OTP" : "Sign-In"} &nbsp;{isSignUp?<i className="bi bi-send"></i>:<i className="bi bi-box-arrow-in-right fw-bold"></i>}</button>}
+                                {!showOTP && <button className="btn submit_btn  my-2" type='submit' title={isSignUp ? "Sign-Up" : "Sign-In"}>{isSignUp ? "Sent OTP" : "Sign-In"} &nbsp;{isSignUp?<i className="bi bi-send"></i>:<i className="bi bi-box-arrow-in-right fw-bold"></i>}</button>}
                             </form>
                         </div>
                     </div>
