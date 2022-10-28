@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-
 // global scope variabe
 
 const image_link = "https://bloggerzone.in/blogadmin/images/63234400_1657257086.jpg";
@@ -60,7 +59,7 @@ export default function BlogCard(props) {
 
   return (
     <>
-      <div className="col-lg-5 mt-4">
+      <div className="col-lg-5 mt-4"  data-aos="zoom-in-up"  >
         <div className={`card blog-card blog-card-${themeSide}`}>
           <div className="d-flex justify-content-center img_container">
             <img src={image_link} className="card-img-top img-fluid" alt="fsdfsd" />

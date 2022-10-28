@@ -8,10 +8,10 @@ import SkeletonCard from './SkeletonCard';
 import AddBlogFloat from '../Modals/AddBlogFloat';
 import { notifyCopy, notifySuccess } from '../Toastify/ToastNotifications';
 
-const userId = localStorage.getItem("userId");
 const baseServerUrl = "https://masterghostblog.herokuapp.com/";
 
 export default function UserBlogs(props) {
+  const userId = localStorage.getItem("userId");
 
   const [blogs, setBlogs] = useState([]);
 
@@ -32,7 +32,7 @@ export default function UserBlogs(props) {
     progressHandler(100);
     setLoader(false);
     setBlogs(data.blogs);
-  }, [progressHandler])
+  }, [progressHandler, userId])
 
   useEffect(() => {
     sendRequest();

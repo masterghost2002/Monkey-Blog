@@ -41,6 +41,7 @@ export default function Blogs(props) {
   }, [progressHandler])
 
 
+
   // use effect
   useEffect(() => {
     sendRequest().then((data) => {
