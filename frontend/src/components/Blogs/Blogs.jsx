@@ -16,13 +16,14 @@ export default function Blogs(props) {
   // store (store/index.js) functions
   const dispatch = useDispatch();
   const showWelcome = useSelector((state) => state.showWelcome); //set show welcome to false after first login
-
+  const userInfo = useSelector((state)=>state.userInfo);
   //props destructure to prevent looping while changing of progress bar
   const progressHandler = props.progressHandler;
 
   //blogs state, loaderstate
   const [blogs, setBlogs] = useState([]);
   const [loader, setLoader] = useState(true);
+  
 
   // server requets
   const sendRequest = useCallback(async () => {
@@ -40,17 +41,17 @@ export default function Blogs(props) {
   }, [progressHandler])
 
 
+
   // use effect
   useEffect(() => {
     sendRequest().then((data) => {
       setBlogs(data.blogs);
     }).catch((err)=>console.log(err));
     if(showWelcome === true){
-      notifyWelcome();
+      notifyWelcome(userInfo.userName);
       dispatch(authActions.setShowWelcome());
     }
-  }, [sendRequest, showWelcome, dispatch]);
-
+  }, [sendRequest, showWelcome, dispatch, userInfo.userName]);
 
   return (
     <>

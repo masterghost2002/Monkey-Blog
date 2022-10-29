@@ -13,32 +13,31 @@ export const Header = () => {
     const dispatch = useDispatch();
     const isLoggedIn = useSelector((state) => state.isLoggedIn);
     const themeSide = useSelector((state) => state.themeSide);
-    let userName = localStorage.getItem("userName");
-    const userId = localStorage.getItem("userId");
+    const userInfo = useSelector((state)=>state.userInfo);
 
     // handle theme side
     const handleThemeSide = async () => {
         if (themeSide === 'dark') {
-            dispatch(authActions.setThemeSideLight());
             const res = await axios.put(`${baseServerUrl}user/update`, {
-                userId: userId,
-                userName: userName,
+                userId: userInfo.userId,
+                userName: userInfo.userName,
                 themeSide: 'light'
             });
             const auth_access_token = res.data.accessToken;
+            dispatch(authActions.setThemeSideLight());
             localStorage.removeItem("auth_access_token");
             localStorage.setItem("auth_access_token", auth_access_token);
         }
         else {
-            dispatch(authActions.setThemeSideDark());
             const res = await axios.put(`${baseServerUrl}user/update`, {
-                userId: userId,
-                userName: userName,
+                userId: userInfo.userId,
+                userName: userInfo.userName,
                 themeSide: 'dark'
             });
             const auth_access_token = res.data.accessToken;
             localStorage.removeItem("auth_access_token");
             localStorage.setItem("auth_access_token", auth_access_token);
+            dispatch(authActions.setThemeSideDark());
         }
     }
     return (
@@ -85,7 +84,7 @@ export const Header = () => {
 
                         {isLoggedIn && <div className="nav-item dropdown">
                             <a className="nav-link active dropdown-toggle fw-bold" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                {userName ? userName.split(" ")[0] : "Monkey-App"}
+                                {userInfo.userName ? userInfo.userName.split(" ")[0] : "Monkey-App"}
                             </a>
                             <ul className={`dropdown-menu ${themeSide === 'dark' ? "dropdown-dark" : ""}`} aria-labelledby="navbarDropdown">
                                 <li>
@@ -94,7 +93,7 @@ export const Header = () => {
                                     </div>
                                 </li>
                                 <li>
-                                    <span className={`dropdown-item user_name_${themeSide}`}>{userName}</span>
+                                    <span className={`dropdown-item user_name_${themeSide}`}>{userInfo.userName}</span>
                                 </li>
                                 <li>
                                     <a className="dropdown-item disabled" href="/">Profile Setting</a>

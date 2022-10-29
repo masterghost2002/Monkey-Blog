@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 // components
 import BlogCard from './BlogCard';
 import Heading from './Heading';
 import NoBlog from '../Responses/NoBlog';
 import SkeletonCard from './SkeletonCard';
 import AddBlogFloat from '../Modals/AddBlogFloat';
-import { notifyCopy, notifyDelete } from '../Toastify/ToastNotifications';
+import { notifyCopy, notifySuccess } from '../Toastify/ToastNotifications';
 
-const userId = localStorage.getItem("userId");
 const baseServerUrl = "https://masterghostblog.herokuapp.com/";
 
 export default function UserBlogs(props) {
+  const userInfo = useSelector((state)=>state.userInfo);
 
   const [blogs, setBlogs] = useState([]);
 
@@ -19,10 +20,9 @@ export default function UserBlogs(props) {
   const progressHandler = props.progressHandler;
   const [loader, setLoader] = useState(true);
 
-
   const sendRequest =  useCallback(async () => {
     progressHandler(27);
-    const res = await axios.get(`${baseServerUrl}blogs/user/${userId}`)
+    const res = await axios.get(`${baseServerUrl}blogs/user/${userInfo.userId}`)
       .then((reponse) => {
         progressHandler(87);
         return reponse;
@@ -32,7 +32,7 @@ export default function UserBlogs(props) {
     progressHandler(100);
     setLoader(false);
     setBlogs(data.blogs);
-  }, [progressHandler])
+  }, [progressHandler, userInfo.userId])
 
   useEffect(() => {
     sendRequest();
@@ -42,7 +42,7 @@ export default function UserBlogs(props) {
       <div className='container-fluid blogs'>
         <Heading content={"Your Blogs"}></Heading>
         <div className="row justify-content-center">
-          {loader?<><SkeletonCard/><SkeletonCard/></>:blogs.length ? blogs.map((item) => <BlogCard key={item._id} blog={item} canmodify={true} onDelete={sendRequest} notificationDelete={notifyDelete} notificationCopy={notifyCopy}></BlogCard>) : <NoBlog />}
+          {loader?<><SkeletonCard/><SkeletonCard/></>:blogs.length ? blogs.map((item) => <BlogCard key={item._id} blog={item} canmodify={true} onDelete={sendRequest} notificationDelete={notifySuccess} notificationCopy={notifyCopy}></BlogCard>) : <NoBlog />}
         </div>
       </div>
       {!loader && <AddBlogFloat/>}

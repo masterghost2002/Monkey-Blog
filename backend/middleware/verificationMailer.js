@@ -1,30 +1,39 @@
 
 let nodemailer = require('nodemailer');
 let transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "host",
+    service: "server",
+    port: 587,
+    secure: false, // use TLS
     auth: {
-        user: "<Email>",
-        pass: "<Token>"
-    }
+        user: "username@mail.com",
+        pass: "password",
+    },
 });
-const verifyMail = (req, res, next) => {
-    // console.log(req.body);
-    req.session.name = req.body.name;
-    req.session.email = req.body.email;
-    req.session.password = req.body.password;
+const verifyMail = (otp, request, response) => {
+    const { email, name } = request.body;
     let mailOptions = {
-        from: "monkeyapp@verifymail.com",
-        to: req.body.email,
-        subject: "Verify Email Address",
-        text: `Please verify your email address. [GET] http://localhost:3000/verify/${req.session.id}`
+        from: "from",
+        to: email,
+        subject: "Verify your email",
+        html: `
+        <div>
+        <span>Hi <strong>${name}! </strong></span><br></br>
+        <span>Your verification code is <strong>${otp}</strong></span><br></br>
+        <span> Enter this code &nbsp;to <strong>activate </strong>your Monkey-App account. </span><br></br>
+        <span>If you have any questions, send us an email <strong>monkeyappsupport@cublearner.org.</strong></span><br></br>
+        <span>  We’re glad you’re here! &nbsp;</span><br></br>
+        <span> The <strong>Monkey-App team</strong></span>
+        </div>
+        `
     }
     transporter.sendMail(mailOptions, function (error, result) {
         if (error) {
-            console.log("Failed to send verification mail");
-            res.status(404).send("Failed to send verification mail" + error);
+            console.log("Failed to send verification mail", error);
+            response.status(404).json({ message: "Unable to send otp", error: error });
         } else {
             console.log("Verification mail sent : " + result.response);
-            res.status(200).send("Verification mail sent : " + result.response);
+            return response.status(200).json({ message: `OTP Sent` });
         }
     });
 };

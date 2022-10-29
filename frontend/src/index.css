@@ -4,10 +4,19 @@
   font-family: 'Sora', sans-serif;
   font-size: 15px;
   scroll-behavior: smooth;
+  --dark-blue: #3090F1;
+  --light-blue: #51A5FA;
+  --dark-grey: #1A1A1A;
+  --light-grey: #282828;
 }
 @media screen and (max-width: 790px) {
   *{
     font-size: 18px;
+  }
+}
+@media screen and (max-width: 330px) {
+  *{
+    font-size: 14px;
   }
 }
 .href{
@@ -24,3 +33,13 @@ button:hover,
   box-shadow: none !important;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

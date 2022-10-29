@@ -37,7 +37,7 @@ export default function Contact() {
         <section className='contactus_wrapper'>
             <div className="container-fluid">
                 <div className="row justify-content-center">
-                    <div className="col-lg-4">
+                    <div className="col-lg-8">
                         <form onSubmit={handleSubmit} className="contactus-form">
                             <div className="d-flex heading-container justify-content-center align-items-centers">
                                 <span className='text-center heading'>Contact US</span>

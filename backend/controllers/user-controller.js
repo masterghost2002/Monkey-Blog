@@ -4,39 +4,20 @@ const bcrypt = require('bcryptjs');
 const { generate_access_token, verify_token } = require('../middleware/auth_jwt');
 
 
-const signup = async (req, res, next) => {
-    const { name, email, password } = req.body;
-    if (password.length < 8) return res.status(400).json({ message: "Must be of 8 character" })
-    let existingUser;
-    try {
-        existingUser = await User.findOne({ email: email });
-    } catch (err) {
-        console.log("Error while Signup: " + err);
-    }
-    if (existingUser)
-        return res.status(404).json({ message: "User Already Exist" });
-    try {
-        saveUser(req, res, next);
-    } catch (err) {
-        return console.log("Unable to register User: " + err);
-    };
-};
-const saveUser = async (req, res) => {
-    // console.log(req.session.name);
+const saveUser = async (name, email, password, req, res) => {
     const newUser = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: bcrypt.hashSync(req.body.password),
+        name: name,
+        email: email,
+        password: password,
         blogs: []
     });
-    // console.log(newUser);
     try {
         newUser.save();
     }
     catch (err) {
         return console.log("Unable to register User: " + err);
     }
-    return res.status(200).json({ message: `Dear ${req.body.name} welcome to monkey app`, user: newUser });
+    return res.status(200).json({ message: `Dear ${name} welcome to monkey app`, user: newUser });
 };
 
 const login = async (req, res) => {
@@ -88,4 +69,4 @@ const updateUser = async (req, res) => {
     return res.status(200).json({ message: "User Update Success", accessToken:accessToken });
 
 }
-module.exports = { signup, saveUser, login, verify_access_token, updateUser };
+module.exports = {saveUser, login, verify_access_token, updateUser };

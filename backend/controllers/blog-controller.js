@@ -59,6 +59,7 @@ const verifyUser = async (req, res, next)=>{
     const ACCESS_TOKEN = authHeader.split(" ")[1];
     if(ACCESS_TOKEN === null) res.status(401);
     const user = verify_token(ACCESS_TOKEN);
+    console.log(user);
     const blogId = req.params.id;
     try {
         blogs = await (await Blog.findById(blogId).populate('user', '_id'));
@@ -68,13 +69,41 @@ const verifyUser = async (req, res, next)=>{
     if (!blogs)
         return res.status(404).json({ message: "No Blog Found" });
     const blogUserId = JSON.stringify(blogs.user._id);
-    if(blogUserId === user._id)
+    const reqUserId = JSON.stringify(user._id);
+
+    console.log(blogUserId);
+    console.log(reqUserId);
+
+    if(blogUserId === reqUserId){
+        console.log("hello");
         next();
+    }
     return res.status(401).json({validationError:"Anauthorized User"});
 }
 const updateBlog = async (req, res) => {
     const { title, description } = req.body;
     const blogId = req.params.id;
+    const authHeader = req.headers['authorization'];
+    const ACCESS_TOKEN = authHeader.split(" ")[1];
+    if(ACCESS_TOKEN === null) res.status(401).json({validationError:"Anauthorized User"});
+    const user = verify_token(ACCESS_TOKEN);
+
+    try {
+        blogs = await (await Blog.findById(blogId).populate('user', '_id'));
+    } catch (err) {
+        return console.log(err);
+    }
+    if (!blogs)
+        return res.status(404).json({ message: "No Blog Found" });
+
+    const blogUserId = JSON.stringify(blogs.user._id);
+    const reqUserId = JSON.stringify(user._id);
+
+
+    if(blogUserId !== reqUserId){
+        return res.status(401).json({validationError:"Anauthorized User"});
+    }
+    
     let blog;
     try {
         blog = await Blog.findByIdAndUpdate(blogId, {
@@ -88,6 +117,22 @@ const updateBlog = async (req, res) => {
     return res.status(500).json({message: "Unable To update"});
     return res.status(200).json({message:"Update Success"});
 };
+// const updateBlog = async (req, res) => {
+//     const { title, description } = req.body;
+//     const blogId = req.params.id;
+//     let blog;
+//     try {
+//         blog = await Blog.findByIdAndUpdate(blogId, {
+//             title: title,
+//             description: description
+//         });
+//     }catch(err){
+//         return console.log(err);
+//     }
+//     if(!blog)
+//     return res.status(500).json({message: "Unable To update"});
+//     return res.status(200).json({message:"Update Success"});
+// };
 
 
 // return the blog by id
@@ -114,7 +159,7 @@ const deleteBlog = async (req, res, next)=>{
         blog = await Blog.findByIdAndRemove(Id).populate('user'); // populate works with the refrence collection
         // it will find  out the detail of the particular user which refers to the curr blog
         // now blog contain the blog and user detail as well 
-        await blog.user.blogs.pull(blog); 
+        await blog.user.blogs.pull(blog._id); 
         // blog.user.blogs refers to the user{the user whose blog is this}.blogs.pull(blog);
         // .blogs is the array of blogs which  we refers to the user
         //.pull (pop) pull the blog (which we are going to delete) from the blogs array of user
