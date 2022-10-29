@@ -13,7 +13,7 @@ export default function AddBlog(props) {
 
   // localstorage
   const AUTH_ACCESS_TOKEN = localStorage.getItem("auth_access_token");
-  const userId = localStorage.getItem("userId");
+  const userInfo = useSelector((state)=>state.userInfo);
 
   //store
   const themeSide = useSelector((state) => state.themeSide);
@@ -101,7 +101,7 @@ export default function AddBlog(props) {
     const res = await axios.post(`${baseServerUrl}blogs/add`, {
       title: newBlog.title,
       description: newBlog.description,
-      user: userId
+      user: userInfo.userId
     }).catch(err => console.log(err));
     const data = await res.data
     return data;
@@ -113,7 +113,7 @@ export default function AddBlog(props) {
     const res = await reqInstance.put(`${baseServerUrl}blogs/update/${blogId}`, {
       title: newBlog.title,
       description: newBlog.description,
-      user: userId
+      user: userInfo.userId
     }).catch(error => error);
     return res;
   }

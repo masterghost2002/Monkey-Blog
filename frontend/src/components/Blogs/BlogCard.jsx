@@ -9,12 +9,12 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 // global scope variabe
 
-const image_link = "https://bloggerzone.in/blogadmin/images/63234400_1657257086.jpg";
+const image_link = "https://images.unsplash.com/photo-1516414447565-b14be0adf13e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=773&q=80";
 const baseServerUrl = "https://masterghostblog.herokuapp.com/";
 // const baseServerUrl = "http://localhost:5000/";
 export default function BlogCard(props) {
 
-  const userName = localStorage.getItem("userName");
+  const userInfo = useSelector((state) => state.userInfo);
   // react-router-dom
   const navigate = useNavigate();
 
@@ -59,7 +59,7 @@ export default function BlogCard(props) {
 
   return (
     <>
-      <div className="col-lg-5 mt-4"  data-aos="zoom-in-up"  >
+      <div className="col-lg-5 mt-4" data-aos="zoom-in-up"  >
         <div className={`card blog-card blog-card-${themeSide}`}>
           <div className="d-flex justify-content-center img_container">
             <img src={image_link} className="card-img-top img-fluid" alt="fsdfsd" />
@@ -67,10 +67,10 @@ export default function BlogCard(props) {
           <div className="card-body">
             <div className=" row card-detail">
               <div className="col-lg-6">
-                <span><img src={Avatar} alt="" className="img-fluid" />&nbsp; &nbsp;{props.blog.user.name === undefined ? userName : props.blog.user.name}</span>
+                <span><img src={Avatar} alt="" className="img-fluid" />&nbsp; &nbsp;{props.blog.user.name === undefined ? userInfo.userName : props.blog.user.name}</span>
               </div>
               <div className="col-lg-6 d-flex justify-content-end">
-                <span><i className="bi bi-calendar3"></i></span><span className='text-muted fw-normal'>&nbsp; {date}</span>
+                <span><i className="fa-solid fa-calendar-days text-muted"></i></span><span className='text-muted fw-normal'>&nbsp; {date}</span>
               </div>
             </div>
             <h5 className="card-title">{props.blog.title}</h5>
@@ -79,21 +79,21 @@ export default function BlogCard(props) {
           <hr className='divider-line'></hr>
           <div className="card-body row">
             <div className="col-lg-6 mt-lg-3 ">
-              <NavLink className="btn btn-viewfull" aria-current="page" to={`/blog/${props.blog._id}`}>View Full Blog &nbsp;<i className="bi bi-eye"></i></NavLink>
+              <NavLink className="btn btn-viewfull" aria-current="page" to={`/blog/${props.blog._id}`}>View Full Blog &nbsp;<i className="fa-solid fa-eye"></i></NavLink>
             </div>
             <div className={`col-lg-6 mt-3 d-flex justify-content-${props.canmodify ? "between" : "end"}`}>
               <CopyToClipboard text={`https://monkey-app.netlify.app/blog/${props.blog._id}`}>
                 <button onClick={props.notificationCopy} className={`card-link  card-link-btn card-link-btn-${themeSide} blog-btns`} title='copy-link'>
-                  <i className="bi bi-link-45deg fs-4"></i>
+                  <i className="fa-solid fa-share fs-4"></i>
                 </button>
               </CopyToClipboard>
               {props.canmodify && <button className={`card-link  card-link-btn card-link-btn-${themeSide} blog-btns`} title='edit-blog' onClick={handleEdit}>
-                <i className="bi bi-pencil-square fs-4"></i>
+                <i className="fa-solid fa-pen-to-square fs-4"></i>
               </button>}
               {/* delete confirm modal */}
               {props.canmodify && <>
                 <button className={`card-link  card-link-btn card-link-btn-${themeSide} blog-btns`} title='delete-blog' onClick={handleShow}>
-                  <i className="bi bi-trash fs-4 "></i>
+                  <i className="fa-regular fa-trash-can fs-4"></i>
                 </button>
                 <Modal show={show} onHide={handleClose} className={`modal-${themeSide}`}>
                   <Modal.Header closeButton className={`modal-header-${themeSide}`}>

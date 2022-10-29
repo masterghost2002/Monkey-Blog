@@ -104,12 +104,10 @@ export default function Auth(props) {
         else {
             sendRequest("login")
                 .then((user) => {
-                    localStorage.setItem("userName", user.name);
-                    localStorage.setItem("userId", user._id);
                     if (user.themeSide === 'dark')
                         dispatch(authActions.setThemeSideDark());
                     else dispatch(authActions.setThemeSideLight());
-                    dispatch(authActions.login());
+                    dispatch(authActions.login([user._id, user.name]));
                 })
                 .then(() => navigate('/blogs'))
                 .catch((err) => {

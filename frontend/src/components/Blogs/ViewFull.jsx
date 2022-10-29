@@ -118,10 +118,10 @@ export default function ViewFull(props) {
                                     <hr></hr>
                                     <div className="card-body d-flex justify-content-between">
                                         <CopyToClipboard text={`https://monkey-app.netlify.app/blog/${blog._id}`}>
-                                            <button className="card-link  card-link-btn blog-btns" title='copy-link' onClick={notifyCopy}><i className="bi bi-link-45deg fs-4"></i></button>
+                                            <button className="card-link  card-link-btn blog-btns" title='copy-link' onClick={notifyCopy}><i className="fa-solid fa-share fs-4"></i></button>
                                         </CopyToClipboard>
                                         <button type="button" className="card-link card-link-btn blog-btns" onClick={handleShow}>
-                                            <i className="bi bi-file-earmark-arrow-down-fill fs-4"></i>
+                                        <i className="fa-regular fa-file-pdf fs-4"></i>
                                         </button>
                                         <Modal show={show} onHide={handleClose} className={`modal-${themeSide}`}>
                                             <Modal.Header closeButton className={`modal-header-${themeSide}`}>

@@ -13,11 +13,10 @@ const baseServerUrl = "https://masterghostblog.herokuapp.com/";
 // const baseServerUrl = "http://localhost:5000/";
 
 export default function Blogs(props) {
-  const userName = localStorage.getItem('userName');
   // store (store/index.js) functions
   const dispatch = useDispatch();
   const showWelcome = useSelector((state) => state.showWelcome); //set show welcome to false after first login
-
+  const userInfo = useSelector((state)=>state.userInfo);
   //props destructure to prevent looping while changing of progress bar
   const progressHandler = props.progressHandler;
 
@@ -25,6 +24,7 @@ export default function Blogs(props) {
   const [blogs, setBlogs] = useState([]);
   const [loader, setLoader] = useState(true);
   
+
   // server requets
   const sendRequest = useCallback(async () => {
     progressHandler(27);
@@ -48,10 +48,10 @@ export default function Blogs(props) {
       setBlogs(data.blogs);
     }).catch((err)=>console.log(err));
     if(showWelcome === true){
-      notifyWelcome(userName);
+      notifyWelcome(userInfo.userName);
       dispatch(authActions.setShowWelcome());
     }
-  }, [sendRequest, showWelcome, dispatch, userName]);
+  }, [sendRequest, showWelcome, dispatch, userInfo.userName]);
 
   return (
     <>
