@@ -1,9 +1,11 @@
 .main {
-    padding-top: 4rem;
+    /* padding-top: 4rem; */
+    /* margin-top: 4rem; */
 }
 
 .redirects {
-    min-height: 80vh;
+    padding-top: 4rem;
+    min-height: 90vh;
     align-items: center;
     justify-content: center;
     display: flex;
@@ -96,6 +98,8 @@
 }
 
 .heading-container {
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 20vh;
 }
@@ -155,15 +159,18 @@ card .theming {
 
 /* #####################################login screen #############################3*/
 .auth_wrapper {
-    /* min-height: 80vh; */
+    min-height: 80vh;
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='1440' height='560' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1075%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='rgba(255%2c 255%2c 255%2c 1)'%3e%3c/rect%3e%3cpath d='M 0%2c181 C 72%2c154 216%2c44.2 360%2c46 C 504%2c47.8 576%2c173.2 720%2c190 C 864%2c206.8 936%2c134.2 1080%2c130 C 1224%2c125.8 1368%2c161.2 1440%2c169L1440 560L0 560z' fill='rgba(48%2c 144%2c 241%2c 1)'%3e%3c/path%3e%3cpath d='M 0%2c331 C 41.2%2c350.2 123.6%2c437 206%2c427 C 288.4%2c417 329.6%2c270.2 412%2c281 C 494.4%2c291.8 535.6%2c458.6 618%2c481 C 700.4%2c503.4 741.6%2c400.6 824%2c393 C 906.4%2c385.4 947.6%2c465.2 1030%2c443 C 1112.4%2c420.8 1154%2c261.4 1236%2c282 C 1318%2c302.6 1399.2%2c493.2 1440%2c546L1440 560L0 560z' fill='rgba(81%2c 165%2c 250%2c 1)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1075'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3c/defs%3e%3c/svg%3e");
-    display: flex;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat; 
     background-size: 100% 100%;
-    align-items: center;
+    padding-top: 4rem;
+    display: flex;
+
+
+    /* align-items: center; */
 }
 
-.login-form {
+.auth_form {
     padding: 20px;
     box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
     border-radius: 12px;
@@ -225,7 +232,7 @@ card .theming {
 
 .forget_component {
     display: flex;
-    min-height: 80vh;
+    min-height: 70vh;
     justify-content: center;
     align-items: center;
 }
@@ -237,10 +244,14 @@ card .theming {
 
 /* Blogs  main screen*/
 .blogs {
+    padding-top: 4rem;
     min-height: 80vh;
     padding-bottom: 2rem;
 }
-
+.no_blog{
+    padding-top: 4rem;
+    min-height: 80vh;
+}
 /* blog card start */
 .blog-card {
     border: none !important;
@@ -320,10 +331,18 @@ card .theming {
     background-color: rgb(63, 63, 63);
     color: white !important;
 }
-
+.blog_end_message{
+    display: flex;
+    justify-content: center;
+    padding-bottom: 1rem;
+    font-family: Arial, Helvetica, sans-serif !important;
+}
 /*  */
 /* blog card mobile */
 @media screen and (max-width: 790px) {
+    .auth_form{
+        margin: 2rem 0 2rem 0;
+    }
     .blog-card {
         box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px;
         margin-left: 0;
@@ -400,7 +419,7 @@ card .theming {
 /* heading component */
 .heading {
     font-weight: bold;
-    font-size: 3rem;
+    font-size: 2.5rem;
 }
 
 .divider-line {

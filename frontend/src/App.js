@@ -1,77 +1,87 @@
 import './components/Styles/styleSheet.css'
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, lazy, Suspense } from 'react';
 import LoadingBar from 'react-top-loading-bar';
-import axios from 'axios';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from './Store';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AOS from 'aos';
+
 import 'aos/dist/aos.css';
 // components
 import { Header } from './components/Header/Header';
-import Auth from './components/Login-Signup/Auth';
-import ForgetPassword from './components/Responses/ForgetPassword';
-import Blogs from './components/Blogs/Blogs';
-import AddBlog from './components/Blogs/AddBlog';
-import UserBlogs from './components/Blogs/UserBlogs';
 import Footer from './components/Footer/Footer';
-import ViewFull from './components/Blogs/ViewFull';
-import Contact from './components/ContactUs/Contact';
-import NotFound from './components/Responses/NotFound';
-import Redirects from './components/Responses/Redirects';
 import LogoSplash from './components/Responses/LogoSplash';
-// const baseServerUrl = "http://localhost:5000/";
-const baseServerUrl = "https://masterghostblog.herokuapp.com/";
+import { AUTH_TOKEN } from './components/BackendResponses/backendRequest';
+
+// using lazy to prevent rendering of all the components even if they are not required
+const Auth = lazy(() => import('./components/Login-Signup/Auth'));
+const ForgetPassword = lazy(() => import('./components/Login-Signup/ForgetPassword'));
+const Blogs = lazy(() => import('./components/Blogs/Blogs'));
+const ViewFull = lazy(() => import('./components/Blogs/ViewFull'));
+const AddBlog = lazy(()=>import('./components/Blogs/AddBlog'));
+const Contact = lazy(()=>import('./components/ContactUs/Contact'));
+const NotFound = lazy(()=>import('./components/Responses/NotFound'));
+const Redirects = lazy(()=>import('./components/Responses/Redirects'));
 
 
 function App() {
 
-  //progress bar
+  //store
   const dispatch = useDispatch();
-  const AUTH_ACCESS_TOKEN = localStorage.getItem("auth_access_token");
-  const [progress, setProgress] = useState(0);
-  const [loader, setLoader] = useState(false);
-
   //store related workk
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const themeSide = useSelector((state) => state.themeSide);
+
+  // progress bar and loader state
+  const [progress, setProgress] = useState(0);
+  const [loader, setLoader] = useState(false);
+
+
   //router dom
   const location = useLocation();
   const navigate = useNavigate();
   const accessablePath = location.pathname;
 
   //after auth functions
-
-
   const verify_access_token = useCallback(async () => {
-    if (AUTH_ACCESS_TOKEN === null && (accessablePath === '/redirects' || accessablePath.substring(0, 6) === '/blog/')){
-       navigate(accessablePath);
-       return;
-    };
-    if (isLoggedIn && accessablePath === '/') navigate('/blogs');
-    setLoader(true);
-    let reqInstance = axios.create({ headers: { Authorization: `Bearer ${AUTH_ACCESS_TOKEN}` } });
-    await reqInstance.post(`${baseServerUrl}user/verify_auth`)
-      .then((response) => {
-        if (response.data.user.themeSide === 'dark')
-          dispatch(authActions.setThemeSideDark());
-        else dispatch(authActions.setThemeSideLight());
-        dispatch(authActions.login([response.data.user._id, response.data.user.name]));
-        dispatch(authActions.setShowWelcome()); //set show welcome to false
-        setLoader(false);
-      })
-      .catch(function (error) {
-        if (error.response.status === 404 && accessablePath !== '/redirects' && accessablePath.substring(0, 6) !== '/blog/'){
-          setLoader(false);
-          navigate('/');
-        } 
-      });
-  }, [AUTH_ACCESS_TOKEN, dispatch, navigate, accessablePath, isLoggedIn]);
+    const AUTH_ACCESS_TOKEN = localStorage.getItem("auth_access_token");
 
-  // console.log("hello");
+    // if the accesstoken is null and paths are  redirets blog/:someid , /forgotpassword redirect the user to their required path
+    if (AUTH_ACCESS_TOKEN === null && (accessablePath === '/redirects' || accessablePath.substring(0, 6) === '/blog/' || accessablePath === '/forgotpassword')) {
+      navigate(accessablePath);
+      return;
+    };
+
+    // if the user is logedin and try to access auth page or forgotpassword then redirect to /blogs
+    if (isLoggedIn && (accessablePath === '/' || accessablePath === '/forgotpassword')) navigate('/blogs');
+
+    // if   // if the accesstoken is null and paths are not redirets blog/:someid , /forgotpassword redirect the user to '/' auth page
+    if (AUTH_ACCESS_TOKEN === null) {
+      navigate('/');
+      return;
+    };
+
+    // setLoader true because we are going to fetch the user info now
+    setLoader(true);
+    const response = await AUTH_TOKEN();
+    if (response.status === 404 && accessablePath !== '/redirects' && accessablePath.substring(0, 6) !== '/blog/') {
+      setLoader(false);
+      dispatch(authActions.logout());
+      navigate('/');
+      return;
+    }
+    if (response.data.user.themeSide === 'dark')
+      dispatch(authActions.setThemeSideDark());
+    else dispatch(authActions.setThemeSideLight());
+    dispatch(authActions.login([response.data.user._id, response.data.user.name]));
+    setLoader(false);
+  }, [dispatch, navigate, accessablePath, isLoggedIn]);
+
+  //use Effect
   useEffect(() => {
+    // animation on scroll
     AOS.init({
       offset: 150,
       duration: 500,
@@ -83,42 +93,44 @@ function App() {
   return (
     <React.Fragment>
       {
-        loader && !isLoggedIn ? <LogoSplash />:
-      <>
-        <header className='header'>
-          <LoadingBar
-            color='#51A5FA'
-            progress={progress}
-            loaderSpeed='800'
-            onLoaderFinished={() => setProgress(0)}
-          />
-          <Header />
-        </header>
-        <main className={`main main-${themeSide}`}>
-          <Routes>
-            <Route path='/blog/:id' element={<ViewFull progressHandler={setProgress} />}></Route>
-            <Route path='/forgetpassword' element={<ForgetPassword />}></Route>
-            {!isLoggedIn ? <Route path='/' element={<Auth progressHandler={setProgress} />}></Route> :
-              <>
-                <Route path='/blogs' element={<Blogs progressHandler={setProgress} />}></Route>
-                <Route path='/myBlogs' element={<UserBlogs progressHandler={setProgress} />}></Route>
-                <Route path='/updateblog/:id' element={<AddBlog progressHandler={setProgress} />}></Route>
-                <Route path='/addBlog' element={<AddBlog progressHandler={setProgress}></AddBlog>}></Route>
-              </>
-            }
-            <Route path='/notfound' element={<NotFound />}></Route>
-            <Route path='/contactus' element={<Contact />}></Route>
-            <Route path='/redirects' element={<Redirects />}></Route>
-          </Routes>
-          <ToastContainer
-            bodyClassName="toastBody"
-            theme="dark"
-          />
-        </main>
-        <footer>
-          <Footer />
-        </footer>
-      </>
+        loader && !isLoggedIn ? <LogoSplash /> :
+          <>
+            <header className='header'>
+              <LoadingBar
+                color='#51A5FA'
+                progress={progress}
+                loaderSpeed='800'
+                onLoaderFinished={() => setProgress(0)}
+              />
+              <Header />
+            </header>
+            <main className={`main main-${themeSide}`}>
+              <Suspense fallback={<LogoSplash/>}>
+                <Routes>
+                  <Route path='/blog/:id' element={<ViewFull progressHandler={setProgress} />}></Route>
+                  <Route path='/forgotpassword' element={<ForgetPassword progressHandler={setProgress} />}></Route>
+                  {!isLoggedIn ? <Route path='/' element={<Auth progressHandler={setProgress} />}></Route> :
+                    <>
+                      <Route path='/blogs' element={<Blogs progressHandler={setProgress} type={"All Blogs"} />}></Route>
+                      <Route path='/myBlogs' element={<Blogs progressHandler={setProgress} type={"My Blogs"} />}></Route>
+                      <Route path='/updateblog/:id' element={<AddBlog progressHandler={setProgress} />}></Route>
+                      <Route path='/addBlog' element={<AddBlog progressHandler={setProgress}></AddBlog>}></Route>
+                    </>
+                  }
+                  <Route path='/notfound' element={<NotFound />}></Route>
+                  <Route path='/contactus' element={<Contact />}></Route>
+                  <Route path='/redirects' element={<Redirects />}></Route>
+                </Routes>
+              </Suspense>
+              <ToastContainer
+                bodyClassName="toastBody"
+                theme="dark"
+              />
+            </main>
+            <footer>
+              <Footer />
+            </footer>
+          </>
       }
     </React.Fragment>
   );
