@@ -1,35 +1,38 @@
 
-# Monkey-App (Blogging Site)
+# Monkey-App 🐒 (Blogging Site)
 
 Monkey-App is a full-stack app build over MERN. 
 It is basically a Blogging site with modern UI and lots of functionality.
-Where user can post update delte or read other user blogs even can share them, download as pdf.
+Where user can post update delte or read other user blogs even can share them, download as pdf.\
+
+[🔗 Monkey-App](https://monkey-app.netlify.app/)
 
 
 
 
 ## Features
 
-- Light/dark mode toggle
-- Add/Update Blog
-- Rich Text-Editor
-- Download Blog as PDF (BETA)
-- Validation Handeling (wrong password, email, OTP ..etc)
-- Authentication while deleting or updating blog
+- Light/dark mode toggle ☀️/🌚
+- Add/Update Blog  ➕ ✏️
+
+- Rich Text-Editor 🤑 ✏️
+- Download Blog as PDF (BETA) 📥
+- Validation Handeling (wrong password, email, OTP ..etc) ❌
+- Authentication while deleting or updating blog 🗑️
 - Fully Responsive
 - JWT Authentication
-- OTP Verfication for signup/forgotpassword
-- Animation on scroll
-- Share blog over social media, person can view shared blog without login
-- Fast, Optimised
-- Modern UI
-- Loader,Spinners, Skeletion Card while fetching data
+- OTP Verfication for signup/forgotpassword. 
+- Animation on scroll 🖱️
+- Share blog over social media, person can view shared blog without login 🌐
+- Fast, Optimised 🚀
+- Modern UI 
+- Loader,Spinners, Skeletion Card while fetching data. ߷ 🩻
 - Good routes management 
 
 
 
 
-## Tech Stack
+## Tech Stack 🌐
 
 **Front-end:** React, Redux, React-toastify,Bootstrap,React-Loader,React-Skeleton,JodithEditor,React-Lazy,Axios,AOS
 
@@ -57,7 +60,7 @@ To run this project, you will need to add the following environment variables to
 
 ## Run Locally
 
-Clone the project
+Clone the project 
 
 ```bash
   git clone https://github.com/masterghost2002/Monkey-Blog
