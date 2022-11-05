@@ -1,45 +1,138 @@
-# Monkey-Blog
-Monkey-Blog  a part of monkey site
 
+# Monkey-App (Blogging Site)
 
-![Screenshot (85)](https://user-images.githubusercontent.com/55751461/197377412-1ee3c8d1-639f-4163-b14a-55b09fdd995e.png)
-![Screenshot (86)](https://user-images.githubusercontent.com/55751461/197377414-9d0a0d69-0c43-4af6-b066-983255b7e72d.png)
-![Screenshot (87)](https://user-images.githubusercontent.com/55751461/197377415-68147715-3e0b-49c6-8b4a-3226ed3b2cee.png)
-![Screenshot (88)](https://user-images.githubusercontent.com/55751461/197377416-ab952806-297d-42a2-b6e1-c9ef31e34414.png)
-![Screenshot (75)](https://user-images.githubusercontent.com/55751461/197377419-dbbb88f7-da9e-49a2-b61d-17b49cf8c6b4.png)
-![Screenshot (76)](https://user-images.githubusercontent.com/55751461/197377420-8d6780cb-5679-4d57-b3e9-0329b4f313ad.png)
-![Screenshot (77)](https://user-images.githubusercontent.com/55751461/197377423-ad31493f-b9bf-48f8-b1ae-aef4b3b0fef9.png)
-![Screenshot (78)](https://user-images.githubusercontent.com/55751461/197377425-db7958bd-d405-44bf-9e16-5d597c86b527.png)
-![Screenshot (79)](https://user-images.githubusercontent.com/55751461/197377426-b7caa076-60e7-497f-bcc3-770c441f1d4f.png)
-![Screenshot (80)](https://user-images.githubusercontent.com/55751461/197377431-90af807a-ae58-40ce-8ad3-301bb70ef051.png)
-![Screenshot (81)](https://user-images.githubusercontent.com/55751461/197377433-893a5b70-e111-4773-b306-f37b3de6c2f6.png)
-![Screenshot (82)](https://user-images.githubusercontent.com/55751461/197377434-09949d57-97ce-4c3e-918c-b19b5cf0c665.png)
-![Screenshot (83)](https://user-images.githubusercontent.com/55751461/197377436-f036ebc0-bb84-4d31-ac9d-bec2c8fb096e.png)
-![Screenshot (84)](https://user-images.githubusercontent.com/55751461/197377438-ff05bed1-2537-4443-a519-261e3413ce11.png)
+Monkey-App is a full-stack app build over MERN. 
+It is basically a Blogging site with modern UI and lots of functionality.
+Where user can post update delte or read other user blogs even can share them, download as pdf.
 
 
 
-# Getting Started with Monkey Blog
-### 1.Open Backend Folder do npm install
-### 2. Open frontend Folder do npm install
-### 3. Add mongoose uri in Backend server.js (to connect to your database)
-### 4. Add email and password token in middleware
 
-# Getting Started with Create React App
+## Features
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- Light/dark mode toggle
+- Add/Update Blog
+- Rich Text-Editor
+- Download Blog as PDF (BETA)
+- Validation Handeling (wrong password, email, OTP ..etc)
+- Authentication while deleting or updating blog
+- Fully Responsive
+- JWT Authentication
+- OTP Verfication for signup/forgotpassword
+- Animation on scroll
+- Share blog over social media, person can view shared blog without login
+- Fast, Optimised
+- Modern UI
+- Loader,Spinners, Skeletion Card while fetching data
+- Good routes management 
 
-## Available Scripts
 
-In the project directory, you can run:
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Tech Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**Front-end:** React, Redux, React-toastify,Bootstrap,React-Loader,React-Skeleton,JodithEditor,React-Lazy,Axios,AOS
+
+**Back-end:** Node, Express,MongoDB,Mongoose
+
+
+## Requirements
+
+Install Node js 16 or above
+
+```bash
+  https://nodejs.org/en/download/
+```
+
+    
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`DATABASE URI` --> YOUR DATABASE URI
+
+`BASE_SERVER_URL` --> for localhost use http://localhost:5000
+
+
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/masterghost2002/Monkey-Blog
+```
+
+Go to the project directory
+
+```bash
+  cd Monkey-Blog
+```
+
+Install front-end dependencies, go to the front-end directory
+
+```bash
+  cd frontend
+```
+
+```bash
+  npm install
+```
+Install back-end dependencies, go to the back-end directory
+
+```bash
+  cd backend
+```
+
+```bash
+  npm install
+```
+Start the server,go to the back-end directory
+
+```bash
+  npm server.js
+```
+OR
+```bash
+  nodemon server.js
+```
+Start the frontend,go to the back-end directory
+
+```bash
+  npm start
+```
+
+## Screenshots Desktop
+
+![Screenshot (97)](https://user-images.githubusercontent.com/55751461/200129949-cff124f7-0686-49fd-a565-15b0152581b5.png)
+![Screenshot (98)](https://user-images.githubusercontent.com/55751461/200129952-354124ea-04c1-43cf-aa5e-2f0505084db0.png)
+![Screenshot (99)](https://user-images.githubusercontent.com/55751461/200129954-fe590def-f784-486b-bf72-44b7ee016ee5.png)
+![Screenshot (100)](https://user-images.githubusercontent.com/55751461/200129958-40abdf6c-7788-4dd0-b953-49082c7a590e.png)
+![Screenshot (101)](https://user-images.githubusercontent.com/55751461/200129961-1187ed69-ffba-4918-aa61-bb95096397da.png)
+![Screenshot (89)](https://user-images.githubusercontent.com/55751461/200129963-fd983c7d-155c-45df-9e9f-285291eefe5b.png)
+![Screenshot (90)](https://user-images.githubusercontent.com/55751461/200129965-fd63f3a4-0af0-4e37-8741-8a04edc8afc1.png)
+![Screenshot (91)](https://user-images.githubusercontent.com/55751461/200129977-5890f3c0-3a0a-4fdb-af96-d5766169f24b.png)
+![Screenshot (92)](https://user-images.githubusercontent.com/55751461/200129986-e4351a87-c552-4dbc-b629-5160472eb43b.png)
+![Screenshot (93)](https://user-images.githubusercontent.com/55751461/200129988-2f8dbed3-60e5-4906-a366-87966e8f121c.png)
+![Screenshot (94)](https://user-images.githubusercontent.com/55751461/200129994-c98f5e8f-cb9e-46c1-872b-f7c0b6c22f19.png)
+![Screenshot (95)](https://user-images.githubusercontent.com/55751461/200129997-fd5838aa-2a6d-4ef2-837b-8b12acaeead1.png)
+![Screenshot (96)](https://user-images.githubusercontent.com/55751461/200130000-12857158-b694-4a42-bc77-fb3826f44ac3.png)
+![Screenshot (111)](https://user-images.githubusercontent.com/55751461/200130945-48f972e9-0067-4aba-9faa-4b2c5557c339.png)
+![Screenshot (112)](https://user-images.githubusercontent.com/55751461/200130946-bc9b7add-2082-4d27-a9fd-dbcf743b3c72.png)
+![Screenshot (113)](https://user-images.githubusercontent.com/55751461/200130976-c487ae19-9523-4f5f-b650-c2947bb22f89.png)
+
+## Screenshots Mobile
+
+![Screenshot (106)](https://user-images.githubusercontent.com/55751461/200130990-ec34fbb8-d40b-4932-8534-52b2210b05cb.png)
+![Screenshot (107)](https://user-images.githubusercontent.com/55751461/200130994-7ffb56c3-e47a-4a94-a69c-cd494342cb08.png)
+![Screenshot (108)](https://user-images.githubusercontent.com/55751461/200130995-d5e5d429-c267-484f-a091-cc5a628ee60b.png)
+![Screenshot (102)](https://user-images.githubusercontent.com/55751461/200130998-87e1cb14-6192-4de4-be9b-722cffd26936.png)
+![Screenshot (103)](https://user-images.githubusercontent.com/55751461/200130999-91b11cad-909a-4a70-a7a4-986533cca026.png)
+
+
+
+## NPM
+
 
 ### `npm test`
 
@@ -95,3 +188,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
