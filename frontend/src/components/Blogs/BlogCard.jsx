@@ -1,17 +1,16 @@
 import React, { useState } from 'react'
 import Avatar from '../../assests/images/avatar-sm.png'
-import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { DELETE_BLOG_BY_ID } from '../BackendResponses/backendRequest';
+import { notifyError, notifySuccess, notifyCopy } from '../Toastify/ToastNotifications';
 // global scope variabe
 
 const image_link = "https://images.unsplash.com/photo-1516414447565-b14be0adf13e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=773&q=80";
-const baseServerUrl = "https://masterghostblog.herokuapp.com/";
-// const baseServerUrl = "http://localhost:5000/";
 export default function BlogCard(props) {
 
   const userInfo = useSelector((state) => state.userInfo);
@@ -42,20 +41,20 @@ export default function BlogCard(props) {
   date = dtFromat.format(date);
 
   // edit delete function and request
-  const handleDelete = () => {
+  const handleDelete = async () => {
     setShow(false);
-    sendDeleteRequest().then(() => {
-      props.onDelete(); // call the sendRequest function of userBlog component to refetch the user realted blog
-      props.notificationDelete("Blog Deleted");
-    }).catch((err) => console.log(err));
+    const response = await DELETE_BLOG_BY_ID(props.blog._id);
+    if(response.status === 200)
+      notifySuccess("Blog Deleted");
+    else notifyError(response.data.message);
+    props.onDelete();
+
   }
+
   const handleEdit = () => {
     navigate(`/updateblog/${props.blog._id}`);
   }
-  const sendDeleteRequest = async () => {
-    const res = await axios.delete(`${baseServerUrl}blogs/${props.blog._id}`);
-    return res.data;
-  }
+
 
   return (
     <>
@@ -83,7 +82,7 @@ export default function BlogCard(props) {
             </div>
             <div className={`col-lg-6 mt-3 d-flex justify-content-${props.canmodify ? "between" : "end"}`}>
               <CopyToClipboard text={`https://monkey-app.netlify.app/blog/${props.blog._id}`}>
-                <button onClick={props.notificationCopy} className={`card-link  card-link-btn card-link-btn-${themeSide} blog-btns`} title='copy-link'>
+                <button onClick={notifyCopy} className={`card-link  card-link-btn card-link-btn-${themeSide} blog-btns`} title='copy-link'>
                   <i className="fa-solid fa-share fs-4"></i>
                 </button>
               </CopyToClipboard>
@@ -107,7 +106,6 @@ export default function BlogCard(props) {
                   </Modal.Footer>
                 </Modal>
               </>}
-
             </div>
           </div>
         </div>

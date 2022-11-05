@@ -1,65 +1,53 @@
 import { React, useCallback, useEffect, useState } from 'react';
-import { authActions } from '../../Store';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import {GET_ALL_BLOGS, GET_USER_BLOGS} from '../BackendResponses/backendRequest';
 // components
-import {notifyCopy, notifyWelcome} from '../Toastify/ToastNotifications';
 import BlogCard from './BlogCard';
 import Heading from './Heading';
 import SkeletonCard from './SkeletonCard';
 import AddBlogFloat from '../Modals/AddBlogFloat';
+import NoBlog from '../Responses/NoBlog';
 
-const baseServerUrl = "https://masterghostblog.herokuapp.com/";
-// const baseServerUrl = "http://localhost:5000/";
-
+// user blog and blog are merged in one
 export default function Blogs(props) {
   // store (store/index.js) functions
-  const dispatch = useDispatch();
-  const showWelcome = useSelector((state) => state.showWelcome); //set show welcome to false after first login
   const userInfo = useSelector((state)=>state.userInfo);
+
   //props destructure to prevent looping while changing of progress bar
   const progressHandler = props.progressHandler;
-
+  const type = props.type;
   //blogs state, loaderstate
   const [blogs, setBlogs] = useState([]);
   const [loader, setLoader] = useState(true);
-  
 
-  // server requets
-  const sendRequest = useCallback(async () => {
-    progressHandler(27);
-    const res = await axios.get(`${baseServerUrl}blogs/`)
-      .then((response) => {
-        progressHandler(87);
-        return response;
-      })
-      .catch(err => console.log(err));
-    const data = await res.data;
-    await setLoader(false);
-    await progressHandler(100);
-    return data; // return blogs data 
-  }, [progressHandler])
-
-
+  // all blogs
+  const sendRequest = useCallback(async ()=>{
+        await setLoader(true);
+        await progressHandler(27);
+        const response =  type==="All Blogs"? await GET_ALL_BLOGS(): await GET_USER_BLOGS(userInfo.userId);
+        const data = await response.data;
+        await progressHandler(100);
+        await setLoader(false);
+        if(response.request.status === 200)
+          setBlogs(data.blogs);
+  }, [progressHandler, userInfo.userId, type]);
 
   // use effect
   useEffect(() => {
-    sendRequest().then((data) => {
-      setBlogs(data.blogs);
-    }).catch((err)=>console.log(err));
-    if(showWelcome === true){
-      notifyWelcome(userInfo.userName);
-      dispatch(authActions.setShowWelcome());
-    }
-  }, [sendRequest, showWelcome, dispatch, userInfo.userName]);
+    sendRequest();
+  }, [sendRequest]);
 
   return (
     <>
-      <div className='container-fluid blogs'>
-        <Heading content={"Latest Blogs"}></Heading>
-        {loader ? <div className="row justify-content-center">{<><SkeletonCard /><SkeletonCard /></>}</div> : <div className="row justify-content-center">
-          {blogs.map((item) => <BlogCard key={item._id} blog={item} canmodify={false} notificationCopy={notifyCopy}></BlogCard>)}
-        </div>}
+    <div className='container-fluid blogs'>
+        <Heading content={type}></Heading>
+        <div className="row justify-content-center">
+          {loader ? <><SkeletonCard /><SkeletonCard /></> : blogs.length ? blogs.map((item) => <BlogCard key={item._id} blog={item} canmodify={type==="All Blogs"?false:true} onDelete={sendRequest}></BlogCard>) : <NoBlog />}
+        </div>
+      
+      </div>
+      <div className='blog_end_message'>
+        <span>No more blogs :(</span>
       </div>
       {!loader && <AddBlogFloat />}
     </>

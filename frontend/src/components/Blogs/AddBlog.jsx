@@ -1,29 +1,20 @@
-import React, { useEffect, useState, useRef, useMemo } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import JoditEditor from 'jodit-react';
-
 // components
 import Heading from './Heading';
-import { notifyAdd } from '../Toastify/ToastNotifications';
+import { notifyAdd, notifyError } from '../Toastify/ToastNotifications';
+import { REQUEST_ADD_BLOG, UPDATE_BLOG, GET_BLOG_BY_ID } from '../BackendResponses/backendRequest';
 
 export default function AddBlog(props) {
-  const baseServerUrl = "https://masterghostblog.herokuapp.com/";
-
-  // localstorage
-  const AUTH_ACCESS_TOKEN = localStorage.getItem("auth_access_token");
-  const userInfo = useSelector((state)=>state.userInfo);
-
+  const userInfo = useSelector((state) => state.userInfo);
   //store
   const themeSide = useSelector((state) => state.themeSide);
-
   //router dom
   const navigate = useNavigate();
-
   //props destructure to prevent looping while changing of progress bar
   const progressHandler = props.progressHandler;
-
   //editor 
   const editor = useRef(null);
   function returnThemeSide(themeSide) {
@@ -38,27 +29,6 @@ export default function AddBlog(props) {
   // state of blog
   const [newBlog, setNewBlog] = useState({ title: "", description: "" });
 
-  //  use effect
-  useEffect(() => {
-    const sendRequestGetBlog = async () => {
-      progressHandler(27);
-      const res = await axios.get(`${baseServerUrl}blogs/${blogId}`).catch((err) => console.log(err));
-      const data = await res.data;
-      setNewBlog({
-        title: data.blog.title,
-        description: data.blog.description
-      })
-      progressHandler(100);
-    }
-    if (blogId !== undefined) {
-      sendRequestGetBlog();
-    }
-  }, [blogId, progressHandler]);
-
-
-
-
-
   const handleChange = (event) => {
     setNewBlog((prevSate) => ({
       ...prevSate, // first it will derefernce the prevState and set it then 
@@ -66,58 +36,80 @@ export default function AddBlog(props) {
     }));
   };
 
+  //  handdle blog
+  const handleBlog = useCallback(async () => {
 
-  const handleSubmit = (event) => {
+    //if blogId is undefined means the user visited the Addblog url to add a new blog not to update the blog
+    if (blogId === undefined) return;
+
+    // set the progress bar because now if will fetch the blog from backend
+    progressHandler(27);
+
+    const response = await GET_BLOG_BY_ID(blogId);//get blog by id fetch the blog by its id
+
+    // if failed with status 401 invalid blog id is passed and navigate to notfound section
+    if (response.request.status === 401) {
+      navigate('/notfound');
+      progressHandler(100);
+    }
+    const blog = await response.data.blog; // backend send the blog data attached in from of data.blog
+
+
+    // set the new blog
+    setNewBlog({
+      title: blog.title,
+      description: blog.description
+    })
+    progressHandler(100);
+  }, [progressHandler, blogId, navigate]);
+
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     progressHandler(27);
-    if (newBlog.title === "" || newBlog.description === "")
+    if (newBlog.title === "" || newBlog.description === "") {
       alert(`${newBlog.title === "" ? "Title" : "Description"} must not be empty`);
-    else {
-      if (blogId === undefined) {
-        sendRequestAdd()
-          .then(() => {
-            navigate('/myBlogs')
-          });
-      }
-      else {
-        sendRequestUpdate()
-          .then((res) => {
-            if (res.status === 401) {
-              navigate('/notfound');
-              progressHandler(100);
-            }
-            else{
-              navigate('/myBlogs');
-            }
-          })
-          .catch((error) => console.log(error));
-      }
+      return;
     }
 
-  }
-
-  // add new blog
-  const sendRequestAdd = async () => {
-    const res = await axios.post(`${baseServerUrl}blogs/add`, {
+    //created a blogObject which consist of all its info
+    const blogInfo = {
       title: newBlog.title,
       description: newBlog.description,
-      user: userInfo.userId
-    }).catch(err => console.log(err));
-    const data = await res.data
-    return data;
+      userId: userInfo.userId,
+      blogId: blogId //if it is a new blog then blog id will be undefined and be handle by the backend itslef
+    }
+
+    // if blogId is undefined means we are adding a new blog
+    if (blogId === undefined) {
+      const response = await REQUEST_ADD_BLOG(blogInfo);
+      if (response.request.status === 200)
+        notifyAdd(blogId !== undefined);
+      else notifyError(response.request.message);
+      navigate('/myBlogs');
+      return;
+    }
+
+    // else we requested to update the blog 
+    const response = await UPDATE_BLOG(blogInfo);
+
+    // if  response.status !== 200 failed to update the blog
+    if (response.status !== 200) {
+      notifyError(response.data.validationError);
+      progressHandler(100);
+      navigate('/blogs');
+      return;
+    }
+    else {
+      notifyAdd(blogId !== undefined);
+      navigate('/myBlogs');
+    }
   }
 
-  // update
-  const sendRequestUpdate = async () => {
-    let reqInstance = axios.create({ headers: { Authorization: `Bearer ${AUTH_ACCESS_TOKEN}` } });
-    const res = await reqInstance.put(`${baseServerUrl}blogs/update/${blogId}`, {
-      title: newBlog.title,
-      description: newBlog.description,
-      user: userInfo.userId
-    }).catch(error => error);
-    return res;
-  }
-
+  ///use Effect
+  useEffect(() => {
+    handleBlog();
+  }, [handleBlog]);
   return (
     <>
       <div className='container-fluid blogs'>
@@ -143,7 +135,7 @@ export default function AddBlog(props) {
                   }))}
                 />
               </div>
-              <button className='btn add-blog-btn' onClick={()=>notifyAdd(blogId !== undefined)}>{blogId === undefined ? "Add Blog" : "Update Blog"}</button>
+              <button className='btn add-blog-btn'>{blogId === undefined ? "Add Blog" : "Update Blog"} <i className="fa-solid fa-plus"></i></button>
             </form>
           </div>
         </div>

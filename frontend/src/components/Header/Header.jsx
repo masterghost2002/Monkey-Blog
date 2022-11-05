@@ -2,43 +2,42 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { authActions } from '../../Store';
+
+//customs
+import { UPDATE_THEME } from '../BackendResponses/backendRequest';
+import { notifyError } from '../Toastify/ToastNotifications';
 import Logo from '../../assests/images/logo.png';
 import Avatar from '../../assests/images/avatar-lg.png';
-import axios from 'axios';
 
-// const baseServerUrl = "http://localhost:5000/";
-const baseServerUrl = "https://masterghostblog.herokuapp.com/";
 export const Header = () => {
+
+    // navbar related state
     const [isCollapsed, setIsCollapsed] = useState(true);
+
+    // store
     const dispatch = useDispatch();
-    const isLoggedIn = useSelector((state) => state.isLoggedIn);
-    const themeSide = useSelector((state) => state.themeSide);
-    const userInfo = useSelector((state)=>state.userInfo);
+    const isLoggedIn = useSelector((state) => state.isLoggedIn); // user is loged in or not?
+    const themeSide = useSelector((state) => state.themeSide); //dark of light theme side
+    const userInfo = useSelector((state)=>state.userInfo); // return useName, userId
 
     // handle theme side
     const handleThemeSide = async () => {
-        if (themeSide === 'dark') {
-            const res = await axios.put(`${baseServerUrl}user/update`, {
-                userId: userInfo.userId,
-                userName: userInfo.userName,
-                themeSide: 'light'
-            });
-            const auth_access_token = res.data.accessToken;
-            dispatch(authActions.setThemeSideLight());
+        const requestData = {
+            userId : userInfo.userId,
+            themeSide: themeSide === 'dark'?'light':'dark', // setting the theme side based on the current present theme
+        }
+        const response = await UPDATE_THEME(requestData);
+
+        // if the response status is 200 it means we successfully updated the theme
+        if(response.status === 200){
+            themeSide === 'dark'?dispatch(authActions.setThemeSideLight()):dispatch(authActions.setThemeSideDark());
+            const auth_access_token =  await response.data.accessToken;
             localStorage.removeItem("auth_access_token");
             localStorage.setItem("auth_access_token", auth_access_token);
+            return;
         }
-        else {
-            const res = await axios.put(`${baseServerUrl}user/update`, {
-                userId: userInfo.userId,
-                userName: userInfo.userName,
-                themeSide: 'dark'
-            });
-            const auth_access_token = res.data.accessToken;
-            localStorage.removeItem("auth_access_token");
-            localStorage.setItem("auth_access_token", auth_access_token);
-            dispatch(authActions.setThemeSideDark());
-        }
+        // else we show the error here using toast
+        notifyError(response.message);
     }
     return (
         <nav className={`navbar navbar-expand-lg navbar-${themeSide}`}>

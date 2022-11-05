@@ -8,10 +8,11 @@
   --light-blue: #51A5FA;
   --dark-grey: #1A1A1A;
   --light-grey: #282828;
+  
 }
 @media screen and (max-width: 790px) {
   *{
-    font-size: 18px;
+    font-size: 16px;
   }
 }
 @media screen and (max-width: 330px) {

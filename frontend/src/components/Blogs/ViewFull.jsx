@@ -1,19 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import Avatar from '../../assests/images/avatar-sm.png'
 import { jsPDF } from "jspdf";
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
+// as we are injection external html so, its good to purify it to prevent exteranl html attack
 import ViewFullSkeleton from './ViewFullSkeleton';
 import { useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { notifyCopy } from '../Toastify/ToastNotifications';
-// as we are injection external html so, its good to purify it to prevent exteranl html attack
+import { GET_BLOG_BY_ID } from '../BackendResponses/backendRequest';
 export default function ViewFull(props) {
-    const baseServerUrl = "https://masterghostblog.herokuapp.com/";
 
     //store
     const themeSide = useSelector((state) => state.themeSide);
@@ -45,7 +44,7 @@ export default function ViewFull(props) {
         btn_color: "success"
     }
 
-    //time format
+    //time format 
     const formatDate = (created_at) => {
         let date = new Date(created_at);
         let dtFromat = new Intl.DateTimeFormat('en-US', {
@@ -60,27 +59,25 @@ export default function ViewFull(props) {
     //server request to get blog
     const sendRequestGetBlog = useCallback(async () => {
         progressHandler(27);
-        const res = await axios.get(`${baseServerUrl}blogs/${blog_id}`).catch(function (error) {
-            if (error.response) {
-                progressHandler(100);
-                navigate("/notfound");
-            }
-            else if (error.request)
-                console.log(error.request);
-            else
-                console.log('Error', error.message);
-        });
-        const data = await res.data;
-        setBlog({
-            title: data.blog.title,
-            description: data.blog.description,
-            userName: data.blog.user.name,
-            date: formatDate(data.blog.created_at),
-            _id: data.blog._id
-        });
-        setLoader(false);
-        progressHandler(100);
-    }, [blog_id, baseServerUrl, navigate, progressHandler]);
+        const response = await GET_BLOG_BY_ID(blog_id);
+        if (response.status === 200) {
+            const data = await response.data;
+            setBlog({
+                title: data.blog.title,
+                description: data.blog.description,
+                userName: data.blog.user.name,
+                date: formatDate(data.blog.created_at),
+                _id: data.blog._id
+            });
+            setLoader(false);
+            progressHandler(100);
+        }
+        else {
+            progressHandler(100);
+            navigate("/notfound");
+        }
+
+    }, [blog_id, navigate, progressHandler]);
     useEffect(() => {
         sendRequestGetBlog();
     }, [sendRequestGetBlog]);
@@ -96,7 +93,7 @@ export default function ViewFull(props) {
     return (
         <>
             {loader ? <ViewFullSkeleton /> : < section className='view_full_blog' >
-                <div className="container-fluid">
+                <div className="container-fluid blogs">
                     <div className="row justify-content-center">
                         <div className="col-lg-10">
                             <div className={`card card-full card-full-${themeSide}`} >
@@ -121,7 +118,7 @@ export default function ViewFull(props) {
                                             <button className="card-link  card-link-btn blog-btns" title='copy-link' onClick={notifyCopy}><i className="fa-solid fa-share fs-4"></i></button>
                                         </CopyToClipboard>
                                         <button type="button" className="card-link card-link-btn blog-btns" onClick={handleShow}>
-                                        <i className="fa-regular fa-file-pdf fs-4"></i>
+                                            <i className="fa-regular fa-file-pdf fs-4"></i>
                                         </button>
                                         <Modal show={show} onHide={handleClose} className={`modal-${themeSide}`}>
                                             <Modal.Header closeButton className={`modal-header-${themeSide}`}>
