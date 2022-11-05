@@ -8,7 +8,7 @@ const getAllBlogs = async (req, res, next) => {
     try {
         blogs = await (await Blog.find().sort('-created_at').populate('user', 'name'));
     } catch (err) {
-        return console.log(err);
+        return res.status(500).json({message: "Server Error"});
     }
     if (!blogs)
         return res.status(404).json({ message: "No Blog Found" });
@@ -47,9 +47,9 @@ const addBlog = async (req, res, next) => {
         await mongooseSession.commitTransaction();
 
     } catch (err) {
-        return console.log(err);
+        return res.status(500).json({message: "Server Error"});
     }
-    return res.status(200).json({ newBlog });
+    return res.status(200).json({message: "Blog Added" });
 };
 
 // update the already present blog
@@ -91,7 +91,7 @@ const updateBlog = async (req, res) => {
     try {
         blogs = await (await Blog.findById(blogId).populate('user', '_id'));
     } catch (err) {
-        return console.log(err);
+        return res.status(500).json({message: "Server Error"});
     }
     if (!blogs)
         return res.status(404).json({ message: "No Blog Found" });
@@ -165,7 +165,7 @@ const deleteBlog = async (req, res, next)=>{
         //.pull (pop) pull the blog (which we are going to delete) from the blogs array of user
         await blog.user.save();
     }catch(err){
-        return console.log(err);
+        return res.status(500).json({message:"Server Error"});
     }
     if(!blog) return res.status(500).json({message: "Unable to delete"});
     return res.status(200).json({message: "Blog delete success"});

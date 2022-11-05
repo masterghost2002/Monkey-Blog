@@ -36,7 +36,7 @@ app.use(express.json());
 // database.on("error", console.error.bind("Database connection failed"));
 // database.once("open", ()=>{ console.log("Connected to database")});
 // will listen to part if and only if we are connected to our database
-const dbURI = "";
+const dbURI = "mongodb+srv://masterghost:R%40kesh050317@cluster0.npotuys.mongodb.net/monkey-site?retryWrites=true&w=majority";
 mongoose.connect(dbURI)
 .then(app.listen(PORT)).then(console.log("Connected To DB and listening to 5000")).catch((err)=>{console.log(err)});
 app.use('/user', userRoutes);

@@ -1,26 +1,39 @@
 
+//  user: "rakeshdhariwal61@gmail.com",
+//  pass: "mqxiorsgcnepyrvh"
+// r%(FSMIxP1
 let nodemailer = require('nodemailer');
 let transporter = nodemailer.createTransport({
-    host: "host",
-    service: "server",
+    host: "us2.smtp.mailhostbox.com",
+    service: "monkeyappsupport@cublearner.org",
     port: 587,
     secure: false, // use TLS
     auth: {
-        user: "username@mail.com",
-        pass: "password",
+        user: "monkeyappsupport@cublearner.org",
+        pass: "r%(FSMIxP1",
     },
 });
-const verifyMail = (otp, request, response) => {
-    const { email, name } = request.body;
+const verifyMail = (request, response) => {
+    const  email = request.body.email;
+    const name = request.name?request.name:request.body.name;
+    const type = request.type;
+    const otp = request.OTP;
+    const content = type === "forgot_password"?
+                                "Enter this code &nbsp;to <strong>reset </strong>your Monkey-App password.":
+                                "Enter this code &nbsp;to <strong>activate </strong>your Monkey-App account. ";
+    const subject = type === "forgot_password"?
+                                "Password Reset OTP":
+                                "Verify your email";
     let mailOptions = {
-        from: "from",
+        from: "monkeyappsupport@cublearner.org",
         to: email,
-        subject: "Verify your email",
+        subject: subject,
         html: `
         <div>
         <span>Hi <strong>${name}! </strong></span><br></br>
         <span>Your verification code is <strong>${otp}</strong></span><br></br>
-        <span> Enter this code &nbsp;to <strong>activate </strong>your Monkey-App account. </span><br></br>
+        <span>${content} </span><br></br>
+        <span>OTP is valid for 10 minutes</span><br></br>
         <span>If you have any questions, send us an email <strong>monkeyappsupport@cublearner.org.</strong></span><br></br>
         <span>  We’re glad you’re here! &nbsp;</span><br></br>
         <span> The <strong>Monkey-App team</strong></span>

@@ -2,28 +2,17 @@ const userOptVerfication = require('../models/OptModel');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const verificationMailer  = require('../middleware/verificationMailer');
-const {saveUser} = require('./user-controller');
 const sendVerficationOtp = async (request, response)=>{
-    const {name, email, password} = request.body;
-    if (password.length < 8) return response.status(400).json({ message: "Must be of 8 character" })
-    let existingUser;
+    const {email, password} = request.body;
+    const name = request.name?request.name:request.body.name;
+    let verification_modal;
     try{
-        existingUser = await User.findOne({email: email});
-    }
-    catch(error){
-        response.send(error);
-    }
-    if(existingUser){
-        return response.status(404).json({ message: "User Already Exist" });
-    }
-    let existingVerification;
-    try{
-        existingVerification = await userOptVerfication.findOne({email:email});
+        verification_modal = await userOptVerfication.findOne({email:email});
     }
     catch(error){
         return response.status(500).json({message: "Server Error"});
     }
-    if(existingVerification)
+    if(verification_modal)
         await userOptVerfication.deleteOne({email: email});
     const Otp = `${Math.floor(1000+Math.random()*9000)}`;
     const newVerficaion = new userOptVerfication({
@@ -33,16 +22,17 @@ const sendVerficationOtp = async (request, response)=>{
         password: bcrypt.hashSync(password),
         createdAt: Date.now()
     });
+
+    request.OTP = Otp;
     try{
-        newVerficaion.save();
-        verificationMailer(Otp,request, response);
+        await newVerficaion.save();
     }
     catch(error){
         return response.status(404).json({message:"Unable to send otp", error:error});
     }
-    // return response.status(200).json({message: `OTP Sent Success`});
+    verificationMailer(request, response);;
 };
-const verifyUserOtp = async(request, response)=>{
+const verifyUserOtp = async(request, response, next)=>{
     const {Otp, email} = request.body;
     let existingVerification;
     try{
@@ -57,7 +47,7 @@ const verifyUserOtp = async(request, response)=>{
     if(!OTP_VERFIED_STATUS)
         return response.status(400).json({message: "Invalid OTP"});
     await userOptVerfication.deleteOne({email: email});
-    saveUser(existingVerification.name, existingVerification.email, existingVerification.password, request, response);
-
+    request.userInfo = existingVerification;
+    next();
 }
 module.exports = {sendVerficationOtp, verifyUserOtp};
