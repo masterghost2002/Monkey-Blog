@@ -4,8 +4,8 @@ const {getAllBlogs, addBlog, updateBlog, getById, deleteBlog, getByUserId} = req
 
 router.get('/', getAllBlogs);
 router.post('/add', addBlog);
-router.put('/update/:id', updateBlog);
 router.get('/:id', getById);
+router.put('/update/:id',updateBlog);
 router.delete('/:id', deleteBlog);
 router.get('/user/:id', getByUserId);
 module.exports = router;

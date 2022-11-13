@@ -14,7 +14,11 @@ const userSchema = new Schema({
     password:{
         type: String,
         required: true,
-        minLength: 6
+        minLength: 8
+    },
+    themeSide:{
+        type: String,
+        default: 'light'
     },
     blogs:[{type: mongoose.Types.ObjectId, ref:"blog", required:true}]
 });

@@ -1,15 +1,14 @@
-const session = require('express-session');
 const { default: mongoose } = require('mongoose');
 const Blog = require('../models/Blog');
 const User = require('../models/User');
-
+const {verify_token} = require('../middleware/auth_jwt');
 // return all the blogs
 const getAllBlogs = async (req, res, next) => {
     let blogs;
     try {
         blogs = await (await Blog.find().sort('-created_at').populate('user', 'name'));
     } catch (err) {
-        return console.log(err);
+        return res.status(500).json({message: "Server Error"});
     }
     if (!blogs)
         return res.status(404).json({ message: "No Blog Found" });
@@ -48,15 +47,63 @@ const addBlog = async (req, res, next) => {
         await mongooseSession.commitTransaction();
 
     } catch (err) {
-        return console.log(err);
+        return res.status(500).json({message: "Server Error"});
     }
-    return res.status(200).json({ newBlog });
+    return res.status(200).json({message: "Blog Added" });
 };
 
 // update the already present blog
-const updateBlog = async (req, res, next) => {
+
+const verifyUser = async (req, res, next)=>{
+    const authHeader = req.headers['authorization'];
+    const ACCESS_TOKEN = authHeader.split(" ")[1];
+    if(ACCESS_TOKEN === null) res.status(401);
+    const user = verify_token(ACCESS_TOKEN);
+    console.log(user);
+    const blogId = req.params.id;
+    try {
+        blogs = await (await Blog.findById(blogId).populate('user', '_id'));
+    } catch (err) {
+        return console.log(err);
+    }
+    if (!blogs)
+        return res.status(404).json({ message: "No Blog Found" });
+    const blogUserId = JSON.stringify(blogs.user._id);
+    const reqUserId = JSON.stringify(user._id);
+
+    console.log(blogUserId);
+    console.log(reqUserId);
+
+    if(blogUserId === reqUserId){
+        console.log("hello");
+        next();
+    }
+    return res.status(401).json({validationError:"Anauthorized User"});
+}
+const updateBlog = async (req, res) => {
     const { title, description } = req.body;
     const blogId = req.params.id;
+    const authHeader = req.headers['authorization'];
+    const ACCESS_TOKEN = authHeader.split(" ")[1];
+    if(ACCESS_TOKEN === null) res.status(401).json({validationError:"Anauthorized User"});
+    const user = verify_token(ACCESS_TOKEN);
+
+    try {
+        blogs = await (await Blog.findById(blogId).populate('user', '_id'));
+    } catch (err) {
+        return res.status(500).json({message: "Server Error"});
+    }
+    if (!blogs)
+        return res.status(404).json({ message: "No Blog Found" });
+
+    const blogUserId = JSON.stringify(blogs.user._id);
+    const reqUserId = JSON.stringify(user._id);
+
+
+    if(blogUserId !== reqUserId){
+        return res.status(401).json({validationError:"Anauthorized User"});
+    }
+    
     let blog;
     try {
         blog = await Blog.findByIdAndUpdate(blogId, {
@@ -68,12 +115,28 @@ const updateBlog = async (req, res, next) => {
     }
     if(!blog)
     return res.status(500).json({message: "Unable To update"});
-    return res.status(200).json({blog});
+    return res.status(200).json({message:"Update Success"});
 };
+// const updateBlog = async (req, res) => {
+//     const { title, description } = req.body;
+//     const blogId = req.params.id;
+//     let blog;
+//     try {
+//         blog = await Blog.findByIdAndUpdate(blogId, {
+//             title: title,
+//             description: description
+//         });
+//     }catch(err){
+//         return console.log(err);
+//     }
+//     if(!blog)
+//     return res.status(500).json({message: "Unable To update"});
+//     return res.status(200).json({message:"Update Success"});
+// };
 
 
 // return the blog by id
-const getById = async (req, res, next)=>{
+const getById = async (req, res)=>{
     const Id = req.params.id;
     let blog;
     try{
@@ -96,13 +159,13 @@ const deleteBlog = async (req, res, next)=>{
         blog = await Blog.findByIdAndRemove(Id).populate('user'); // populate works with the refrence collection
         // it will find  out the detail of the particular user which refers to the curr blog
         // now blog contain the blog and user detail as well 
-        await blog.user.blogs.pull(blog); 
+        await blog.user.blogs.pull(blog._id); 
         // blog.user.blogs refers to the user{the user whose blog is this}.blogs.pull(blog);
         // .blogs is the array of blogs which  we refers to the user
         //.pull (pop) pull the blog (which we are going to delete) from the blogs array of user
         await blog.user.save();
     }catch(err){
-        return console.log(err);
+        return res.status(500).json({message:"Server Error"});
     }
     if(!blog) return res.status(500).json({message: "Unable to delete"});
     return res.status(200).json({message: "Blog delete success"});
@@ -122,4 +185,4 @@ const getByUserId = async (req, res, next)=>{
         return res.status(404).json({message: "No blogs found"});
     return res.status(200).json({blogs: userBlogs.blogs});
 }
-module.exports = { getAllBlogs, addBlog, updateBlog , getById, deleteBlog, getByUserId};
+module.exports = { getAllBlogs, addBlog, updateBlog , getById, deleteBlog, getByUserId, verifyUser};
