@@ -6,7 +6,7 @@ export default function NoBlog() {
         <span className='fs-3 fw-bold text-muted d-flex justify-content-center'>Opps!</span><br></br>
         <span className="fs-4 fw-bold text-muted d-flex justify-content-center">Add Your first Blog</span>
         <div className='d-flex justify-content-center mt-4'>
-            <NavLink className="btn btn-add_blog" to={'/addBlog'}>Add Blog</NavLink>
+            <NavLink className="btn btn-add_blog" to={'/addBlog'}>Add Blog <i className="fa-solid fa-plus"></i></NavLink>
         </div>
     </div>
   )
