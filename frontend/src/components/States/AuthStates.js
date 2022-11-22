@@ -2,7 +2,8 @@ export const INITIAL_STATE = {
     inputs:{
         name: "",
         email:"",
-        password: ""
+        password: "",
+        confirmpassword: ""
     },
     validationMessage:{
         OtpClass: "",
@@ -10,21 +11,20 @@ export const INITIAL_STATE = {
         passwordClass: ""
     },
     isSignUp: false,
-    viewPassword: false,
     showOTP: false,
-    spinnerState: false
+    showSpinner: false
 };
 export const authReducer = (state, action)=> {
     switch(action.type){
         case "SEND_REQUEST":
             return {
                 ...state,
-                spinnerState: true
+                showSpinner: true
             };
         case "SEND_REQUEST_DONE":
             return {
                 ...state,
-                spinnerState: false
+                showSpinner: false
             };
         case "SUCCESS_SIGNUP_OTP":
             return {
@@ -34,12 +34,12 @@ export const authReducer = (state, action)=> {
         case "FAILED_AUTH_EMAIL":
             return{
                 ...state,
-                validationMessage :{EmailClass: "danger animate__animated animate__shakeX"},
+                validationMessage :{EmailClass: "border-danger animate__animated animate__shakeX"},
             };
         case "FAILED_AUTH_PASSWORD":
             return{
                 ...state,
-                validationMessage:{passwordClass: "danger animate__animated animate__shakeX "},
+                validationMessage:{passwordClass: "border-danger animate__animated animate__shakeX "},
             };
         case "SIGNUP_OTP":
             return{
@@ -55,11 +55,6 @@ export const authReducer = (state, action)=> {
             return{
                 ...state, 
                 isSignUp : !state.isSignUp
-            }
-        case "PASSWORD_VISIBILITY":
-            return{
-                ...state,
-                viewPassword: !state.viewPassword
             }
         case "FORM_INPUTS":
             return{

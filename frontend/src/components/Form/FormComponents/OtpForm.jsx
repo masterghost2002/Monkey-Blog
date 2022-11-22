@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { notifyError } from '../Toastify/ToastNotifications';
-import { SIGNUP_OTP_VERIFY,FORGOT_PASSWORD_OTP_VERIFY } from '../BackendResponses/backendRequest';
-import Spinner from '../../assests/animations/oval.svg';
+import { notifyError } from '../../Toastify/ToastNotifications';
+import { SIGNUP_OTP_VERIFY,FORGOT_PASSWORD_OTP_VERIFY } from '../../BackendResponses/backendRequest';
+import Spinner from '../../../assests/animations/oval.svg';
 export default function OtpForm(props) {
 
     //otp state
     const [otp, setOtp] = useState(0);
 
-    // set loader true after otp sent success
-    const [loader, setLoader] = useState(false);
-
-    // router dom to navigate after validation (navigate to login screen)
+    // set spinner true after otp sent success
+    const [spinner, setSpinner] = useState(false);
     const navigate = useNavigate();
 
     // verified 
@@ -43,15 +41,15 @@ export default function OtpForm(props) {
             OTP: strOTP
         };
         let response;
-        setLoader(true);
+        setSpinner(true);
 
         // selection for is user trying to signup or forgot password
         if (props.requestFor === "ForgotPassword")
             response = await FORGOT_PASSWORD_OTP_VERIFY(requestData)
         else response = await SIGNUP_OTP_VERIFY(requestData);
         
-        // setting loader false after getting the response
-        setLoader(false);
+        // setting spinner false after getting the response
+        setSpinner(false);
         // status === 200 means the user is verified now
         if(response.status === 200){
             setVerfified({ className: "success" });
@@ -76,12 +74,12 @@ export default function OtpForm(props) {
             <div className={`text-${verified.className}`}>
                 {verified.message}
             </div>
-            {loader && <>
+            {spinner && <>
                 <div className='d-flex justify-content-center mt-4'>
                     <img src={Spinner} alt="sdfsd" />
                 </div>
             </>}
-            {!loader && <button className="btn btn-verify-otp" type="button" id="button-verify" title="verify-otp" onClick={handelVerify}>Verify and Continue</button>}
+            {!spinner && <button className="btn btn-verify-otp" type="button" id="button-verify" title="verify-otp" onClick={handelVerify}>Verify and Continue</button>}
         </>
     )
 }

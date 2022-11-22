@@ -105,4 +105,14 @@ const AUTH_TOKEN = async () => {
         .catch(error => error.response);
     return response;
 }
-export { GET_ALL_BLOGS, GET_USER_BLOGS, DELETE_BLOG_BY_ID, REQUEST_ADD_BLOG, UPDATE_BLOG, GET_BLOG_BY_ID, AUTH_TOKEN, LOGIN_REQUEST, SIGNUP_REQUEST,SIGNUP_OTP_VERIFY, FORGOT_PASSWORD_OTP_VERIFY,UPDATE_THEME,FORGOT_PASSWORD_OTP_REQUEST};
+
+const SEND_MAIL = async (mailData)=>{
+    const response = await axios.post(`${baseServerUrl()}contactus`, {
+        name: mailData.name,
+        email: mailData.email,
+        subject: mailData.subject,
+        message: mailData.message
+    }).catch(err => err.response);
+    return response;
+}
+export { GET_ALL_BLOGS, GET_USER_BLOGS, DELETE_BLOG_BY_ID, REQUEST_ADD_BLOG, UPDATE_BLOG, GET_BLOG_BY_ID, AUTH_TOKEN, LOGIN_REQUEST, SIGNUP_REQUEST,SIGNUP_OTP_VERIFY, FORGOT_PASSWORD_OTP_VERIFY,UPDATE_THEME,FORGOT_PASSWORD_OTP_REQUEST, SEND_MAIL};

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import JoditEditor from 'jodit-react';
 // components
-import Heading from './Heading';
+import Heading from '../Modals/Heading';
 import { notifyAdd, notifyError } from '../Toastify/ToastNotifications';
 import { REQUEST_ADD_BLOG, UPDATE_BLOG, GET_BLOG_BY_ID } from '../BackendResponses/backendRequest';
 

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import {GET_ALL_BLOGS, GET_USER_BLOGS} from '../BackendResponses/backendRequest';
 // components
 import BlogCard from './BlogCard';
-import Heading from './Heading';
+import Heading from '../Modals/Heading';
 import SkeletonCard from './SkeletonCard';
 import AddBlogFloat from '../Modals/AddBlogFloat';
 import NoBlog from '../Responses/NoBlog';

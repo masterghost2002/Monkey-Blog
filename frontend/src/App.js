@@ -16,11 +16,11 @@ import LogoSplash from './components/Responses/LogoSplash';
 import { AUTH_TOKEN } from './components/BackendResponses/backendRequest';
 
 // using lazy to prevent rendering of all the components even if they are not required
-const Auth = lazy(() => import('./components/Login-Signup/Auth'));
-const ForgetPassword = lazy(() => import('./components/Login-Signup/ForgetPassword'));
+const Auth = lazy(() => import('./components/Auth/Auth'));
+const ForgetPassword = lazy(() => import('./components/Auth/ForgetPassword'));
 const Blogs = lazy(() => import('./components/Blogs/Blogs'));
 const ViewFull = lazy(() => import('./components/Blogs/ViewFull'));
-const AddBlog = lazy(()=>import('./components/Blogs/AddBlog'));
+const AddUpdateBlog = lazy(()=>import('./components/Blogs/AddUpdateBlog'));
 const Contact = lazy(()=>import('./components/ContactUs/Contact'));
 const NotFound = lazy(()=>import('./components/Responses/NotFound'));
 const Redirects = lazy(()=>import('./components/Responses/Redirects'));
@@ -49,7 +49,7 @@ function App() {
     const AUTH_ACCESS_TOKEN = localStorage.getItem("auth_access_token");
 
     // if the accesstoken is null and paths are  redirets blog/:someid , /forgotpassword redirect the user to their required path
-    if (AUTH_ACCESS_TOKEN === null && (accessablePath === '/redirects' || accessablePath.substring(0, 6) === '/blog/' || accessablePath === '/forgotpassword')) {
+    if (AUTH_ACCESS_TOKEN === null && (accessablePath === '/redirects' || accessablePath.substring(0, 6) === '/blog/' || accessablePath === '/forgotpassword' || accessablePath === '/contactus')) {
       navigate(accessablePath);
       return;
     };
@@ -66,7 +66,7 @@ function App() {
     // setLoader true because we are going to fetch the user info now
     setLoader(true);
     const response = await AUTH_TOKEN();
-    if (response.status === 404 && accessablePath !== '/redirects' && accessablePath.substring(0, 6) !== '/blog/') {
+    if (response.status === 404 && accessablePath !== '/redirects' && accessablePath !== '/contactus' && accessablePath.substring(0, 6) !== '/blog/') {
       setLoader(false);
       dispatch(authActions.logout());
       navigate('/');
@@ -113,8 +113,8 @@ function App() {
                     <>
                       <Route path='/blogs' element={<Blogs progressHandler={setProgress} type={"All Blogs"} />}></Route>
                       <Route path='/myBlogs' element={<Blogs progressHandler={setProgress} type={"My Blogs"} />}></Route>
-                      <Route path='/updateblog/:id' element={<AddBlog progressHandler={setProgress} />}></Route>
-                      <Route path='/addBlog' element={<AddBlog progressHandler={setProgress}></AddBlog>}></Route>
+                      <Route path='/updateblog/:id' element={<AddUpdateBlog progressHandler={setProgress} />}></Route>
+                      <Route path='/addBlog' element={<AddUpdateBlog progressHandler={setProgress}></AddUpdateBlog>}></Route>
                     </>
                   }
                   <Route path='/notfound' element={<NotFound />}></Route>

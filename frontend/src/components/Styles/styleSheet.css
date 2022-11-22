@@ -12,7 +12,7 @@
 }
 
 .logo-splash {
-    min-height: 80vh;
+    min-height: 100vh;
     align-items: center;
     justify-content: center;
     display: flex;
@@ -170,7 +170,7 @@ card .theming {
     /* align-items: center; */
 }
 
-.auth_form {
+.form-container {
     padding: 20px;
     box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
     border-radius: 12px;
@@ -185,6 +185,10 @@ card .theming {
     background-repeat: no-repeat;
     background-size: 100% 100%;
     align-items: center;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    padding-top: 5rem;
 }
 
 .contactus-form {
@@ -340,7 +344,7 @@ card .theming {
 /*  */
 /* blog card mobile */
 @media screen and (max-width: 790px) {
-    .auth_form{
+    .form-container{
         margin: 2rem 0 2rem 0;
     }
     .blog-card {
@@ -463,11 +467,6 @@ card .theming {
 }
 
 /* ############contact us */
-.contactus_wrapper {
-    min-height: 80vh;
-    display: flex;
-    align-items: center;
-}
 
 /*############################## footer ############################################### */
 .footer {
@@ -476,7 +475,13 @@ card .theming {
     padding-top: 1rem;
     background-color: var(--light-blue);
 }
-
+.social-icons{
+    padding-right: 1rem;
+}
+.social-icons:hover{
+    transform: scale(1.1);
+    transition: all 0.3s linear;
+}
 .contact-us {
     color: white;
     text-decoration: none;

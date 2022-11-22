@@ -1,8 +1,13 @@
 import React from 'react';
 import { useState } from 'react';
-import axios from 'axios';
+import { SEND_MAIL } from '../BackendResponses/backendRequest';
+import { notifyError, notifySuccess } from '../Toastify/ToastNotifications';
 
-
+import FormContainer from '../Form/FormContainer';
+import SimpleInput from '../Form/FormComponents/SimpleInput';
+import TextArea from '../Form/FormComponents/TextArea';
+import FormHeading from '../Form/FormComponents/FormHeading';
+import Button from '../Modals/Button';
 export default function Contact() {
 
     const [inputs, setInputs] = useState({
@@ -17,49 +22,54 @@ export default function Contact() {
     };
 
     //server
-    const baseServerUrl = "https://masterghostblog.herokuapp.com/";
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        sendRequest();
-    }
-    const sendRequest = async (type) => {
-        const res = await axios.post(`${baseServerUrl}contactus`, {
-            name: inputs.name,
-            email: inputs.email,
-            subject: inputs.subject,
-            message: inputs.message
-        }).catch(err => console.log("Mail send failed" + err));
-        const status = await res.status;
-        return status === 200;
+        const response = await SEND_MAIL(inputs);
+        if(response.status === 200)
+            notifySuccess("Mail Send");
+        else notifyError(response.message);
+
     }
     return (
         <section className='contactus_wrapper'>
             <div className="container-fluid">
                 <div className="row justify-content-center">
                     <div className="col-lg-8">
-                        <form onSubmit={handleSubmit} className="contactus-form">
-                            <div className="d-flex heading-container justify-content-center align-items-centers">
-                                <span className='text-center heading'>Contact US</span>
-                            </div>
-                            <div className="form-floating mb-2">
-                                <input type="text" className="form-control" id="floatingInput exampleFormControlInput1" placeholder="John Vick" onChange={handleChange} value={inputs.name} name='name' />
-                                <label htmlFor="floatingInput">Full Name</label>
-                            </div>
-                            <div className="form-floating mb-2">
-                                <input type="email" className="form-control" id="floatingInput exampleFormControlInput1" placeholder="name@example.com" onChange={handleChange} value={inputs.email} name='email' />
-                                <label htmlFor="floatingInput">Email address</label>
-                            </div>
-                            <div className="form-floating mb-2">
-                                <input type="text" className="form-control" id="floatingInput exampleFormControlInput1" placeholder="forgetmailexample" onChange={handleChange} value={inputs.subject} name='subject' />
-                                <label htmlFor="floatingInput">Subject</label>
-                            </div>
-                            <div className="mb-1">
-                                <label htmlFor="exampleFormControlTextarea1" className="form-label fs-3" >Message</label>
-                                <textarea className="form-control" id="exampleFormControlTextarea1" rows="4" onChange={handleChange} value={inputs.message} name='message'></textarea>
-                            </div>
-                            <button className="btn submit_btn w-100px my-2">Sent Mail</button>
-                        </form>
+                        <FormContainer onSubmit = {handleSubmit}>
+                            <FormHeading heading = {"Contact US"}/>
+                            <SimpleInput
+                                placeholder = {"Full Name"}
+                                onChange = {handleChange}
+                                label = "Full Name"
+                                id = "fullname"
+                            />
+                            <SimpleInput
+                                placeholder = {"Email"}
+                                onChange = {handleChange}
+                                label = "Email"
+                                id = "email"
+                                name = "email"
+                            />
+                            <SimpleInput
+                                placeholder = {"Subject"}
+                                onChange = {handleChange}
+                                label = "Subject"
+                                id = "subject"
+                                name = "subject"
+                            />
+                            <TextArea
+                                label={"Message"}
+                                name = {"message"}
+                                onChange = {handleChange}
+                            />
+                            <Button
+                                title={"Send Mail"}
+                                type={"Submit"}
+                                btn_name={"Send Mail"}
+                                icon={"bi bi-send"}
+                            />
+                        </FormContainer>
                     </div>
                 </div>
             </div>
