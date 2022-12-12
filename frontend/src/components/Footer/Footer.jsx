@@ -1,28 +1,56 @@
 import React from 'react';
-// import Logo from '../../assests/images/logo.png';
-import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Box, HStack, VStack, Text, Link, SimpleGrid, GridItem, Divider, useColorMode } from '@chakra-ui/react';
+import { FaInstagram, FaGithub, FaLinkedin } from 'react-icons/fa';
+import { logo_lg } from '../../assests/data';
+import { social_links } from '../../assests/data';
 export default function Footer() {
-  const isLoggedIn = useSelector((state) => state.isLoggedIn);
-  const themeSide = useSelector((state)=>state.themeSide);
-  return (
-    <footer className={`footer footer-${themeSide}`}>
-      <div className="container-fluid">
-        <div className="row d-flex align-items-center">
-          <div className="col-lg-4 d-flex justify-content-lg-start justify-content-center  mb-2">
-            <NavLink to={isLoggedIn ? "/blogs" : "/" } className={`contact-us contact-us-link-${themeSide}`}>Monkey-APP&nbsp; © 2022</NavLink>
-          </div>
-          <div className="col-lg-4 d-flex justify-content-lg-center justify-content-center mb-2 align-items-center">
-            <ul style={{"listStyle":"none"}}>
-              <li><NavLink className={`contact-us contact-us-link-${themeSide}`} aria-current="page" to="/contactus"><i className="fa-regular fa-address-card"></i>&nbsp;About US</NavLink></li>
-              <li><NavLink className={`contact-us contact-us-link-${themeSide}`} aria-current="page" to="/contactus"><i className="fa-solid fa-envelope"></i>&nbsp;Contact US</NavLink></li>
-            </ul>
-          </div>
-          <div className="col-lg-4 d-flex d-flex justify-content-lg-end justify-content-center mb-2">
-            <span className='contact-us'>Follow on</span>
-          </div>
-        </div>
-      </div>
-    </footer>
-  )
+    const {colorMode} = useColorMode();
+    const logoColor = colorMode === 'light'?'black':'white';
+    const linkColor = colorMode === 'light'?'gray.600':'gray.200';
+    return (
+        <Box
+        minHeight={['15vh']}
+        p={[5, 10]}
+        zIndex={1}
+        width= '100%'
+        >
+            {/* <Divider/> */}
+            <SimpleGrid
+                pt={2}
+                columns={[1, 3]}
+                rowGap={3}
+            >
+                <GridItem colSpan={1} >
+                    <HStack justifyContent={'flex-start'}>
+                        <Text fontSize='xl' fontWeight='bold' color='blue.500'>{logo_lg.firstPart}</Text><Text fontSize='xl' fontWeight='bold' color={logoColor}>{logo_lg.secondPart}</Text>
+                    </HStack>
+                </GridItem>
+                <GridItem colSpan={1} >
+                    <VStack align={['flex-end', 'center']}>
+                        <VStack align='flex-start'>
+                        <Link color={linkColor} fontWeight='bold' >About US</Link>
+                        <Link color={linkColor} fontWeight='bold'>Contact US</Link>
+                        </VStack>
+                    </VStack>
+                </GridItem>
+                <Divider display={['inline', 'none']}  />
+                <GridItem colSpan={1} >
+                    <VStack align={'flex-end'}>
+                        <Text fontWeight='bold'>Follow On</Text>
+                        <HStack  width='100%' justifyContent='flex-end'>
+                            <Link px={4} _hover={{ transition: '.4s', transform: 'scale(1.1)'}} href={social_links.Instagram} aria-label="Instagram">
+                                <FaInstagram color='#bc2a8d' fontSize='2em' />
+                            </Link>
+                            <Link px={4} _hover={{ transition: '.4s', transform: 'scale(1.1)'}} href={social_links.github} aria-label="Github">
+                                <FaGithub fontSize='2em' />
+                            </Link>
+                            <Link px={4} _hover={{ transition: '.4s', transform: 'scale(1.1)'}} href={social_links.linkedIn} aria-label="LinkedIn">
+                                <FaLinkedin color='#0A66C2' fontSize='2em' />
+                            </Link>
+                        </HStack>
+                    </VStack>
+                </GridItem>
+            </SimpleGrid>
+        </Box>
+    )
 }
