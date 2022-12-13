@@ -38,6 +38,9 @@ Where user can post update delte or read other user blogs even can share them, d
 
 **Back-end:** Node, Express,MongoDB,Mongoose
 
+## Perforamce calculated using Lighthouse dev tool
+![monkey-app-performance](https://user-images.githubusercontent.com/55751461/207223329-a3f9d9df-f948-4f2b-90c7-44b0c699411a.jpg)
+
 
 ## Requirements
 
@@ -109,30 +112,13 @@ Start the frontend,go to the back-end directory
 
 ## Screenshots Desktop
 
-![Screenshot (97)](https://user-images.githubusercontent.com/55751461/200129949-cff124f7-0686-49fd-a565-15b0152581b5.png)
-![Screenshot (98)](https://user-images.githubusercontent.com/55751461/200129952-354124ea-04c1-43cf-aa5e-2f0505084db0.png)
-![Screenshot (99)](https://user-images.githubusercontent.com/55751461/200129954-fe590def-f784-486b-bf72-44b7ee016ee5.png)
-![Screenshot (100)](https://user-images.githubusercontent.com/55751461/200129958-40abdf6c-7788-4dd0-b953-49082c7a590e.png)
-![Screenshot (101)](https://user-images.githubusercontent.com/55751461/200129961-1187ed69-ffba-4918-aa61-bb95096397da.png)
-![Screenshot (89)](https://user-images.githubusercontent.com/55751461/200129963-fd983c7d-155c-45df-9e9f-285291eefe5b.png)
-![Screenshot (90)](https://user-images.githubusercontent.com/55751461/200129965-fd63f3a4-0af0-4e37-8741-8a04edc8afc1.png)
-![Screenshot (91)](https://user-images.githubusercontent.com/55751461/200129977-5890f3c0-3a0a-4fdb-af96-d5766169f24b.png)
-![Screenshot (92)](https://user-images.githubusercontent.com/55751461/200129986-e4351a87-c552-4dbc-b629-5160472eb43b.png)
-![Screenshot (93)](https://user-images.githubusercontent.com/55751461/200129988-2f8dbed3-60e5-4906-a366-87966e8f121c.png)
-![Screenshot (94)](https://user-images.githubusercontent.com/55751461/200129994-c98f5e8f-cb9e-46c1-872b-f7c0b6c22f19.png)
-![Screenshot (95)](https://user-images.githubusercontent.com/55751461/200129997-fd5838aa-2a6d-4ef2-837b-8b12acaeead1.png)
-![Screenshot (96)](https://user-images.githubusercontent.com/55751461/200130000-12857158-b694-4a42-bc77-fb3826f44ac3.png)
-![Screenshot (111)](https://user-images.githubusercontent.com/55751461/200130945-48f972e9-0067-4aba-9faa-4b2c5557c339.png)
-![Screenshot (112)](https://user-images.githubusercontent.com/55751461/200130946-bc9b7add-2082-4d27-a9fd-dbcf743b3c72.png)
-![Screenshot (113)](https://user-images.githubusercontent.com/55751461/200130976-c487ae19-9523-4f5f-b650-c2947bb22f89.png)
+adding sooon
 
 ## Screenshots Mobile
 
-![Screenshot (106)](https://user-images.githubusercontent.com/55751461/200130990-ec34fbb8-d40b-4932-8534-52b2210b05cb.png)
-![Screenshot (107)](https://user-images.githubusercontent.com/55751461/200130994-7ffb56c3-e47a-4a94-a69c-cd494342cb08.png)
-![Screenshot (108)](https://user-images.githubusercontent.com/55751461/200130995-d5e5d429-c267-484f-a091-cc5a628ee60b.png)
-![Screenshot (102)](https://user-images.githubusercontent.com/55751461/200130998-87e1cb14-6192-4de4-be9b-722cffd26936.png)
-![Screenshot (103)](https://user-images.githubusercontent.com/55751461/200130999-91b11cad-909a-4a70-a7a4-986533cca026.png)
+
+adding sooon
+
 
 
 
