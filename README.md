@@ -52,11 +52,13 @@ Install Node js 16 or above
 
 To run this project, you will need to add the following environment variables to your .env file
 
-`DATABASE URI` --> YOUR DATABASE URI
-
-`BASE_SERVER_URL` --> for localhost use http://localhost:5000
-
-
+`DATABASE_URI`
+`ACESS_AUTH_TOKEN_SECRET_KEY`
+`NODE_MAILER_USER_NAME`
+`NODE_MAILER_PASSWORD`
+`NODE_MAILER_HOST`
+`NODE_MAILER_SERVICE`
+`NODE_MAILER_PORT`
 
 ## Run Locally
 
