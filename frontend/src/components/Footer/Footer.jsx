@@ -28,8 +28,8 @@ export default function Footer() {
                 <GridItem colSpan={1} >
                     <VStack align={['flex-end', 'center']}>
                         <VStack align='flex-start'>
-                        <Link color={linkColor} fontWeight='bold' >About US</Link>
-                        <Link color={linkColor} fontWeight='bold'>Contact US</Link>
+                        <Link color={linkColor} fontWeight='bold' to='/aboutus' id='about-us'>About US</Link>
+                        <Link color={linkColor} fontWeight='bold' to='contactus' id='contact-us'>Contact US</Link>
                         </VStack>
                     </VStack>
                 </GridItem>

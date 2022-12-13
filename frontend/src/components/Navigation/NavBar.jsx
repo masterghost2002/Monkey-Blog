@@ -110,7 +110,7 @@ export default function NavBar() {
               <Avatar
                 size={'sm'}
                 src={avatar_img.link}
-                alt = 'Chakra UI'
+                alt = 'www.chakraui.com'
               />
             </MenuButton>
             <MenuList alignItems={'center'} >
@@ -119,7 +119,7 @@ export default function NavBar() {
                 <Avatar
                   size={'2xl'}
                   src={avatar_img.link}
-                  alt = 'Chakra UI'
+                  alt = 'www.chakraui.com'
                 />
               </Center>
               <br />

@@ -31,6 +31,11 @@ export const authReducer = (state, action) => {
                 ...state,
                 showOTP: true
             };
+        case "HIDE_SHOW_OTP":
+            return {
+                ...state,
+                showOTP: false
+            }
         case "FAILED_AUTH_EMAIL":
             return {
                 ...state,

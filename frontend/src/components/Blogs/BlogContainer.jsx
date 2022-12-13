@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Container, SimpleGrid, HStack, VStack, Text, Divider } from "@chakra-ui/react";
 import { GET_ALL_BLOGS, GET_USER_BLOGS } from '../BackendResponses/backendRequest';
 import { useSelector } from 'react-redux';
@@ -9,6 +9,7 @@ import AddFirstBlog from "../Reponses/AddFirstBlog";
 export default function BlogContainer(props) {
     var userInfo = useSelector((state) => state.userInfo);
     // blogs 
+    const blogType = useMemo(()=>props.type, [props.type]);
     const [blogs, setBlogs] = useState([]);
     const [filteredBlogs, setFilteredBlogs] = useState([]);
     const [fetchBlog, setFetchBlog] = useState(false);
@@ -17,7 +18,6 @@ export default function BlogContainer(props) {
     const [searchQuery, setSearchQuery] = useState({ searchInput: '', searchBy: 'Blog Title', sortBy: 'Newest First' });
     const sortBlogs = (event) => {
         event.preventDefault();
-        console.log('inside in');
         if (event.target.value === "Newest First") {
             if (filteredBlogs.length)
                 setFilteredBlogs(filteredBlogs.sort((a, b) => a.created_at < b.created_at));
@@ -25,7 +25,6 @@ export default function BlogContainer(props) {
             setSearchQuery({ ...searchQuery, 'sortBy': 'Newest First' });
         }
         else if (event.target.value === "Oldest First" ) {
-            console.log('inside');
             if (filteredBlogs.length)
                 setFilteredBlogs(filteredBlogs.sort((a, b) => a.created_at > b.created_at));
             else setBlogs(blogs.sort((a, b) => a.created_at > b.created_at));
@@ -34,9 +33,9 @@ export default function BlogContainer(props) {
     }
     const advanceSearch = (blog) => {
         if (searchQuery.searchBy === "Blog Title")
-            return blog.title.toLowerCase().replaceAll(' ', '').includes(searchQuery.searchInput);
+            return blog.title.toLowerCase().replaceAll(' ', '').includes(searchQuery.searchInput.toLowerCase().replaceAll(' ', ''));
         else if (searchQuery.searchBy === "User Name")
-            return blog.user.name.toLowerCase().replaceAll(' ', '').includes(searchQuery.searchInput);
+            return blog.user.name.toLowerCase().replaceAll(' ', '').includes(searchQuery.searchInput.toLowerCase().replaceAll(' ', ''));
     }
 
     const onChangeSearch = (event) => {
@@ -51,13 +50,13 @@ export default function BlogContainer(props) {
     //backend request
     const sendRequest = useCallback(async () => {
         setFetchBlog(true);
-        const response = props.type === "All Blogs" ? await GET_ALL_BLOGS() : await GET_USER_BLOGS(userInfo.userId);
+        const response = blogType === "All Blogs" ? await GET_ALL_BLOGS() : await GET_USER_BLOGS(userInfo.userId);
         const data = await response.data;
         setFetchBlog(false);
         if (response.request.status === 200) {
             setBlogs(data.blogs);
         }
-    }, [props.type, userInfo.userId]);
+    }, [userInfo.userId, blogType]);
 
     // use effect
     useEffect(() => {

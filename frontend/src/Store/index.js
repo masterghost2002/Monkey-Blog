@@ -13,6 +13,7 @@ const authSlice = createSlice({
             state.isLoggedIn = false;
             state.showWelcome = true;
             state.themeSide = '';
+            state.logoSplash = false;
         },
         setThemeSide(state, actions){
             state.themeSide = actions.payload
