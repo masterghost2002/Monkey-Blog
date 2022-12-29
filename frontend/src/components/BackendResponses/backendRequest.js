@@ -2,6 +2,7 @@ import axios from "axios";
 const AUTH_ACCESS_TOKEN = () => localStorage.getItem("auth_access_token");
 // user requests
 const BACKEND_URL = ()=>"https://monkeyblogbackend-production.up.railway.app/";
+// const BACKEND_URL = ()=>"http://localhost:5000/";
 const LOGIN_REQUEST = async (userInfo) => {
     const response = await axios.post(`${BACKEND_URL()}user/login`, {
         name: userInfo.name,
@@ -104,10 +105,11 @@ const AUTH_TOKEN = async () => {
 }
 
 const SEND_MAIL = async (mailData)=>{
+    console.log(mailData);
     const response = await axios.post(`${BACKEND_URL()}contactus`, {
         name: mailData.name,
         email: mailData.email,
-        subject: mailData.subject,
+        // subject: mailData.subject,
         message: mailData.message
     }).catch(err => err.response);
     return response;

@@ -22,7 +22,7 @@ export default function DrawerExample({
         finalFocusRef={btnRef}
       >
         <DrawerOverlay />
-        <DrawerContent alignItems="center" borderRadius = '12px 12px 0px 0px'>
+        <DrawerContent alignItems="center" borderRadius = '12px 12px 0px 0px' >
           <DrawerCloseButton alignSelf="end" mx={p} my={p} />
           <DrawerHeader my={p}>
             <Text as="p"> {title} </Text>

@@ -4,7 +4,7 @@ export default function SimpleInput(props) {
     return (
         <FormControl mb={4} isInvalid={props.isInvalid}>
             <FormLabel fontWeight={'bold'}>{props.label}</FormLabel>
-            <Input disabled = {props.disabled} type = {props.type} name={props.name} onChange = {props.onChange} placeholder = {props.placeholder} value={props.defaultValue} size={props.size} variant={props.variant}></Input>
+            <Input isRequired={props.isRequired} disabled = {props.disabled} type = {props.type} name={props.name} onChange = {props.onChange} placeholder = {props.placeholder} value={props.defaultValue} size={props.size} variant={props.variant}></Input>
         </FormControl>
     )
 }
@@ -15,7 +15,8 @@ SimpleInput.propTypes = {
     label: PropTypes.string,
     type: PropTypes.string,
     disabled: PropTypes.bool,
-    style: PropTypes.string
+    style: PropTypes.string,
+    isRequired: PropTypes.bool
   };
 SimpleInput.defaultProps = {
     name: 'name',
@@ -23,5 +24,6 @@ SimpleInput.defaultProps = {
     type: 'text',
     size: 'sm',
     variant: 'filled',
-    disabled: false
+    disabled: false,
+    isRequired: false
 };

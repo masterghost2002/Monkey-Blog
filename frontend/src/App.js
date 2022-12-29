@@ -25,6 +25,7 @@ function NON_VERIFIED_LINKS(link){
   switch(link){
     case '/aboutus': return true;
     case '/contactus': return true;
+    case '/aboutdeveloper': return true;
     case '/404_not_found': return true;
     default: return false;
   }
