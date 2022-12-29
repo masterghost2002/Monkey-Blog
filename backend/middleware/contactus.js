@@ -1,15 +1,18 @@
 let nodemailer = require('nodemailer');
 let transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: process.env.NODE_MAILER_HOST,
+    service: process.env.NODE_MAILER_SERVICE,
+    port: process.env.NODE_MAILER_PORT,
+    secure: false, // use TLS
     auth: {
-        user: "<Email>",
-        pass: "<Token>"
-    }
+        user: process.env.NODE_MAILER_USER_NAME,
+        pass: process.env.NODE_MAILER_PASSWORD,
+    },
 });
 const contactMail = (req, res, next) => {
     let mailOptions = {
-        from: req.body.email,
-        to: "rakeshdhariwal657@gmail.com",
+        from: 'monkeyapp@mail.com',
+        to: req.body.email,
         subject: req.body.subject,
         text: `Hi I ${req.body.name}  ${req.body.message}`
     }

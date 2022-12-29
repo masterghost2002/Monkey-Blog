@@ -6,7 +6,7 @@ const {verify_token} = require('../middleware/auth_jwt');
 const getAllBlogs = async (req, res, next) => {
     let blogs;
     try {
-        blogs = await (await Blog.find().sort('-created_at').populate('user', 'name'));
+        blogs = await (await Blog.find().sort('-created_at').populate('user', 'name badge'));
     } catch (err) {
         return res.status(500).json({message: "Server Error"});
     }
@@ -117,23 +117,6 @@ const updateBlog = async (req, res) => {
     return res.status(500).json({message: "Unable To update"});
     return res.status(200).json({message:"Update Success"});
 };
-// const updateBlog = async (req, res) => {
-//     const { title, description } = req.body;
-//     const blogId = req.params.id;
-//     let blog;
-//     try {
-//         blog = await Blog.findByIdAndUpdate(blogId, {
-//             title: title,
-//             description: description
-//         });
-//     }catch(err){
-//         return console.log(err);
-//     }
-//     if(!blog)
-//     return res.status(500).json({message: "Unable To update"});
-//     return res.status(200).json({message:"Update Success"});
-// };
-
 
 // return the blog by id
 const getById = async (req, res)=>{
@@ -177,7 +160,7 @@ const getByUserId = async (req, res, next)=>{
     const userId = req.params.id;
     let userBlogs;
     try{
-        userBlogs = await User.findById(userId).populate('blogs');
+        userBlogs = await User.findById(userId).populate('blogs').sort('-created_at');
     }catch(err){
         return console.log("Unable to fetch"+err);
     }

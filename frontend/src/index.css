@@ -1,46 +1,19 @@
-* {
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@200;300;400&display=swap');
+*{
   margin: 0;
-  box-sizing: border-box;
-  font-family: 'Sora', sans-serif;
-  font-size: 15px;
-  scroll-behavior: smooth;
-  --dark-blue: #3090F1;
-  --light-blue: #51A5FA;
-  --dark-grey: #1A1A1A;
-  --light-grey: #282828;
-  
+  padding: 0;
 }
-@media screen and (max-width: 790px) {
-  *{
-    font-size: 16px;
-  }
-}
-@media screen and (max-width: 330px) {
-  *{
-    font-size: 14px;
-  }
-}
-.href{
-  text-decoration: none !important;
-}
-button:focus,
-.form-check-input:focus,
-button:active,
-button:hover,
-.btn:active,
-.btn.active {
-  outline: 0px !important;
-  -webkit-appearance: none;
-  box-shadow: none !important;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type=number] {
-  -moz-appearance: textfield;
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }

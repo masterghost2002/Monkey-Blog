@@ -1,7 +1,7 @@
 import { createSlice , configureStore} from '@reduxjs/toolkit';
 const authSlice = createSlice({
     name: "auth",
-    initialState:{isLoggedIn: false, themeSide: '', userInfo:{userId:'', userName:''}},
+    initialState:{isLoggedIn: false, themeSide: 'light', userInfo:{userId:'', userName:''}, logoSplash:false},
     reducers:{
         login(state, actions){
             state.isLoggedIn = true;
@@ -13,12 +13,13 @@ const authSlice = createSlice({
             state.isLoggedIn = false;
             state.showWelcome = true;
             state.themeSide = '';
+            state.logoSplash = false;
         },
-        setThemeSideLight(state){
-            state.themeSide = 'light'
+        setThemeSide(state, actions){
+            state.themeSide = actions.payload
         },
-        setThemeSideDark(state){
-            state.themeSide = 'dark'
+        setLogoSplash(state){
+            state.logoSplash = !state.logoSplash
         }
     }
 });

@@ -1,16 +1,13 @@
 
-//  user: "rakeshdhariwal61@gmail.com",
-//  pass: "mqxiorsgcnepyrvh"
-// r%(FSMIxP1
 let nodemailer = require('nodemailer');
 let transporter = nodemailer.createTransport({
-    host: "us2.smtp.mailhostbox.com",
-    service: "monkeyappsupport@cublearner.org",
-    port: 587,
+    host: process.env.NODE_MAILER_HOST,
+    service: process.env.NODE_MAILER_SERVICE,
+    port: process.env.NODE_MAILER_PORT,
     secure: false, // use TLS
     auth: {
-        user: "monkeyappsupport@cublearner.org",
-        pass: "r%(FSMIxP1",
+        user: process.env.NODE_MAILER_USER_NAME,
+        pass: process.env.NODE_MAILER_PASSWORD,
     },
 });
 const verifyMail = (request, response) => {
@@ -25,7 +22,7 @@ const verifyMail = (request, response) => {
                                 "Password Reset OTP":
                                 "Verify your email";
     let mailOptions = {
-        from: "monkeyappsupport@cublearner.org",
+        from: process.env.NODE_MAILER_USER_NAME,
         to: email,
         subject: subject,
         html: `
