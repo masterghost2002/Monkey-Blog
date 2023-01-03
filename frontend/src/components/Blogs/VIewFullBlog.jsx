@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { jsPDF } from "jspdf";
 import {
   Container,
   Card,
@@ -14,16 +15,20 @@ import {
   Divider,
   useColorMode,
   HStack,
-  IconButton
+  IconButton,
+  Skeleton,
+  SkeletonText,
+  SkeletonCircle
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import { avatar_img } from '../../assests/data';
 import { GET_BLOG_BY_ID } from '../BackendResponses/backendRequest';
-import { CalendarIcon, MoonIcon, SunIcon, LinkIcon} from '@chakra-ui/icons';
+import { CalendarIcon, MoonIcon, SunIcon, LinkIcon } from '@chakra-ui/icons';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { CustomToast } from '../Reponses/Toast';
 import { GrDocumentPdf } from 'react-icons/gr';
+import ConfirmModal from '../Reponses/ConfirmModal';
 
 const formatDate = (created_at) => {
   let date = new Date(created_at);
@@ -41,8 +46,39 @@ export default function VIewFullBlog() {
   const navigate = useNavigate();
   const params = useParams();
   const [blog, setBlog] = useState({ title: '', description: '', userName: '', date: '' });
+  const [isLoaded, setIsLoaded] = useState(false);
   const { colorMode, toggleColorMode } = useColorMode();
-  const {addToast} = CustomToast();
+  const { addToast } = CustomToast();
+
+  const generatePDF = () => {
+    let pdf_container = document.createElement('div');
+    pdf_container.style.width = '550px';
+    // pdf_container.style.padding = "30px";
+
+    let blog_description = document.createElement('p');
+    blog_description.innerHTML = blog.description;
+
+    let blogTitle = document.createElement('h1');
+    blogTitle.innerText = `Title: ${blog.title}`;
+    blogTitle.style.color = 'black';
+    blogTitle.style.marginBottom = '30px'
+    pdf_container.append(blogTitle);
+    pdf_container.append(blog_description);
+
+
+
+    var doc = new jsPDF("p", "pt", "a4");
+    doc.setFontSize(12)
+    doc.html(pdf_container,
+      {
+        margin: [20, 20, 0 , 20],
+        callback: function (pdf) {
+          pdf.save(`${blog.title}.pdf`);
+        }
+      });
+
+  }
+
   const sendRequestGetBlog = useCallback(async () => {
     const response = await GET_BLOG_BY_ID(params.id);
     if (response.status === 200) {
@@ -53,6 +89,7 @@ export default function VIewFullBlog() {
         userName: data.blog.user.name,
         date: formatDate(data.blog.created_at),
       });
+      setIsLoaded(true);
     }
     else {
       navigate("/notfound");
@@ -70,10 +107,14 @@ export default function VIewFullBlog() {
             <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
               <HStack width='100%' justifyContent='space-between'>
                 <HStack>
-                  <Avatar name='Segun Adebayo' src={avatar_img.link} />
+                  <SkeletonCircle width='50px' height='50px' isLoaded={isLoaded}>
+                    <Avatar name='Segun Adebayo' src={avatar_img.link} />
+                  </SkeletonCircle>
                   <Box>
-                    <Heading size='sm'>{blog.userName}</Heading>
-                    <Text color='red.300'><CalendarIcon /> {blog.date}</Text>
+                    <Skeleton isLoaded={isLoaded} width='150px'>
+                      <Heading size='sm'>{blog.userName}</Heading>
+                      <Text color='red.300'><CalendarIcon /> {blog.date}</Text>
+                    </Skeleton>
                   </Box>
                 </HStack>
                 <IconButton
@@ -88,7 +129,9 @@ export default function VIewFullBlog() {
         </CardHeader>
         <Divider />
         <CardBody px={10}>
-          <Text fontWeight='bold' fontSize='xl' py={2}>Title: {blog.title}</Text>
+          <SkeletonText noOfLines={12} spacing='4' skeletonHeight='6' isLoaded={isLoaded}>
+            <Text fontWeight='bold' fontSize='xl' py={2}>Title: {blog.title}</Text>
+          </SkeletonText>
           <Divider />
           <Text dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(blog.description) }} />
         </CardBody>
@@ -108,7 +151,16 @@ export default function VIewFullBlog() {
                 onClick={() => addToast({ message: 'Blog link copied to clipboard', status: 'success' })}
               />
             </CopyToClipboard>
-            <IconButton variant='ghost' icon={<GrDocumentPdf color='red'/>} aria-label="download_as_pdf"/>
+            <ConfirmModal
+              heading={'Download Blog'}
+              body={'This feature is in BETA phase downloaded file may not exactly look same.'}
+              handleConfirm={generatePDF}
+              icon={<GrDocumentPdf color='red' />}
+              confirmBtnName='Download'
+              aria-label="delete_blog"
+            >
+              <GrDocumentPdf color='red' />
+            </ConfirmModal>
           </HStack>
 
         </CardFooter>

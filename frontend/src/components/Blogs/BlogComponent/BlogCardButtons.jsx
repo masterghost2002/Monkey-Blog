@@ -8,9 +8,9 @@ import {
     Link
 } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
-import { LinkIcon, ViewIcon, EditIcon } from '@chakra-ui/icons';
+import { LinkIcon, ViewIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import DeleteAlert from '../../Reponses/DeleteAlert';
+import ConfirmModal from '../../Reponses/ConfirmModal';
 import { CustomToast } from '../../Reponses/Toast';
 export default function BlogCardButtons(props) {
     const {addToast} = CustomToast();
@@ -33,10 +33,12 @@ export default function BlogCardButtons(props) {
                         />
                     </CopyToClipboard>
                     {props.canmodify && <IconButton variant='ghost' icon={<EditIcon />} onClick={props.handleEdit} aria-label="edit" />}
-                    {props.canmodify &&<DeleteAlert
+                    {props.canmodify &&<ConfirmModal
                         heading={'Delete Blog'}
                         body={'Are you sure want to delete blog?'}
-                        handleDelete = {props.handleDelete}
+                        handleConfirm = {props.handleDelete}
+                        confirmBtnName = 'Delete'
+                        icon = {<DeleteIcon/>}
                         aria-label="delete_blog"
                     />}
                 </HStack>

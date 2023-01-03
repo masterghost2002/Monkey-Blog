@@ -9,44 +9,50 @@ import AddFirstBlog from "../Reponses/AddFirstBlog";
 export default function BlogContainer(props) {
     var userInfo = useSelector((state) => state.userInfo);
     // blogs 
-    const blogType = useMemo(()=>props.type, [props.type]);
+    const blogType = useMemo(() => props.type, [props.type]);
     const [blogs, setBlogs] = useState([]);
     const [filteredBlogs, setFilteredBlogs] = useState([]);
     const [fetchBlog, setFetchBlog] = useState(false);
 
 
-    const [searchQuery, setSearchQuery] = useState({ searchInput: '', searchBy: 'Blog Title', sortBy: 'Newest First' });
+    const [searchQuery, setSearchQuery] = useState({ searchInput: '', searchBy: 'Blog Title'});
+    const [newestFirst, setNewestFirst] = useState(true);
     const sortBlogs = (event) => {
         event.preventDefault();
-        if (event.target.value === "Newest First") {
+        if (event.target.value === "Newest First" && newestFirst === false) {
             if (filteredBlogs.length)
                 setFilteredBlogs(filteredBlogs.sort((a, b) => a.created_at < b.created_at));
             else setBlogs(blogs.sort((a, b) => a.created_at < b.created_at));
-            setSearchQuery({ ...searchQuery, 'sortBy': 'Newest First' });
+            setNewestFirst((prevState)=>!prevState);
         }
-        else if (event.target.value === "Oldest First" ) {
+        else if (event.target.value === "Oldest First" && newestFirst === true) {
             if (filteredBlogs.length)
                 setFilteredBlogs(filteredBlogs.sort((a, b) => a.created_at > b.created_at));
             else setBlogs(blogs.sort((a, b) => a.created_at > b.created_at));
-            setSearchQuery({ ...searchQuery, 'sortBy': 'Oldest First' });
+            setNewestFirst((prevState)=>!prevState);
         }
     }
-    const advanceSearch = (blog) => {
+    const advanceSearch = (blog, value) => {
+        const search_ = value.toLowerCase().replaceAll(' ', '');
         if (searchQuery.searchBy === "Blog Title")
-            return blog.title.toLowerCase().replaceAll(' ', '').includes(searchQuery.searchInput.toLowerCase().replaceAll(' ', ''));
+            return blog.title.toLowerCase().replaceAll(' ', '').includes(search_);
         else if (searchQuery.searchBy === "User Name")
-            return blog.user.name.toLowerCase().replaceAll(' ', '').includes(searchQuery.searchInput.toLowerCase().replaceAll(' ', ''));
+            return (blog.user.name.toLowerCase().replaceAll(' ', '')).startsWith(search_);
     }
 
     const onChangeSearch = (event) => {
         event.preventDefault();
         setSearchQuery({ ...searchQuery, [event.target.name]: event.target.value });
-        if (searchQuery.searchInput === '' && filteredBlogs.length)
+        if (event.target.value === '' || (searchQuery.searchInput === '' && filteredBlogs.length))
             setFilteredBlogs([]);
         else
-            setFilteredBlogs(blogs.filter((blog) => advanceSearch(blog)));
-    }
+            setFilteredBlogs(blogs.filter((blog) => advanceSearch(blog, event.target.value)));
 
+        // passing direct value bcz setState took some time to change its state
+    }
+    const changeSearchType = (event)=>{
+        setSearchQuery({ ...searchQuery, [event.target.name]: event.target.value });
+    }
     //backend request
     const sendRequest = useCallback(async () => {
         setFetchBlog(true);
@@ -71,7 +77,7 @@ export default function BlogContainer(props) {
                 </HStack>
                 <SearchBar
                     onChange={onChangeSearch}
-                    children={<SelectForm options={[{ label: 'Blog Title' }, { label: 'User Name' }]} placeholder='Search By' onSelect={onChangeSearch} />}
+                    children={<SelectForm options={[{ label: 'Blog Title' }, { label: 'User Name' }]} placeholder='Search By' onSelect={changeSearchType} />}
                 />
                 <SelectForm
                     width={['xsm', 'xsm']}
@@ -90,10 +96,10 @@ export default function BlogContainer(props) {
             >
                 {
                     !blogs.length ?
-                       <> {!fetchBlog?<AddFirstBlog/>:<BlogCard loaded={false}/>}</>:
+                        <> {!fetchBlog ? <AddFirstBlog /> : <BlogCard loaded={false} />}</> :
                         searchQuery.searchInput === '' ?
                             blogs.length ? blogs.map((item) => <BlogCard key={item._id} blog={item} canmodify={props.type === "All Blogs" ? false : true} onDelete={sendRequest} loaded={true}></BlogCard>) :
-                                <BlogCard loaded={false}  /> :
+                                <BlogCard loaded={false} /> :
                             filteredBlogs.length ? filteredBlogs.map((item) => <BlogCard key={item._id} blog={item} canmodify={props.type === "All Blogs" ? false : true} onDelete={sendRequest} loaded={true}></BlogCard>) :
                                 <BlogCard loaded={false} />
 

@@ -21,7 +21,7 @@ export default function TopBadge() {
         </GridItem>
         <GridItem align='center'>
         <Link href = "https://github.com/masterghost2002/Monkey-Blog/releases" isExternal= {true}>
-          <Button size='sm'>Changelog 💎</Button>
+          <Button size='sm'>Changelog V2.2💎</Button>
         </Link>
         </GridItem>
       </SimpleGrid>

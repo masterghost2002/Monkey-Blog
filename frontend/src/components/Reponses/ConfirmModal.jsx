@@ -11,19 +11,18 @@ import {
     IconButton
 
 } from '@chakra-ui/react';
-import {DeleteIcon} from '@chakra-ui/icons';
-export default function Alert(props) {
+export default function ConfirmModal(props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = React.useRef();
 
-  const handleDeleteButton = ()=>{
-    props.handleDelete();
+  const handleClick = ()=>{
+    props.handleConfirm();
     onClose();
   }
 
   return (
     <>
-      <IconButton icon={<DeleteIcon/>}  colorScheme='red' onClick={onOpen}/>
+      <IconButton icon={props.icon}  colorScheme='red' onClick={onOpen}/>
       <AlertDialog
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
@@ -44,8 +43,8 @@ export default function Alert(props) {
               <Button ref={cancelRef} onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme='red'  onClick = {handleDeleteButton} ml={3}>
-                Delete
+              <Button colorScheme='red'  onClick = {handleClick} ml={3}>
+                {props.confirmBtnName}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>
