@@ -1,16 +1,20 @@
 import { useState } from "react";
-import { Container, VStack, IconButton, useColorMode, Box, Heading, Flex, Button } from "@chakra-ui/react";
+import { Container, VStack, IconButton, useColorMode, Box, Heading, Flex, Button, CircularProgress } from "@chakra-ui/react";
 import { SunIcon, MoonIcon } from '@chakra-ui/icons';
 import FormContainer from '../FormComponents/FormContainer';
 import SimpleInput from '../FormComponents/SimpleInput';
 import TextArea from "../FormComponents/TextArea";
 import { SEND_MAIL } from "../BackendResponses/backendRequest";
 import { CustomToast } from '../Reponses/Toast';
+import { useNavigate } from "react-router-dom";
 export default function ContactUs() {
+    const validMailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/; //mail validation
+    const {addToast} = CustomToast();
+    const [isLoader, setIsLoader] = useState(false);
     const [inputs, setInputs] = useState({
         name: "", email: "",  message: ""
     });
-    const {addToast} = CustomToast();
+    const navigate = useNavigate();
     const { colorMode, toggleColorMode } = useColorMode();
     const handleChange = (event) => {
         setInputs((prevstate)=>({
@@ -19,15 +23,21 @@ export default function ContactUs() {
     }
     const handleSubmit = async (event)=>{
         event.preventDefault();
+        if(!inputs.email.match(validMailRegex)){
+            addToast({ title: 'Invalid Email', message: "Please Enter a valid email address", status: 'warning' });
+            return;
+        }
+        setIsLoader(true);
         let response = await SEND_MAIL(inputs);
-        console.log(response);
-        // if(response.status === 200)
-        // {
-        //     addToast({title:'Sent!',message:'Your mail has been sent', status:'Success'});
-        //     return;
-        // }
-        // addToast({title:'Failed :(',message:response.data.message, status:'Error'});
-        // return;
+        setIsLoader(false);
+        if(response.status === 200)
+        {
+            addToast({ title: 'Mail Sent Success', message: "Will resolve your query as soon as possible", status: 'success' });
+            navigate('/');
+            return;
+        }
+        addToast({ title: 'Mail Sent Failed', message: "Server Error", status: 'error' });
+        return;
     }
     return (
         <Container width='container.xlg' minHeight='80vh' display='flex'>
@@ -76,7 +86,8 @@ export default function ContactUs() {
                             onChange = {handleChange}
                         />
                         <VStack>
-                            <Button type='submit' width='100%' size='lg' bg='blue.400' _hover={{ bg: 'blue.300' }} aria-label="submit_btn" >Submit</Button>
+                            {!isLoader && <Button type='submit' width='100%' size='lg' bg='blue.400' _hover={{ bg: 'blue.300' }} aria-label="submit_btn" >Submit</Button>}
+                            {isLoader && <CircularProgress isIndeterminate color='blue.300' />}
                         </VStack>
                     </FormContainer>
                 </VStack>

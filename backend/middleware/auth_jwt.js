@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken');
-const ACESS_AUTH_TOKEN_SECRET_KEY = process.env.ACESS_AUTH_TOKEN_SECRET_KEY;
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const generate_access_token = (user)=>{
-    const token  = jwt.sign(user,ACESS_AUTH_TOKEN_SECRET_KEY);
+    const token  = jwt.sign(user,ACCESS_TOKEN_SECRET);
     return token;
 };
 const verify_token = (ACCESS_TOKEN)=>{
-    const user = jwt.verify(ACCESS_TOKEN, ACESS_AUTH_TOKEN_SECRET_KEY, (err, user)=>{
+    const user = jwt.verify(ACCESS_TOKEN, ACCESS_TOKEN_SECRET, (err, user)=>{
         if(err) return null;
         return user;
     })

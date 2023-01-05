@@ -16,21 +16,20 @@ export default function BlogContainer(props) {
 
 
     const [searchQuery, setSearchQuery] = useState({ searchInput: '', searchBy: 'Blog Title'});
-    const [newestFirst, setNewestFirst] = useState(true);
+    const [isSort, setIsSort] = useState(true);
     const sortBlogs = (event) => {
         event.preventDefault();
-        if (event.target.value === "Newest First" && newestFirst === false) {
+        if (event.target.value === "Newest First") {
             if (filteredBlogs.length)
                 setFilteredBlogs(filteredBlogs.sort((a, b) => a.created_at < b.created_at));
             else setBlogs(blogs.sort((a, b) => a.created_at < b.created_at));
-            setNewestFirst((prevState)=>!prevState);
         }
-        else if (event.target.value === "Oldest First" && newestFirst === true) {
+        else if (event.target.value === "Oldest First") {
             if (filteredBlogs.length)
                 setFilteredBlogs(filteredBlogs.sort((a, b) => a.created_at > b.created_at));
             else setBlogs(blogs.sort((a, b) => a.created_at > b.created_at));
-            setNewestFirst((prevState)=>!prevState);
         }
+        setIsSort((prevState)=>!prevState);
     }
     const advanceSearch = (blog, value) => {
         const search_ = value.toLowerCase().replaceAll(' ', '');

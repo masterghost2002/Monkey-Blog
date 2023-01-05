@@ -65,9 +65,10 @@ const GET_USER_BLOGS = async (userId) => {
 
 }
 const DELETE_BLOG_BY_ID = async (blogId) => {
-    const response = await axios.delete(`${BACKEND_URL()}blogs/${blogId}`)
+    let reqInstance = axios.create({ headers: { Authorization: `Bearer ${AUTH_ACCESS_TOKEN()}` } });
+    const response = await reqInstance.delete(`${BACKEND_URL()}blogs/${blogId}`)
         .then(response => response)
-        .catch(error => error);
+        .catch(error => error.response);
     return response;
 }
 const REQUEST_ADD_BLOG = async (blogInfo) => {
@@ -105,7 +106,6 @@ const AUTH_TOKEN = async () => {
 }
 
 const SEND_MAIL = async (mailData)=>{
-    console.log(mailData);
     const response = await axios.post(`${BACKEND_URL()}contactus`, {
         name: mailData.name,
         email: mailData.email,

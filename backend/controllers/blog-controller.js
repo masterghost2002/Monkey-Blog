@@ -17,7 +17,7 @@ const getAllBlogs = async (req, res, next) => {
 };
 
 // add a new blog
-const addBlog = async (req, res, next) => {
+const addBlog = async (req, res) => {
     const { title, description, image, user } = req.body;
     let existingUser;
     try{
@@ -118,6 +118,8 @@ const updateBlog = async (req, res) => {
     return res.status(200).json({message:"Update Success"});
 };
 
+
+
 // return the blog by id
 const getById = async (req, res)=>{
     const Id = req.params.id;
@@ -136,10 +138,29 @@ const getById = async (req, res)=>{
 
 // delete the given blog by id
 const deleteBlog = async (req, res, next)=>{
-    const Id = req.params.id;
+    const blogId = req.params.id;
+    const authHeader = req.headers['authorization'];
+    const ACCESS_TOKEN = authHeader.split(" ")[1];
+    if(ACCESS_TOKEN === null) res.status(401).json({validationError:"Anauthorized User"});
+    const user = verify_token(ACCESS_TOKEN);
+
+    try {
+        blogs = await (await Blog.findById(blogId).populate('user', '_id'));
+    } catch (err) {
+        return res.status(500).json({message: "Server Error"});
+    }
+    if (!blogs)
+        return res.status(404).json({ message: "No Blog Found" });
+
+    const blogUserId = JSON.stringify(blogs.user._id);
+    const reqUserId = JSON.stringify(user._id);
+    if(blogUserId !== reqUserId){
+        return res.status(401).json({validationError:"Anauthorized User"});
+    }
+    
     let blog;
     try{
-        blog = await Blog.findByIdAndRemove(Id).populate('user'); // populate works with the refrence collection
+        blog = await Blog.findByIdAndRemove(blogId).populate('user'); // populate works with the refrence collection
         // it will find  out the detail of the particular user which refers to the curr blog
         // now blog contain the blog and user detail as well 
         await blog.user.blogs.pull(blog._id); 
@@ -160,12 +181,12 @@ const getByUserId = async (req, res, next)=>{
     const userId = req.params.id;
     let userBlogs;
     try{
-        userBlogs = await User.findById(userId).populate('blogs').sort('-created_at');
+        userBlogs = await User.findById(userId).populate('blogs');
     }catch(err){
         return console.log("Unable to fetch"+err);
     }
     if(!userBlogs)
         return res.status(404).json({message: "No blogs found"});
-    return res.status(200).json({blogs: userBlogs.blogs});
+    return res.status(200).json({blogs: userBlogs.blogs.reverse()});
 }
 module.exports = { getAllBlogs, addBlog, updateBlog , getById, deleteBlog, getByUserId, verifyUser};

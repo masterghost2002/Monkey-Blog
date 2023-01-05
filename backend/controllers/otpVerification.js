@@ -1,6 +1,5 @@
 const userOptVerfication = require('../models/OptModel');
 const bcrypt = require('bcryptjs');
-const User = require('../models/User');
 const verificationMailer  = require('../middleware/verificationMailer');
 const sendVerficationOtp = async (request, response)=>{
     const {email, password} = request.body;

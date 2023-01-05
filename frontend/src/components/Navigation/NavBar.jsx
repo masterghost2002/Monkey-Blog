@@ -37,10 +37,13 @@ export default function NavBar() {
 
 
   window.onscroll = function () {
-    if (window.pageYOffset > 40 && navShadow === false)
+    //dynamically get the top-badge height to net navbar shadow
+    const ele = document.getElementById('top-badge');
+    if (window.pageYOffset > ele.offsetHeight && navShadow === false)
       setNavShadow(true);
-    else if (window.pageYOffset < 40 && navShadow === true)
+    else if (window.pageYOffset < ele.offsetHeight && navShadow === true)
       setNavShadow(false);
+
   }
 
   const handleThemeSide = async () => {

@@ -29,15 +29,15 @@ export default function BlogCard(props) {
     const { addToast } = CustomToast();
     const userInfo = useSelector((state) => state.userInfo);
 
-    const htmlString = props.blog === undefined ? '' : props.blog.description;
-    const descriptionSM = htmlString.replace(/<[^>]+>/g, '').slice(0, 300);
+    const htmlString = props.blog === undefined ? '' : props.blog.description.replaceAll(/<[^>]+>/g, '');
+    const descriptionSM = htmlString.replaceAll("&nbsp;" , " ").slice(0, 300);
 
     //
     const handleDelete = async () => {
         const response = await DELETE_BLOG_BY_ID(props.blog._id);
         if (response.status === 200)
             addToast({ title: 'Blog', message: "Blog Deleted", status: 'success' });
-        else addToast({ title: 'Blog', message: response.data.message, status: 'error' });
+        else addToast({ title: 'Validation Error', message: response.data.validationError, status: 'error' });
         props.onDelete();
     }
     const handleEdit = () => {

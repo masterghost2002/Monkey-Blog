@@ -10,6 +10,7 @@ export default function TopBadge() {
       align="center"
       justify="center"
       bgGradient='linear(to-r, cyan.700, purple.500)'
+      id="top-badge"
     >
       <SimpleGrid
         columns={[1, 1, 2]}

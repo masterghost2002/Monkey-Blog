@@ -1,6 +1,5 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { jsPDF } from "jspdf";
 import {
   Container,
   Card,
@@ -21,15 +20,12 @@ import {
   SkeletonCircle
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import DOMPurify from 'dompurify';
 import { avatar_img } from '../../assests/data';
 import { GET_BLOG_BY_ID } from '../BackendResponses/backendRequest';
 import { CalendarIcon, MoonIcon, SunIcon, LinkIcon } from '@chakra-ui/icons';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { CustomToast } from '../Reponses/Toast';
-import { GrDocumentPdf } from 'react-icons/gr';
-import ConfirmModal from '../Reponses/ConfirmModal';
-
+import JoditEditor from "jodit-react";
 const formatDate = (created_at) => {
   let date = new Date(created_at);
   let dtFromat = new Intl.DateTimeFormat('en-US', {
@@ -50,34 +46,21 @@ export default function VIewFullBlog() {
   const { colorMode, toggleColorMode } = useColorMode();
   const { addToast } = CustomToast();
 
-  const generatePDF = () => {
-    let pdf_container = document.createElement('div');
-    pdf_container.style.width = '550px';
-    // pdf_container.style.padding = "30px";
 
-    let blog_description = document.createElement('p');
-    blog_description.innerHTML = blog.description;
+  ///jodit
 
-    let blogTitle = document.createElement('h1');
-    blogTitle.innerText = `Title: ${blog.title}`;
-    blogTitle.style.color = 'black';
-    blogTitle.style.marginBottom = '30px'
-    pdf_container.append(blogTitle);
-    pdf_container.append(blog_description);
+  const editor = useRef(null);
+  var config = {
+    toolbarDisableStickyForMobile: false,
+    readonly: true,
+    buttons: ['print', 'fullsize', 'about'],
+    toolbarAdaptive: false,
+    toolbarButtonSize: "large",
+    theme: colorMode
+  };
 
 
 
-    var doc = new jsPDF("p", "pt", "a4");
-    doc.setFontSize(12)
-    doc.html(pdf_container,
-      {
-        margin: [20, 20, 0 , 20],
-        callback: function (pdf) {
-          pdf.save(`${blog.title}.pdf`);
-        }
-      });
-
-  }
 
   const sendRequestGetBlog = useCallback(async () => {
     const response = await GET_BLOG_BY_ID(params.id);
@@ -128,12 +111,18 @@ export default function VIewFullBlog() {
           </Flex>
         </CardHeader>
         <Divider />
-        <CardBody px={10}>
+        <CardBody padding={0}>
           <SkeletonText noOfLines={12} spacing='4' skeletonHeight='6' isLoaded={isLoaded}>
-            <Text fontWeight='bold' fontSize='xl' py={2}>Title: {blog.title}</Text>
-          </SkeletonText>
+            <Text p={5} fontWeight='bold' fontSize='xl'>Title: {blog.title}</Text>
           <Divider />
-          <Text dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(blog.description) }} />
+          <JoditEditor
+            ref={editor}
+            value={blog.description}
+            tabIndex={1}
+            name="description"
+            config={config}
+            />
+            </SkeletonText>
         </CardBody>
         <Divider />
         <CardFooter
@@ -147,20 +136,10 @@ export default function VIewFullBlog() {
         >
           <HStack width='100%' justifyContent='space-between'>
             <CopyToClipboard text={`https://monkey-app.netlify.app/blog/${params.id}`}>
-              <IconButton variant='ghost' icon={<LinkIcon />} aria-label="copy_to_clipboard"
+              <IconButton variant='ghost' icon={<LinkIcon />} aria-label="copy_to_clipboard" title='Copy Link'
                 onClick={() => addToast({ message: 'Blog link copied to clipboard', status: 'success' })}
               />
             </CopyToClipboard>
-            <ConfirmModal
-              heading={'Download Blog'}
-              body={'This feature is in BETA phase downloaded file may not exactly look same.'}
-              handleConfirm={generatePDF}
-              icon={<GrDocumentPdf color='red' />}
-              confirmBtnName='Download'
-              aria-label="delete_blog"
-            >
-              <GrDocumentPdf color='red' />
-            </ConfirmModal>
           </HStack>
 
         </CardFooter>
