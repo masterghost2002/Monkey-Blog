@@ -43,9 +43,8 @@ export default function AuthForm(props) {
             props.dispatchState({ type: "FAILED_AUTH_EMAIL" });
             return;
         }
-        if (props.state.authType === 'Sign-Up' && props.state.inputs.password !== props.state.inputs.confirmpassword) {
-            addToast({ title: 'Invalid Input', message: "Password and confrim must be same", status: 'warning' });
-            props.dispatchState({ type: "FAILED_AUTH_PASSWORD" });
+        if (props.state.authType === 'Sign-Up' && props.state.inputs.name.trim().length === 0) {
+            addToast({ title: 'Invalid Input', message: "Opps you don't have any name?", status: 'warning' });
             return;
         }
         if (props.state.inputs.password.trim().length === 0 || props.state.inputs.password.length < 8) {
@@ -53,8 +52,9 @@ export default function AuthForm(props) {
             props.dispatchState({ type: "FAILED_AUTH_PASSWORD" });
             return;
         }
-        if (props.state.authType === 'Sign-Up' && props.state.inputs.name.trim().length === 0) {
-            addToast({ title: 'Invalid Input', message: "Opps you don't have any name?", status: 'warning' });
+        if (props.state.authType !== 'Login' && props.state.inputs.password !== props.state.inputs.confirmpassword) {
+            addToast({ title: 'Invalid Input', message: "Password and confrim must be same", status: 'warning' });
+            props.dispatchState({ type: "FAILED_AUTH_PASSWORD" });
             return;
         }
 
@@ -98,7 +98,8 @@ export default function AuthForm(props) {
                     isInvalid = {props.state.validationMessage.passwordInvalid === true}
                     variant='filled'
                     name='password'
-                    placeholder={props.state.authType !== 'Reset Password' ? 'Password' : 'New Password'}
+                    label={props.state.authType === 'Reset Password'? 'New Password' : 'Password'}
+                    placeholder={props.state.authType === 'Reset Password'? 'New Password' : 'Password'}
                     size='lg'
                     onChange={handleChange}
                 />

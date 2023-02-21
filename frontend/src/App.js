@@ -62,7 +62,7 @@ function App() {
     }
 
     const response =  await AUTH_TOKEN();
-    if(response.status === 404){
+    if(response.status === 401){
       dispatch(authActions.setLogoSplash());
       navigate('/');
       return;

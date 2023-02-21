@@ -8,7 +8,7 @@ const findUser = async (req, res) =>{
         user = await User.findOne({email:email});
     }
     catch{
-        return res.status(500).json({message: "Server Error"});
+        return res.status(500).json({message: "Internal Server Error"});
     }
     return user;
 }
@@ -42,7 +42,7 @@ const saveUser = async (req, res) => {
     catch (err) {
         return res.status(500).json({message: "Server Error"});
     }
-    return res.status(200).json({ message: `Register Success`});
+    return res.status(200).json({ message: `Registration success `});
 };
 
 const login = async (req, res) => {
@@ -61,8 +61,9 @@ const login = async (req, res) => {
 
 const verify_access_token = (req, res) => {
     const authHeader = req.headers['authorization'];
+    console.log(req);
     const ACCESS_TOKEN = authHeader.split(" ")[1];
-    if (ACCESS_TOKEN === null) res.status(401);
+    if ( ACCESS_TOKEN === undefined || ACCESS_TOKEN === null) res.status(401);
     const user = verify_token(ACCESS_TOKEN);
     if (user === null) {
         return res.status(404).json({ message: "Auth failed" });
@@ -70,8 +71,10 @@ const verify_access_token = (req, res) => {
     return res.status(200).json({ user: user });
 }
 
-const updateUser = async (req, res) => {
-    const {userId, themeSide} = req.body;
+// update UserTheme
+const updateUserTheme = async (req, res) => {
+    const userId  = req.verified_user._id;
+    const {themeSide} = req.body;
     let user;
     try {
         user = await User.findByIdAndUpdate(userId, {
@@ -103,4 +106,4 @@ const updatePassword = async (req, res)=>{
     return res.status(200).json({message:"Password Update success"});
 
 }
-module.exports = {saveUser, login, verify_access_token, updateUser,checkUser, checkUser_not, updatePassword };
+module.exports = {saveUser, login, verify_access_token, updateUserTheme,checkUser, checkUser_not, updatePassword };

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   Container,
@@ -14,17 +14,18 @@ import {
   Divider,
   useColorMode,
   HStack,
-  IconButton
+  IconButton,
+  Skeleton,
+  SkeletonText,
+  SkeletonCircle
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import DOMPurify from 'dompurify';
 import { avatar_img } from '../../assests/data';
 import { GET_BLOG_BY_ID } from '../BackendResponses/backendRequest';
-import { CalendarIcon, MoonIcon, SunIcon, LinkIcon} from '@chakra-ui/icons';
+import { CalendarIcon, MoonIcon, SunIcon, LinkIcon } from '@chakra-ui/icons';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { CustomToast } from '../Reponses/Toast';
-import { GrDocumentPdf } from 'react-icons/gr';
-
+import JoditEditor from "jodit-react";
 const formatDate = (created_at) => {
   let date = new Date(created_at);
   let dtFromat = new Intl.DateTimeFormat('en-US', {
@@ -41,8 +42,26 @@ export default function VIewFullBlog() {
   const navigate = useNavigate();
   const params = useParams();
   const [blog, setBlog] = useState({ title: '', description: '', userName: '', date: '' });
+  const [isLoaded, setIsLoaded] = useState(false);
   const { colorMode, toggleColorMode } = useColorMode();
-  const {addToast} = CustomToast();
+  const { addToast } = CustomToast();
+
+
+  ///jodit
+
+  const editor = useRef(null);
+  var config = {
+    toolbarDisableStickyForMobile: false,
+    readonly: true,
+    buttons: ['print', 'fullsize', 'about'],
+    toolbarAdaptive: false,
+    toolbarButtonSize: "large",
+    theme: colorMode
+  };
+
+
+
+
   const sendRequestGetBlog = useCallback(async () => {
     const response = await GET_BLOG_BY_ID(params.id);
     if (response.status === 200) {
@@ -53,6 +72,7 @@ export default function VIewFullBlog() {
         userName: data.blog.user.name,
         date: formatDate(data.blog.created_at),
       });
+      setIsLoaded(true);
     }
     else {
       navigate("/notfound");
@@ -70,10 +90,14 @@ export default function VIewFullBlog() {
             <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
               <HStack width='100%' justifyContent='space-between'>
                 <HStack>
-                  <Avatar name='Segun Adebayo' src={avatar_img.link} />
+                  <SkeletonCircle width='50px' height='50px' isLoaded={isLoaded}>
+                    <Avatar name='Segun Adebayo' src={avatar_img.link} />
+                  </SkeletonCircle>
                   <Box>
-                    <Heading size='sm'>{blog.userName}</Heading>
-                    <Text color='red.300'><CalendarIcon /> {blog.date}</Text>
+                    <Skeleton isLoaded={isLoaded} width='150px'>
+                      <Heading size='sm'>{blog.userName}</Heading>
+                      <Text color='red.300'><CalendarIcon /> {blog.date}</Text>
+                    </Skeleton>
                   </Box>
                 </HStack>
                 <IconButton
@@ -87,10 +111,18 @@ export default function VIewFullBlog() {
           </Flex>
         </CardHeader>
         <Divider />
-        <CardBody px={10}>
-          <Text fontWeight='bold' fontSize='xl' py={2}>Title: {blog.title}</Text>
+        <CardBody padding={0}>
+          <SkeletonText noOfLines={12} spacing='4' skeletonHeight='6' isLoaded={isLoaded}>
+            <Text p={5} fontWeight='bold' fontSize='xl'>Title: {blog.title}</Text>
           <Divider />
-          <Text dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(blog.description) }} />
+          <JoditEditor
+            ref={editor}
+            value={blog.description}
+            tabIndex={1}
+            name="description"
+            config={config}
+            />
+            </SkeletonText>
         </CardBody>
         <Divider />
         <CardFooter
@@ -104,11 +136,10 @@ export default function VIewFullBlog() {
         >
           <HStack width='100%' justifyContent='space-between'>
             <CopyToClipboard text={`https://monkey-app.netlify.app/blog/${params.id}`}>
-              <IconButton variant='ghost' icon={<LinkIcon />} aria-label="copy_to_clipboard"
+              <IconButton variant='ghost' icon={<LinkIcon />} aria-label="copy_to_clipboard" title='Copy Link'
                 onClick={() => addToast({ message: 'Blog link copied to clipboard', status: 'success' })}
               />
             </CopyToClipboard>
-            <IconButton variant='ghost' icon={<GrDocumentPdf color='red'/>} aria-label="download_as_pdf"/>
           </HStack>
 
         </CardFooter>

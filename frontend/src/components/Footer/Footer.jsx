@@ -31,7 +31,7 @@ export default function Footer() {
                 <GridItem colSpan={1} >
                     <VStack align={['flex-end', 'center']}>
                         <VStack align='flex-start'>
-                            <Link as={NavLink} _hover={{border:'0px', color: colorMode === 'light'?'black':'white'}} color={linkColor} fontWeight='bold' to='/aboutdeveloper' id='about-us' isExternal={true}>About Developer</Link>
+                            <Link _hover={{border:'0px', color: colorMode === 'light'?'black':'white'}} color={linkColor} fontWeight='bold' href='https://rakeshdhariwal-portfolio.netlify.app/' id='about-us' isExternal={true}>About Developer</Link>
                             <Link as={NavLink}  _hover={{border:'0px', color: colorMode === 'light'?'black':'white'}}  color={linkColor} fontWeight='bold' to='/contactus' id='contact-us' isExternal={true}>Contact US</Link>
                         </VStack>
                     </VStack>

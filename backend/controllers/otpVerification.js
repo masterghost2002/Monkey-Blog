@@ -1,6 +1,5 @@
 const userOptVerfication = require('../models/OptModel');
 const bcrypt = require('bcryptjs');
-const User = require('../models/User');
 const verificationMailer  = require('../middleware/verificationMailer');
 const sendVerficationOtp = async (request, response)=>{
     const {email, password} = request.body;
@@ -28,7 +27,7 @@ const sendVerficationOtp = async (request, response)=>{
         await newVerficaion.save();
     }
     catch(error){
-        return response.status(404).json({message:"Unable to send otp", error:error});
+        return response.status(401).json({message:"Database transiction error", error:error});
     }
     verificationMailer(request, response);;
 };
@@ -39,7 +38,7 @@ const verifyUserOtp = async(request, response, next)=>{
         existingVerification = await userOptVerfication.findOne({email:email});
     }
     catch(error){
-       return response.status(404).json({message: "Server Error"});
+       return response.status(500).json({message: "Server Error"});
     }
     if(!existingVerification)
        return response.status(404).json({message: "OTP expired or not send yet try again"});

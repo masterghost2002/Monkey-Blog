@@ -10,6 +10,7 @@ export default function TopBadge() {
       align="center"
       justify="center"
       bgGradient='linear(to-r, cyan.700, purple.500)'
+      id="top-badge"
     >
       <SimpleGrid
         columns={[1, 1, 2]}
@@ -21,7 +22,7 @@ export default function TopBadge() {
         </GridItem>
         <GridItem align='center'>
         <Link href = "https://github.com/masterghost2002/Monkey-Blog/releases" isExternal= {true}>
-          <Button size='sm'>Changelog 💎</Button>
+          <Button size='sm'>Changelog V2.2💎</Button>
         </Link>
         </GridItem>
       </SimpleGrid>

@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
-import { Container, HStack, useColorMode, FormLabel, Text, Button, VStack } from "@chakra-ui/react";
+import { Container, HStack, useColorMode, FormLabel, Text, Button, VStack, CircularProgress } from "@chakra-ui/react";
 
-import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import JoditEditor from "jodit-react";
 import { editor_config } from "../../assests/data";
@@ -13,29 +12,33 @@ import { REQUEST_ADD_BLOG, UPDATE_BLOG, GET_BLOG_BY_ID } from '../BackendRespons
 import { useMemo } from "react";
 import { useCallback } from "react";
 import { useEffect } from "react";
+// <iframe> tag specifies an inline frame. An inline frame is used to embed another document within the current HTML document. Tip: Use CSS to style the <iframe> (see example below). Tip: It is a good practice to always include a title attribute for the <iframe> .
 
 function returnConfig(themeSide) {
-    return { theme: themeSide, minHeight: editor_config.minHeight, zIndex:1000 };
+    return { theme: themeSide,
+        minHeight: editor_config.minHeight,
+        zIndex:1000,
+        toolbarDisableStickyForMobile: false,
+        iframe: true // use it else all feature like li bold will not work
+    }
 }
 export default function AddUpdate() {
-
+    
     var { addToast } = CustomToast();
-    const [blog, setBlog] = useState({ title: '', description: '' });
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [isLoader, setIsLoader] = useState(false);
 
     var param = useParams();
     var blogId = param.id;
 
     const { colorMode } = useColorMode();
-    const userInfo = useSelector((state) => state.userInfo);
     var navigate = useNavigate();
     const editor = useRef(null);
     var config = useMemo(() => returnConfig(colorMode), [colorMode]);
 
     const handleChange = (event) => {
-        setBlog((prevSate) => ({
-            ...prevSate, // first it will derefernce the prevState and set it then 
-            [event.target.name]: event.target.value // then it will update the name fild which is currently chagning
-        }));
+        setTitle(event.target.value);
     };
 
     const handleBlog = useCallback(async () => {
@@ -47,30 +50,28 @@ export default function AddUpdate() {
             return;
         }
         const _blog = await response.data.blog;
-        setBlog({
-            title: _blog.title,
-            description: _blog.description
-        })
+        setTitle(_blog.title);
+        setDescription(_blog.description);
     }, [blogId, navigate]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if (blog.title.trim() === '' || blog.description.trim() === '') {
-            const emptyField = blog.title.trim() === '' ? 'Title' : 'Description';
-            addToast({ title: 'Empty Field', message: `${emptyField} must not be empty`, staus: 'error' });
+        if (title.trim() === '' || description.trim() === '') {
+            const emptyField = title.trim() === '' ? 'Title' : 'Description';
+            addToast({ title: 'Empty Field', message: `${emptyField} must not be empty`, status: 'error' });
             return;
         }
 
         const blogInfo = {
-            title: blog.title,
-            description: blog.description,
-            userId: userInfo.userId,
+            title: title,
+            description: description,
             blogId: blogId
         }
-
+        setIsLoader(true);
         switch (blogId) {
             case undefined: {
                 const response = await REQUEST_ADD_BLOG(blogInfo);
+                setIsLoader(false);
                 if (response.request.status === 200)
                     addToast({ title: 'Hurray !', message: 'Your blog is added', status: 'success' });
 
@@ -81,6 +82,7 @@ export default function AddUpdate() {
             default: {
                 const response = await UPDATE_BLOG(blogInfo);
                 // if  response.status !== 200 failed to update the blog
+                setIsLoader(false);
                 if (response.status !== 200) {
                     addToast({ title: 'Validation Error', meassage: response.data.validationError, status: 'error' });
                     navigate('/blogs');
@@ -92,6 +94,7 @@ export default function AddUpdate() {
                 break;
             }
         }
+        setIsLoader(false);
     }
     useEffect(() => {
         handleBlog();
@@ -108,22 +111,22 @@ export default function AddUpdate() {
                         name='title'
                         type='text'
                         onChange={handleChange}
-                        defaultValue = {blog.title}
+                        defaultValue = {title}
                         varient = 'filled'
                     />
                     <FormLabel fontWeight={'bold'}>Description</FormLabel>
                     <JoditEditor
                         ref={editor}
-                        value={blog.description}
+                        value={description}
                         tabIndex={1}
                         name="description"
                         config={config}
-                        onChange={newContent => setBlog((prevSate) => ({
-                            ...prevSate,
-                            'description': newContent
-                        }))}
+                        onBlur={newContent=>setDescription(newContent)}
                     />
-                    <Button type='submit' mt={10} width='100%' colorScheme='green'>{blogId === undefined?'Add Blog':'Update Blog'}</Button>
+                    <VStack>
+                    {!isLoader && <Button type='submit' mt={10} width='100%' colorScheme='green'>{blogId === undefined?'Add Blog':'Update Blog'}</Button>}
+                    {isLoader && <CircularProgress isIndeterminate color='blue.300' />}
+                    </VStack>
                 </FormContainer>
             </VStack>
         </Container>
