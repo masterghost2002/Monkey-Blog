@@ -1,7 +1,7 @@
 import axios from "axios";
 const AUTH_ACCESS_TOKEN = () => localStorage.getItem("auth_access_token");
 // user requests
-const BACKEND_URL = ()=>"https://monkeyblogbackend-production.up.railway.app/";
+const BACKEND_URL = ()=>"https://doubtful-life-jacket-slug.cyclic.app/";
 // const BACKEND_URL = ()=>"http://localhost:5000/";
 
 // user realted request start
