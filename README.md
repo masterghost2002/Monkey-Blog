@@ -34,9 +34,9 @@ Where user can post update delte or read other user blogs even can share them, d
 
 ## Tech Stack 🌐
 
-**Front-end:** React, Redux, React-toastify,Bootstrap,React-Loader,React-Skeleton,JodithEditor,React-Lazy,Axios,AOS
+**Front-end:** React, Redux,Chakra UI,JodithEditor,React-Lazy,Axios,AOS
 
-**Back-end:** Node, Express,MongoDB,Mongoose
+**Back-end:** Node, Express,MongoDB,Mongoose,Node mailer,cyptojs
 
 
 ## Requirements
